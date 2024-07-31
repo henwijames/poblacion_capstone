@@ -4,5 +4,8 @@
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
     "vite": "^5.3.2"
+  },
+  "scripts": {
+    "tailwind": "npx tailwindcss -i assets/css/input.css -o assets/css/style.css --watch"
   }
 }
