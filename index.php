@@ -8,8 +8,12 @@
             </div>
 
             <div class="hidden md:flex gap-x-6 text-[18px]">
-                <div class="font-bold text-[20px] ">
-                    <a href="login" class="z-40 text-white hover:bg-[#DEE197] hover:text-black transition-all bg-[#C1C549] p-3 w-5 rounded-md">Login / Signup</a>
+                <div class="font-bold text-[16px] ">
+                    <a href="login" class="text-white bg-[#DEE197] hover:text-black transition-all py-2 px-3 w-5 rounded-md">Sign In</a>
+
+                </div>
+                <div class="font-bold text-[16px] ">
+                    <a href="login" class="text-white hover:bg-[#DEE197] hover:text-black transition-all bg-[#C1C549] py-2 px-3 w-5 rounded-md">Sign Up</a>
 
                 </div>
             </div>
