@@ -3,11 +3,11 @@
     <div class="container mx-auto md:px-[120px] px-6  py-6">
         <nav class="flex justify-between items-center">
             <div>
-                <a href="index"><img src="assets/img/poblacionease.png" alt="poblacionease logo" class="w-[150px] h-[60px] max-[150px]:"></a>
+                <a href="index"><img src="assets/img/poblacionease.png" alt="poblacionease logo" class="w-[150px] h-[60px]"></a>
 
             </div>
 
-            <div class="hidden md:flex gap-x-6 text-[18px]">
+            <div class="flex gap-x-6 text-[18px]">
                 <div class=" text-[16px] ">
                     <a href="login" class=" bg-[#DEE197] hover:bg-[#C1C549] transition-all py-2 px-3 w-5 rounded-md uppercase shadow-md">Login</a>
 
@@ -17,12 +17,6 @@
 
                 </div>
             </div>
-
-            <button id="menu-toggle" class="md:hidden text-gray-800 focus:outline-none">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
         </nav>
     </div>
 
@@ -42,9 +36,73 @@
 
     </div>
 </header>
-<div class="">
-    <h1>HI guys</h1>
-</div>
+<section class="py-12 md:py-20 lg:py-24">
+    <div class="container mx-auto px-4 md:px-6">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl">Featured Listings</h2>
+            <p class="mt-4 text-lg text-muted-foreground md:text-xl">Check out our top-rated properties.</p>
+        </div>
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <img
+                    src="/placeholder.svg"
+                    alt="Featured Listing 1"
+                    width="400"
+                    height="300"
+                    class="rounded-t-md object-cover w-full h-60"
+                    style="aspect-ratio: 400 / 300; object-fit: cover;" />
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Luxury Penthouse in Downtown</h3>
+                    <p class="mt-2 text-muted-foreground">3 Bedrooms, 2 Bathrooms</p>
+                    <p class="mt-3 font-bold">$1,200,000</p>
+                    <div class="mt-4">
+                        <a class="text-primary bg-[#C1C549] px-5 py-2 border border-[#C1C549] rounded-md hover:bg-white" href="#" rel="ugc">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <img
+                    src="/placeholder.svg"
+                    alt="Featured Listing 2"
+                    width="400"
+                    height="300"
+                    class="rounded-t-md object-cover w-full h-60"
+                    style="aspect-ratio: 400 / 300; object-fit: cover;" />
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Cozy Bungalow in the Suburbs</h3>
+                    <p class="mt-2 text-muted-foreground">2 Bedrooms, 1 Bathroom</p>
+                    <p class="mt-4 font-bold">$450,000</p>
+                    <div class="mt-4">
+                        <a class="text-primary hover:underline" href="#" rel="ugc">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <img
+                    src="/placeholder.svg"
+                    alt="Featured Listing 3"
+                    width="400"
+                    height="300"
+                    class="rounded-t-md object-cover w-full h-60"
+                    style="aspect-ratio: 400 / 300; object-fit: cover;" />
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Modern Townhouse in the City</h3>
+                    <p class="mt-2 text-muted-foreground">3 Bedrooms, 2.5 Bathrooms</p>
+                    <p class="mt-4 font-bold">$800,000</p>
+                    <div class="mt-4">
+                        <a class="text-primary hover:underline" href="#" rel="ugc">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <script src="assets/js/script.js"></script>
 <?php include 'partials/footer.php'; ?>
