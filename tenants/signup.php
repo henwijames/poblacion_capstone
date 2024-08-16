@@ -24,7 +24,7 @@
     <main class="flex items-center justify-center gap-8 px-8 w-full max-w-lg pb-4 mb-4">
         <div class=" flex flex-col items-center">
             <h1 class="text-4xl font-bold text-center mb-6">Sign up as a <span class="text-[#C1C549]">Tenant</span></h1>
-            <form class="space-y-4 flex flex-col w-full">
+            <form class="space-y-4 flex flex-col w-full gap-4">
                 <div class="flex flex-col md:flex-row w-full justify-center items-center gap-4">
                     <div class="flex flex-col gap-2 w-full">
                         <label for="fname" class="text-md">First Name</label>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="id-file" class="text-sm font-medium leading-none">Valid ID</label>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-4">
                         <input class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500" id="id-file" type="file" required>
                         <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 border border-gray-300 bg-white hover:bg-gray-100 h-10 px-4 py-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4">

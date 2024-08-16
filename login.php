@@ -1,11 +1,10 @@
 <?php include 'partials/header.php'; ?>
-
-<main class="home flex items-center justify-center min-h-screen">
+<main class="home  flex flex-col items-center justify-center min-h-screen">
     <div class="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
         <div class="flex flex-col justify-center p-8 md:p-14">
-            <span class="mb-3 text-5xl font-bold text-[#C1C549] uppercase">login</span>
+            <span class="mb-3 text-5xl font-bold text-[#C1C549] uppercase">log<span class="text-secondary">in</span></span>
             <span class="font-light text-gray-400 mb-4">
-                Welcome back to PoblacionEase. Please login to your account.
+                Welcome back to <span class="font-bold">Poblacion<span class="text-primary">Ease</span></span>. Please login to your account.
             </span>
             <div class="py-4">
                 <span class="mb-2 text-md">Email</span>
@@ -30,11 +29,11 @@
                 Login
             </button>
             <div class="text-center text-gray-400">
-                Don't have an account? <a href="signup" class="text-black font-bold hover:text-[#C1C549]">Sign Up</a>
+                Don't have an account? <a href="choose" class="text-black font-bold hover:text-[#C1C549]">Sign Up</a>
             </div>
         </div>
         <div class="relative">
-            <img src="assets/img/poblacionease.png" alt="signin" class="absolute inset-0 m-auto h-[200p] z-20 shadow-md">
+            <img src="assets/img/poblacionease.png" alt="signin" class="absolute hidden md:block inset-0 m-auto h-[200p] z-20 shadow-md">
             <img src="assets/img/volcano.jpg" alt="img" class="w-[400px] h-full hidden rounded-r-2xl md:block object-cover">
             <div class="absolute top-0 left-0 z-10 w-full h-full bg-[#FBFBF3] opacity-50 rounded-r-2xl md:block"></div>
         </div>
