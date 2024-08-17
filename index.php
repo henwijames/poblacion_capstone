@@ -4,6 +4,7 @@
         <!-- Navigation Bar -->
         <?php include 'partials/nav.php'; ?>
 
+
         <div class=" banner container mx-auto md:px-[60px] px-6 gap-0 mt-[20px]">
             <div class="text-banner flex flex-col justify-center w-[300px] md:w-[730px] h-[500px] ">
                 <p class=" uppercase font-bold text-[16px] leading-[20px] mb-1">welcome to poblacion<span class="text-[#C1C549]">ease</span></p>
@@ -112,7 +113,6 @@
         </div>
     </section>
 </main>
-
 
 <script src="assets/js/script.js"></script>
 <?php include 'partials/footer.php'; ?>
