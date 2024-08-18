@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en" class=" scroll-smooth">
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -15,4 +15,4 @@
     <script src="./assets/js/jquery-3.7.1.min.js"></script>
 </head>
 
-<body>
+<body></body>
