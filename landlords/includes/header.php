@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PoblacionEase</title>
 
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 
     <!-- FontAwesome CDN -->
     <script src="https://kit.fontawesome.com/f284e8c7c2.js" crossorigin="anonymous"></script>

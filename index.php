@@ -4,7 +4,7 @@
 
     <header class="home">
         <!-- Navigation Bar -->
-        <?php include 'partials/nav.php'; ?>
+        <?php include 'partials/navbar.php'; ?>
 
 
         <div class=" banner container mx-auto md:px-[60px] px-6 gap-0 mt-[20px]">
