@@ -34,18 +34,18 @@ unset($_SESSION['form_data']);
                 <div class="flex flex-col md:flex-row w-full justify-center items-center gap-4">
                     <div class="flex flex-col gap-2 w-full">
                         <label for="fname" class="text-md">First Name</label>
-                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="fname" id="fname" value="<?php echo htmlspecialchars($formData['fname'] ?? ''); ?>">
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="fname" id="fname" placeholder="John" value="<?php echo htmlspecialchars($formData['fname'] ?? ''); ?>">
                         <?php if (isset($errors['fname'])): ?>
                             <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['fname']); ?></p>
                         <?php endif; ?>
                     </div>
                     <div class="flex flex-col gap-2 w-full">
                         <label for="mname" class="text-md">Middle Name (Optional)</label>
-                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="mname" id="mname" value="<?php echo htmlspecialchars($formData['mname'] ?? ''); ?>">
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="mname" id="mname" placeholder="Sugar" value="<?php echo htmlspecialchars($formData['mname'] ?? ''); ?>">
                     </div>
                     <div class="flex flex-col gap-2 w-full">
                         <label for="lname" class="text-md">Last Name</label>
-                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="lname" id="lname" value="<?php echo htmlspecialchars($formData['lname'] ?? ''); ?>">
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="lname" id="lname" placeholder="Doe" value="<?php echo htmlspecialchars($formData['lname'] ?? ''); ?>">
                         <?php if (isset($errors['lname'])): ?>
                             <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['lname']); ?></p>
                         <?php endif; ?>
@@ -54,14 +54,14 @@ unset($_SESSION['form_data']);
                 <div class="flex flex-col md:flex-row w-full justify-center items-center gap-4">
                     <div class="flex flex-col gap-2 w-full">
                         <label for="email" class="text-md">Email</label>
-                        <input type="email" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="email" id="email" value="<?php echo htmlspecialchars($formData['email'] ?? ''); ?>">
+                        <input type="email" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="email" id="email" placeholder="johndoe@email.com" value="<?php echo htmlspecialchars($formData['email'] ?? ''); ?>">
                         <?php if (isset($errors['email'])): ?>
                             <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['email']); ?></p>
                         <?php endif; ?>
                     </div>
                     <div class="flex flex-col gap-2 w-full">
                         <label for="address" class="text-md">Address</label>
-                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="address" id="address" value="<?php echo htmlspecialchars($formData['address'] ?? ''); ?>">
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" placeholder="Poblacion, Taal, Batangas" name="address" id="address" value="<?php echo htmlspecialchars($formData['address'] ?? ''); ?>">
                         <?php if (isset($errors['address'])): ?>
                             <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['address']); ?></p>
                         <?php endif; ?>
@@ -69,7 +69,7 @@ unset($_SESSION['form_data']);
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="phone" class="text-sm font-medium leading-none">Phone Number</label>
-                    <input class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="phone" id="phone" type="text" value="<?php echo htmlspecialchars($formData['phone'] ?? ''); ?>">
+                    <input class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="phone" id="phone" type="tel" maxlength="11" placeholder="09567345298" value="<?php echo htmlspecialchars($formData['phone'] ?? ''); ?>">
                     <?php if (isset($errors['phone'])): ?>
                         <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['phone']); ?></p>
                     <?php endif; ?>
