@@ -63,19 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $tenants->password = password_hash($password, PASSWORD_BCRYPT); // Hash the password
 
         if ($tenants->create()) {
-            $_SESSION['success'] = "User created successfully!";
-            header("Location: ../tenants/index"); // Redirect to a success page or another page
-            exit();
+            // Auto-login after successful signup
+            $foundUser = $tenants->findByEmail($tenants->email);
+            if ($foundUser && $tenants->verifyPassword($password, $foundUser['password'])) {
+                // Successful login
+                $_SESSION['user_id'] = $foundUser['id'];
+                $_SESSION['success'] = "User created and logged in successfully!";
+                header("Location: ../tenants/index"); // Redirect to the tenant's dashboard or homepage
+                exit();
+            } else {
+                $_SESSION['errors']['login'] = "Login failed after signup.";
+            }
         } else {
             $_SESSION['errors']['database'] = "Failed to create user.";
-            header("Location: ../tenants/signup.php");
-            exit();
         }
-    } else {
-        // Store errors and form data in session
-        $_SESSION['errors'] = $errors;
-        $_SESSION['form_data'] = $_POST;
-        header("Location: ../tenants/signup.php");
-        exit();
     }
+
+    // If there are errors, or if login failed after signup
+    $_SESSION['errors'] = $errors;
+    $_SESSION['form_data'] = $_POST;
+    header("Location: ../tenants/signup.php");
+    exit();
 }

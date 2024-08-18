@@ -1,5 +1,7 @@
 <?php include 'partials/header.php'; ?>
-<main class="font-custom ">
+
+<main class="font-custom">
+
     <header class="home">
         <!-- Navigation Bar -->
         <?php include 'partials/nav.php'; ?>

@@ -1,9 +1,10 @@
 <?php
 
-class Tenants
+
+class Landlords
 {
     private $conn;
-    private $table = 'tenants';
+    private $table = 'landlords';
 
     public $id;
     public $fname;
@@ -12,7 +13,6 @@ class Tenants
     public $email;
     public $address;
     public $phone;
-    public $validid;
     public $password;
 
     public function __construct($db)
@@ -20,10 +20,9 @@ class Tenants
         $this->conn = $db;
     }
 
-    // Create a new tenant
     public function create()
     {
-        $query = "INSERT INTO " . $this->table . " SET first_name=:fname, middle_name=:mname, last_name=:lname, email=:email, address=:address, phone_number=:phone, validid=:validid, password=:password";
+        $query = "INSERT INTO " . $this->table . " SET first_name=:fname, middle_name=:mname, last_name=:lname, email=:email, address=:address, phone_number=:phone, password=:password";
 
         $stmt = $this->conn->prepare($query);
 
@@ -33,7 +32,6 @@ class Tenants
         $this->email = htmlspecialchars(strip_tags($this->email));
         $this->address = htmlspecialchars(strip_tags($this->address));
         $this->phone = htmlspecialchars(strip_tags($this->phone));
-        $this->validid = htmlspecialchars(strip_tags($this->validid));
         $this->password = htmlspecialchars(strip_tags($this->password));
 
         // Bind parameters
@@ -43,7 +41,6 @@ class Tenants
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':address', $this->address);
         $stmt->bindParam(':phone', $this->phone);
-        $stmt->bindParam(':validid', $this->validid);
         $stmt->bindParam(':password', $this->password);
 
         // Execute query

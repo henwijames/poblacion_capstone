@@ -1,4 +1,6 @@
-<?php include 'partials/header.php'; ?>
+<?php
+include 'partials/header.php';
+?>
 <main class="home  flex flex-col items-center justify-center min-h-screen">
     <div class="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
         <div class="flex flex-col justify-center p-8 md:p-14">
@@ -6,28 +8,31 @@
             <span class="font-light text-gray-400 mb-4">
                 Welcome back to <span class="font-bold">Poblacion<span class="text-primary">Ease</span></span>. Please login to your account.
             </span>
-            <div class="py-4">
-                <span class="mb-2 text-md">Email</span>
-                <input type="text" class="w-full p-2 border border-gray-300 rounded-md
+            <form action="Controllers/LoginController.php" method="POST">
+                <div class="py-4">
+                    <span class="mb-2 text-md">Email</span>
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded-md
                 placeholder:font-light placeholder:text-gray-500" name="email" id="email" placeholder="johndoe@email.com">
-            </div>
-            <div class="py-4">
-                <span class="mb-2 text-md">Password</span>
-                <input type="password" class="w-full p-2 border border-gray-300 rounded-md
-                placeholder:font-light placeholder:text-gray-500" name="password" id="password" placeholder="Enter your password">
-            </div>
-            <div class="flex justify-between w-full py-4">
-                <div class="mr-24">
-                    <input type="checkbox" name="ch" id="ch" class="mr-2">
-                    <span class="text-md">Remember for 30 days</span>
                 </div>
-                <a href="#" class="font-bold text-md hover:text-gray-400 transition-colors ease">Forgot Password?</a>
-            </div>
-            <button class="w-full bg-[#C1C549] text-white p-2 rounded-lg mb-6 
-            hover:bg-white hover:text-black border border-[#C1C549] hover:border 
-            hover:border-gray-300 transition-all ease-in uppercase shadow">
-                Login
-            </button>
+                <div class="py-4">
+                    <span class="mb-2 text-md">Password</span>
+                    <input type="password" class="w-full p-2 border border-gray-300 rounded-md
+                placeholder:font-light placeholder:text-gray-500" name="password" id="password" placeholder="Enter your password">
+                </div>
+                <div class="flex justify-between w-full py-4">
+                    <div class="mr-24">
+                        <input type="checkbox" name="ch" id="ch" class="mr-2">
+                        <span class="text-md">Remember for 30 days</span>
+                    </div>
+                    <a href="#" class="font-bold text-md hover:text-gray-400 transition-colors ease">Forgot Password?</a>
+                </div>
+                <button class="w-full bg-[#C1C549] text-white p-2 rounded-lg mb-6 
+                    hover:bg-white hover:text-black border border-[#C1C549] hover:border 
+                    hover:border-gray-300 transition-all ease-in uppercase shadow"
+                    type="submit">
+                    Login
+                </button>
+            </form>
             <div class="text-center text-gray-400">
                 Don't have an account? <a href="choose" class="text-black font-bold hover:text-[#C1C549]">Sign Up</a>
             </div>
