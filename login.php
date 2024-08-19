@@ -1,5 +1,28 @@
 <?php
 include 'partials/header.php';
+
+if (isset($_SESSION['user_id'])) {
+    if ($_SESSION['user_role'] == 'tenant') {
+        header("Location: tenants/index.php");
+    } elseif ($_SESSION['user_role'] == 'landlord') {
+        header("Location: landlords/index.php");
+    }
+    exit();
+}
+
+
+
+// Disable caching of the login page
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+header("Pragma: no-cache"); // HTTP 1.0.
+header("Expires: 0"); // Proxies.
+
+$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
+
+// Clear session data
+unset($_SESSION['errors']);
+unset($_SESSION['form_data']);
 ?>
 <main class="home  flex flex-col items-center justify-center min-h-screen">
     <div class="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
@@ -9,15 +32,24 @@ include 'partials/header.php';
                 Welcome back to <span class="font-bold">Poblacion<span class="text-primary">Ease</span></span>. Please login to your account.
             </span>
             <form action="Controllers/LoginController.php" method="POST">
+                <?php if (isset($errors['login'])): ?>
+                    <p class="text-red-500 text-sm mb-4"><?php echo htmlspecialchars($errors['login']); ?></p>
+                <?php endif; ?>
                 <div class="py-4">
                     <span class="mb-2 text-md">Email</span>
                     <input type="text" class="w-full p-2 border border-gray-300 rounded-md
-                placeholder:font-light placeholder:text-gray-500" name="email" id="email" placeholder="johndoe@email.com">
+                placeholder:font-light placeholder:text-gray-500" name="email" id="email" placeholder="johndoe@email.com" value="<?php echo htmlspecialchars($formData['email'] ?? ''); ?>">
+                    <?php if (isset($errors['email'])): ?>
+                        <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['email']); ?></p>
+                    <?php endif; ?>
                 </div>
                 <div class="py-4">
                     <span class="mb-2 text-md">Password</span>
                     <input type="password" class="w-full p-2 border border-gray-300 rounded-md
                 placeholder:font-light placeholder:text-gray-500" name="password" id="password" placeholder="Enter your password">
+                    <?php if (isset($errors['password'])): ?>
+                        <p class=" text-red-500 text-sm"><?php echo htmlspecialchars($errors['password']); ?></p>
+                    <?php endif; ?>
                 </div>
                 <div class="flex justify-between w-full py-4">
                     <div class="mr-24">

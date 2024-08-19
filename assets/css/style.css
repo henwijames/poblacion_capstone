@@ -590,10 +590,6 @@ video {
   }
 }
 
-.static{
-  position: static;
-}
-
 .absolute{
   position: absolute;
 }
@@ -622,10 +618,6 @@ video {
   top: -400px;
 }
 
-.top-\[80px\]{
-  top: 80px;
-}
-
 .top-\[70px\]{
   top: 70px;
 }
@@ -640,26 +632,6 @@ video {
 
 .z-20{
   z-index: 20;
-}
-
-.z-\[-1\]{
-  z-index: -1;
-}
-
-.z-auto{
-  z-index: auto;
-}
-
-.z-50{
-  z-index: 50;
-}
-
-.z-\[99999\]{
-  z-index: 99999;
-}
-
-.-z-10{
-  z-index: -10;
 }
 
 .m-6{
@@ -678,11 +650,6 @@ video {
 .my-6{
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
-}
-
-.mx-5{
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
 }
 
 .mb-1{
@@ -729,20 +696,8 @@ video {
   margin-top: 2rem;
 }
 
-.mt-\[20px\]{
-  margin-top: 20px;
-}
-
 .mt-\[32px\]{
   margin-top: 32px;
-}
-
-.mt-\[40px\]{
-  margin-top: 40px;
-}
-
-.mt-\[30px\]{
-  margin-top: 30px;
 }
 
 .mt-\[60px\]{
@@ -797,6 +752,10 @@ video {
   height: 100%;
 }
 
+.h-\[200px\]{
+  height: 200px;
+}
+
 .min-h-screen{
   min-height: 100vh;
 }
@@ -823,6 +782,10 @@ video {
 
 .w-full{
   width: 100%;
+}
+
+.w-\[200px\]{
+  width: 200px;
 }
 
 .max-w-3xl{
@@ -893,10 +856,6 @@ video {
   --tw-space-y-reverse: 0;
   margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(2rem * var(--tw-space-y-reverse));
-}
-
-.scroll-smooth{
-  scroll-behavior: smooth;
 }
 
 .rounded-2xl{
@@ -981,16 +940,8 @@ video {
   padding: 1rem;
 }
 
-.p-5{
-  padding: 1.25rem;
-}
-
 .p-8{
   padding: 2rem;
-}
-
-.p-10{
-  padding: 2.5rem;
 }
 
 .px-3{
@@ -1041,26 +992,6 @@ video {
 .py-6{
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
-}
-
-.px-10{
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
-}
-
-.px-20{
-  padding-left: 5rem;
-  padding-right: 5rem;
-}
-
-.px-\[120px\]{
-  padding-left: 120px;
-  padding-right: 120px;
-}
-
-.px-0{
-  padding-left: 0px;
-  padding-right: 0px;
 }
 
 .pl-7{
@@ -1178,6 +1109,11 @@ video {
 .text-white{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-red-500{
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .opacity-0{
@@ -1354,16 +1290,8 @@ video {
     position: static;
   }
 
-  .md\:z-\[-1\]{
-    z-index: -1;
-  }
-
   .md\:z-auto{
     z-index: auto;
-  }
-
-  .md\:z-50{
-    z-index: 50;
   }
 
   .md\:my-0{
