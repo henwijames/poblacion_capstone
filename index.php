@@ -10,7 +10,7 @@
                     <i class="fa-solid fa-bars" onclick="onToggleMenu(this)"></i>
                 </span>
             </div>
-            <ul id="menu" class="md:flex md:items-center gap-4 z-0 md:z-auto  md:static absolute 
+            <ul id="menu" class="md:flex md:items-center gap-4 z-1 md:z-auto md:static absolute 
             bg-background w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 
             opacity-0 top-[-400px] transition-all ease-in duration-500">
                 <li class="my-6 md:my-0 ">
@@ -139,6 +139,7 @@
             </div>
         </div>
     </section>
+
 </main>
 <script>
     function onToggleMenu(e) {
