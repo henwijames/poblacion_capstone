@@ -1,7 +1,7 @@
 <?php include 'partials/header.php'; ?>
 <main class="font-custom">
 
-    <header class="home">
+    <header class=" home">
         <!-- Navigation Bar -->
         <nav class="py-2 sticky top-0 px-5 md:px-[120px]  md:flex items-center justify-between bg-background shadow">
             <div class="flex justify-between items-center">
@@ -38,7 +38,7 @@
                 <h1 class=" uppercase font-bold text-[30px] md:text-[65px] leading-[30px] md:leading-[75px] ">Discover a New Era of Convenience and Connection</h1>
                 <p class="text-[16px] md:text-[24px]">Experience effortless living in Poblacion, Taal with Poblacion<span class="text-[#C1C549]">Ease</span>. Discover apartments, connect with local businesses, and embrace community. Your gateway to convenience in Batangas.</p>
 
-                <a href="" class="flex items-center justify-between w-[213px] bg-primary 
+                <a href="login" class="flex items-center justify-between w-[213px] bg-primary 
                 px-3 py-3 md:px-5 md:py-5 text-white font-bold mt-[32px] rounded-[5px] hover:bg-accent 
                  transition-all ease-in shadow-md">
                     FIND PROPERTIES
@@ -50,11 +50,9 @@
     </header>
     <section class="py-12 md:py-20 lg:py-24" id="rent">
         <div class="container mx-auto px-4 md:px-6">
-            <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl">Featured Listings</h2>
-                <p class="mt-4 text-lg text-muted-foreground md:text-xl">Check out our top-rated properties.</p>
-            </div>
-            <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+
+            <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8">
+
                 <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
                     <img
                         src="assets/img/house1.jpg"
@@ -139,7 +137,15 @@
             </div>
         </div>
     </section>
-
+    <footer class="py-12 bg-background shadow">
+        <div class="container mx-auto">
+            <div class="flex items-center justify-center">
+                <div class="text-muted-foreground">
+                    Copyright &copy; Poblacion<span class="text-primary">Ease</span>. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
 </main>
 <script>
     function onToggleMenu(e) {

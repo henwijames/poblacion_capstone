@@ -3,7 +3,7 @@ session_start();
 include 'session.php';
 ?>
 <!DOCTYPE html>
-<html class="scroll-smooth" lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -19,4 +19,4 @@ include 'session.php';
     <script src="./assets/js/jquery-3.7.1.min.js"></script>
 </head>
 
-<body></body>
+<body>

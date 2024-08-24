@@ -5,6 +5,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'landlord') {
     exit();
 }
 
+
 // Disable caching of the login page
 header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
 header("Pragma: no-cache"); // HTTP 1.0.

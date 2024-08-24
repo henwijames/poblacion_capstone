@@ -76,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
         } else {
             $_SESSION['errors']['database'] = "Failed to create user.";
+            header("Location: ../tenants/signup");
         }
     }
 

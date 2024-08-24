@@ -1,22 +1,6 @@
 <?php
 include 'partials/header.php';
 
-if (isset($_SESSION['user_id'])) {
-    if ($_SESSION['user_role'] == 'tenant') {
-        header("Location: tenants/index.php");
-    } elseif ($_SESSION['user_role'] == 'landlord') {
-        header("Location: landlords/index.php");
-    }
-    exit();
-}
-
-
-
-// Disable caching of the login page
-header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
-header("Pragma: no-cache"); // HTTP 1.0.
-header("Expires: 0"); // Proxies.
-
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
 
@@ -59,7 +43,7 @@ unset($_SESSION['form_data']);
                     <a href="#" class="font-bold text-md hover:text-gray-400 transition-colors ease">Forgot Password?</a>
                 </div>
                 <button class="w-full bg-[#C1C549] text-white p-2 rounded-lg mb-6 
-                    hover:bg-white hover:text-black border border-[#C1C549] hover:border 
+                    hover:bg-accent border-[#C1C549] hover:border 
                     hover:border-gray-300 transition-all ease-in uppercase shadow"
                     type="submit">
                     Login
