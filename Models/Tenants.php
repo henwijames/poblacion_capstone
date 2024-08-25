@@ -62,6 +62,14 @@ class Tenants
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    public function findById($id)
+    {
+        $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     public function verifyPassword($password, $hash)
     {

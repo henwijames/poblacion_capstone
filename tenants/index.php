@@ -28,8 +28,8 @@ include 'includes/header.php';
         </a>
     </ul>
     <a class="profile-name md:flex hidden md:items-center hover:text-primary duration-50 ease-in transition-colors" href="profile">
-        <img src="../assets/img/me.jpg" alt="profile-picture" class=" rounded-full" style="width: 50px; height: 50px; margin-right: 20px;">
-        <p class="text-lg hover:text-primary duration-500" href="#">John Doe</p>
+        <img src="<?php echo $profilePicture; ?>" alt="profile-picture" class=" rounded-full" style="width: 50px; height: 50px; margin-right: 20px;">
+        <p class="text-lg hover:text-primary duration-500" href="#"><?php echo htmlspecialchars($userName); ?></p>
     </a>
 </nav>
 <section class="relative h-[500px] tenants-home" style="background-image: url('../assets/img/bg.png'); z-index: -1; background-size: cover; background-position: center;">
@@ -71,7 +71,7 @@ include 'includes/header.php';
 
 </section>
 <div class="flex flex-col z-10">
-    <main class="flex-1 mx-auto py-8 px-6 md:px-8 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <main class="flex-1 mx-auto py-8 px-6 md:px-8 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
         <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden bg-white" data-v0-t="card">
             <img
@@ -88,75 +88,13 @@ include 'includes/header.php';
                 <p class="text-muted-foreground mb-2">1,000 sq ft | 2 Bed | 2 Bath</p>
                 <p class="text-primary font-bold text-lg">4,000/month</p>
                 <div class="mt-4">
-                    <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="login" rel="ugc">
+                    <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="apartment" rel="ugc">
                         View Details
                     </a>
                 </div>
             </div>
         </div>
-        <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden" data-v0-t="card">
-            <img
-                src="../assets/img/2.jpg"
-                alt="Featured Listing 1"
-                width="400"
-                height="300"
-                class="rounded-t-md object-cover w-full h-60"
-                style="aspect-ratio: 400 / 300; object-fit: cover;" />
-            <div class="p-4">
-                <h3 class="text-lg font-semibold">Luxury Penthouse in Downtown</h3>
-                <h3 class="text-base text-muted-foreground">Zone 14, Taal, Batangas</h3>
-                <p class="mt-2 text-muted-foreground">Hosted by Henry James</p>
-                <p class="text-muted-foreground mb-2">1,000 sq ft | 2 Bed | 2 Bath</p>
-                <p class="text-primary font-bold text-lg">4,000/month</p>
-                <div class="mt-4">
-                    <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="login" rel="ugc">
-                        View Details
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden" data-v0-t="card">
-            <img
-                src="../assets/img/3.jpg"
-                alt="Featured Listing 1"
-                width="400"
-                height="300"
-                class="rounded-t-md object-cover w-full h-60"
-                style="aspect-ratio: 400 / 300; object-fit: cover;" />
-            <div class="p-4">
-                <h3 class="text-lg font-semibold">Luxury Penthouse in Downtown</h3>
-                <h3 class="text-base text-muted-foreground">Zone 14, Taal, Batangas</h3>
-                <p class="mt-2 text-muted-foreground">Hosted by Henry James</p>
-                <p class="text-muted-foreground mb-2">1,000 sq ft | 2 Bed | 2 Bath</p>
-                <p class="text-primary font-bold text-lg">4,000/month</p>
-                <div class="mt-4">
-                    <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="login" rel="ugc">
-                        View Details
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden" data-v0-t="card">
-            <img
-                src="../assets/img/4.jpg"
-                alt="Featured Listing 1"
-                width="400"
-                height="300"
-                class="rounded-t-md object-cover w-full h-60"
-                style="aspect-ratio: 400 / 300; object-fit: cover;" />
-            <div class="p-4">
-                <h3 class="text-lg font-semibold">Luxury Penthouse in Downtown</h3>
-                <h3 class="text-base text-muted-foreground">Zone 14, Taal, Batangas</h3>
-                <p class="mt-2 text-muted-foreground">Hosted by Henry James</p>
-                <p class="text-muted-foreground mb-2">1,000 sq ft | 2 Bed | 2 Bath</p>
-                <p class="text-primary font-bold text-lg">4,000/month</p>
-                <div class="mt-4">
-                    <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="login" rel="ugc">
-                        View Details
-                    </a>
-                </div>
-            </div>
-        </div>
+
 
 
 
@@ -169,18 +107,4 @@ include 'includes/header.php';
 
 
 
-
-<script>
-    function onToggleMenu(e) {
-        let list = document.getElementById("menu");
-
-        if (e.classList.contains("fa-bars")) {
-            e.classList.replace("fa-bars", "fa-times");
-            list.classList.add("top-[70px]", "opacity-100");
-        } else {
-            e.classList.replace("fa-times", "fa-bars");
-            list.classList.remove("top-[70px]", "opacity-100");
-        }
-    }
-</script>
 <?php include 'includes/footer.php'; ?>

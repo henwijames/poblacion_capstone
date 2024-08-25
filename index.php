@@ -1,7 +1,7 @@
 <?php include 'partials/header.php'; ?>
 <main class="font-custom">
 
-    <header class=" home">
+    <header class="home">
         <!-- Navigation Bar -->
         <nav class="py-2 sticky top-0 px-5 md:px-[120px]  md:flex items-center justify-between bg-background shadow">
             <div class="flex justify-between items-center">
@@ -137,15 +137,7 @@
             </div>
         </div>
     </section>
-    <footer class="py-12 bg-background shadow">
-        <div class="container mx-auto">
-            <div class="flex items-center justify-center">
-                <div class="text-muted-foreground">
-                    Copyright &copy; Poblacion<span class="text-primary">Ease</span>. All rights reserved.
-                </div>
-            </div>
-        </div>
-    </footer>
+
 </main>
 <script>
     function onToggleMenu(e) {
