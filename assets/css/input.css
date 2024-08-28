@@ -33,3 +33,17 @@
   background-size: cover;
   background-position: center;
 }
+
+.dot::before {
+  content: "";
+  width: 0.25rem;
+  height: 0.25rem;
+  background-color: #000;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  z-index: 9999;
+}
+
+main.active {
+  @apply md:w-full md:ml-0;
+}
