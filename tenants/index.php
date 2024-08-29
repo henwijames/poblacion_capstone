@@ -24,7 +24,7 @@ include 'includes/header.php';
         </li>
         <a class="profile-name md:hidden flex items-center hover:text-primary duration-50 ease-in transition-colors" href="profile">
             <img src="../assets/img/me.jpg" alt="profile-picture" class="cursor-pointer rounded-full" style="width: 50px; height: 50px; margin-right: 20px;">
-            <p class="text-lg " href="#">John Doe</p>
+            <p class="text-lg " href="#"><?php echo htmlspecialchars($userName); ?></p>
         </a>
     </ul>
     <a class="profile-name md:flex hidden md:items-center hover:text-primary duration-50 ease-in transition-colors" href="profile">
@@ -73,7 +73,7 @@ include 'includes/header.php';
 <div class="flex flex-col z-10">
     <main class="flex-1 mx-auto py-8 px-6 md:px-8 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden bg-white" data-v0-t="card">
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden bg-white">
             <img
                 src="../assets/img/1.jpg"
                 alt="Featured Listing 1"
@@ -94,14 +94,6 @@ include 'includes/header.php';
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
     </main>
 </div>
 

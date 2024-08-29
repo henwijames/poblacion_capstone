@@ -1,39 +1,6 @@
 <?php include 'includes/header.php'; ?>
-<!-- Sidebar -->
-<?php include 'includes/sidebar.php'; ?>
-<!-- Sidebar End -->
-<main class="w-full md:w-[calc(100%-256px)] md:ml-64 min-h-screen main transition-all main">
-    <div class="py-2 px-4 flex items-center shadow-md shadow-black/5">
-        <button type="button" class="text-lg sidebar-toggle">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-        <ul class="flex items-center ml-4">
-            <li class="mr-2">
-                <a href="#" class="text-sm text-gray-600">Dashboard</a>
-            </li>
-        </ul>
-        <ul class="ml-auto flex items-center ">
-            <li class="mr-1 dropdown relative flex items-center gap-4">
-                <span class="hidden md:flex text-gray-400">Henry James Ribano</span>
-                <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
-
-                    <i class="fa-solid fa-user mr-2"></i>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </button>
-                <ul class="dropdown-menu hidden shadow-md py-1.5 rounded-md bg-white border-gray-100 w-[140px] font-medium absolute top-full right-4 mt-2 z-10">
-                    <li>
-                        <a href="#" class="flex items-center text-[13px] py-1.5 px-4 hover:bg-gray-100">Profile</a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center text-[13px] py-1.5 px-4 hover:bg-gray-100">Settings</a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center text-[13px] py-1.5 px-4 hover:bg-gray-100">Logout</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
+<main class="main-content main">
+    <?php include 'includes/topbar.php'; ?>
     <div class="p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             <div class="bg-background rounded-md shadow-md border border-gray-100 p-6">

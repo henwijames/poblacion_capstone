@@ -47,3 +47,17 @@
 main.active {
   @apply md:w-full md:ml-0;
 }
+
+.main-content {
+  width: 100%;
+  margin-left: 0;
+  min-height: 100vh;
+  transition: all 0.2s ease-in-out;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    width: calc(100% - 256px);
+    margin-left: 16rem; /* 64px is 16rem in Tailwind's default scale */
+  }
+}

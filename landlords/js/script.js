@@ -36,7 +36,6 @@ document.querySelectorAll(".sidebar-dropdown-toggle").forEach((item) => {
 
 document.querySelectorAll(".dropdown-toggle").forEach((button) => {
   button.addEventListener("click", () => {
-    console.log("clicked");
     const dropdownMenu = button.nextElementSibling;
 
     // Toggle the hidden class to show/hide the dropdown
@@ -59,5 +58,33 @@ document.addEventListener("click", (e) => {
     document.querySelectorAll(".dropdown-menu").forEach((menu) => {
       menu.classList.add("hidden");
     });
+  }
+});
+
+//End Sidebar
+
+document.addEventListener("DOMContentLoaded", function () {
+  const breadCrumb = document.getElementById("breadcrumb");
+  const pageLinks = document.querySelectorAll("a[href]");
+
+  pageLinks.forEach((link) => {
+    link.addEventListener("click", function (event) {
+      const pageName = this.textContent.trim();
+
+      // Prevent duplicate "Dashboard / Dashboard" entries
+
+      breadCrumb.textContent = `${pageName}`;
+
+      // Store the breadcrumb in localStorage
+      localStorage.setItem("breadcrumb", breadCrumb.textContent);
+    });
+  });
+
+  // On page load, restore the breadcrumb from localStorage
+  const savedBreadcrumb = localStorage.getItem("breadcrumb");
+  if (savedBreadcrumb) {
+    breadCrumb.textContent = savedBreadcrumb;
+  } else {
+    breadCrumb.textContent = "Dashboard";
   }
 });
