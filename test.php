@@ -21,7 +21,7 @@
 
 <body>
 
-    <div class="fixed left-0 top-0 w-64 h-full bg-background p-4 z-50 sidebar-menu transition-transform ">
+    <!-- <div class="fixed left-0 top-0 w-64 h-full bg-background p-4 z-[99999] sidebar-menu transition-transform ">
         <a href="#" class="flex justify-center items-center pb-4 border-b border-b-black">
             <img src="../assets/img/poblacionease.png" alt="" class="w-36 object-cover">
         </a>
@@ -116,7 +116,8 @@
                 </ul>
             </li>
         </ul>
-    </div>
+    </div> -->
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 md:hidden z-40 sidebar-overlay"></div>
     <main class="main-content main">
         <?php include 'includes/topbar.php'; ?>
         <div class="p-6">
@@ -175,7 +176,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
+                                <tr class="bg-white border-b hover:bg-slate-50 transition-colors hidden">
                                     <td class="py-3 px-4 text-[13px] text-slate-600 font-medium">Henry James Ribano</td>
                                     <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">House 5</td>
                                     <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P2,500</td>
@@ -183,7 +184,7 @@
                                         <span class="inline-block px-4 py-1 rounded-full text-sm bg-yellow-400 text-white">Pending</span>
                                     </td>
                                 </tr>
-                                <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
+                                <tr class="bg-white border-b hover:bg-slate-50 transition-colors border-r">
                                     <td class="py-3 px-4 text-[13px] text-slate-600 font-medium">Juan Lorenzo Aguilar</td>
                                     <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">House 2</td>
                                     <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P2,800</td>
@@ -196,7 +197,7 @@
                                     <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">House 1</td>
                                     <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P2,100</td>
                                     <td class="py-3 px-4">
-                                        <span class="inline-block px-4 py-1 rounded-full text-sm bg-red-400 text-white">Banned</span>
+                                        <span class="inline-block px-4 py-1 w-24 rounded-full text-xs bg-red-400 text-white">Banned</span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -469,88 +470,444 @@
 
 
     </div>
+    <nav class="shadow py-2 z-20 sticky top-0 px-5 md:px-[120px]  md:flex items-center justify-between bg-background ">
+        <div class="flex justify-between items-center">
+            <a href="index">
+                <img src="../assets/img/poblacionease.png" alt="logo" class="w-[150px]">
+            </a>
+            <span class="text-3xl cursor-pointer md:hidden block">
+                <i class="fa-solid fa-bars" onclick="onToggleMenu(this)"></i>
+            </span>
+        </div>
+        <ul id="menu" class="md:flex md:items-center gap-4 md:z-auto  md:static absolute 
+            bg-background w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 
+            opacity-0 top-[-400px] transition-all ease-in duration-500" style="z-index: -1;">
+            <li class="my-6 md:my-0 ">
+                <a href="index" class="text-lg hover:text-primary duration-500">Home</a>
+            </li>
+            <li class="my-6 md:my-0 ">
+                <a href="#about" class="text-lg hover:text-primary duration-500">About Us</a>
+            </li>
+            <li class="my-6 md:my-0 ">
+                <a href="#book" class="text-lg hover:text-primary duration-500">Book Now!</a>
+            </li>
+            <a class="profile-name md:hidden flex items-center hover:text-primary duration-50 ease-in transition-colors" href="profile">
+                <img src="../assets/img/me.jpg" alt="profile-picture" class="cursor-pointer rounded-full" style="width: 50px; height: 50px; margin-right: 20px;">
+                <p class="text-lg " href="#">John Doe</p>
+            </a>
+        </ul>
+        <a class="profile-name md:flex hidden md:items-center hover:text-primary duration-50 ease-in transition-colors" href="profile">
+            <img src="<?php echo $profilePicture; ?>" alt="profile-picture" class=" rounded-full" style="width: 50px; height: 50px; margin-right: 20px;">
+            <p class="text-lg hover:text-primary duration-500" href="#"><?php echo htmlspecialchars($userName); ?></p>
+        </a>
+    </nav>
+    <section class="bg-background" id="apartment">
+        <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20" id="about">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <div class="mb-6">
+                        <h1 class="text-3xl font-bold mb-2">Luxury Apartment in Downtown</h1>
+                        <p class="text-muted-foreground">123 Main St, Anytown USA</p>
+                    </div>
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold mb-2">Landlord</h2>
+                        <p class="text-muted-foreground">Henry James Ribano</p>
+                        <p class="text-muted-foreground">Phone : 09691756860</p>
+                    </div>
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold mb-2">Amenities</h2>
+                        <ul class="grid grid-cols-2 gap-4">
+                            <li class="flex items-center gap-2">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-5 h-5 text-primary">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                                <span>Hardwood Floors</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-5 h-5 text-primary">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                                <span>Stainless Steel Appliances</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-5 h-5 text-primary">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                                <span>In-Unit Laundry</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-5 h-5 text-primary">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                                <span>Balcony</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-5 h-5 text-primary">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                                <span>Gym</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-5 h-5 text-primary">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                                <span>Parking</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <img
+                        src="../assets/img/1.jpg"
+                        alt="Apartment Image"
+                        width="300"
+                        height="200"
+                        class="rounded-lg object-cover shadow-lg"
+                        style="aspect-ratio: 300 / 200; object-fit: cover;" />
+                    <img
+                        src="../assets/img/2.jpg"
+                        alt="Apartment Image"
+                        width="300"
+                        height="200"
+                        class="rounded-lg object-cover shadow-lg"
+                        style="aspect-ratio: 300 / 200; object-fit: cover;" />
+                    <img
+                        src="../assets/img/3.jpg"
+                        alt="Apartment Image"
+                        width="300"
+                        height="200"
+                        class="rounded-lg object-cover shadow-lg"
+                        style="aspect-ratio: 300 / 200; object-fit: cover;" />
+                    <img
+                        src="../assets/img/4.jpg"
+                        alt="Apartment Image"
+                        width="300"
+                        height="200"
+                        class="rounded-lg object-cover shadow-lg"
+                        style="aspect-ratio: 300 / 200; object-fit: cover;" />
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <div class="container mx-auto px-4 sm:px-6 md:px-8 py-12">
+        <h1 class="text-3xl font-bold mb-8">Add New Listing</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <form class="space-y-6">
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700">
+                            Address
+                        </label>
+                        <input
+                            type="text"
+                            id="address"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                            name="address"
+                            placeholder="123 Main St, Anytown USA" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="bedrooms" class="block text-sm font-medium text-gray-700">
+                                Bedrooms
+                            </label>
+                            <input
+                                id="bedrooms"
+                                type="number"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                                placeholder="2"
+                                name="bedrooms" />
+                        </div>
+                        <div>
+                            <label for="bathrooms" class="block text-sm font-medium text-gray-700">
+                                Bathrooms
+                            </label>
+                            <input
+                                id="bathrooms"
+                                type="number"
+                                name="bathrooms"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                                placeholder="1" />
+                        </div>
+                    </div>
+                    <div>
+                        <label for="sqft" class="block text-sm font-medium text-gray-700">
+                            Square Footage
+                        </label>
+                        <input
+                            id="sqft"
+                            type="number"
+                            name="sqft"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                            placeholder="1200" />
+                    </div>
+                    <div>
+                        <label for="rent" class="block text-sm font-medium text-gray-700">
+                            Rent Price
+                        </label>
+                        <input
+                            id="rent"
+                            type="number"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                            placeholder="1500"
+                            name="rent" />
+                    </div>
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700">
+                            Description
+                        </label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="3"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                            placeholder="Describe the property details..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Upload Images</label>
+                        <div class="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+                            <div class="space-y-1 text-center">
+                                <svg
+                                    class="mx-auto h-12 w-12 text-gray-400"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    viewBox="0 0 48 48"
+                                    aria-hidden="true">
+                                    <path
+                                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label
+                                        for="file-upload"
+                                        class="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary-dark">
+                                        <span>Upload a file</span>
+                                        <input id="file-upload" class="sr-only" type="file" name="file-upload" />
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button
+                            type="submit"
+                            class="inline-flex justify-center rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                            Save Listing
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold mb-4">Your Listings</h2>
+                <div class="space-y-4">
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-medium">123 Main St, Anytown USA</h3>
+                            <div class="flex gap-2">
+                                <button class="text-primary hover:text-primary-dark">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                </button>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 mb-2">2 bedrooms, 1 bathroom</p>
+                        <p class="text-gray-500 mb-2">1200 sq ft</p>
+                        <p class="text-gray-500 mb-2">$1500/month</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-medium">456 Oak St, Anytown USA</h3>
+                            <div class="flex gap-2">
+                                <button class="text-primary hover:text-primary-dark">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                </button>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 mb-2">3 bedrooms, 2 bathrooms</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Upload Images</label>
+        <p class="block text-xs font-medium text-red-500" ;">Select 5 images in your gallery</p>
+        <div class="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+            <div class="space-y-1 text-center" id="image-drop-area">
+                <svg
+                    class="mx-auto h-12 w-12 text-gray-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true">
+                    <path
+                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                </svg>
+                <div class="flex text-sm text-gray-600">
+                    <label
+                        for="file-upload"
+                        class="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary-dark">
+                        <span>Upload files</span>
+                        <input id="file-upload" class="sr-only" type="file" name="file-upload" multiple />
+                    </label>
+                    <p class="pl-1">or drag and drop</p>
+                </div>
+                <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+            </div>
+        </div>
+
+        <!-- Five Image Preview Container -->
+        <div id="file-preview" class="grid grid-cols-5 gap-4 mt-4">
+            <div class="w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
+                <p class="text-sm text-gray-500">Image 1</p>
+            </div>
+            <div class="w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
+                <p class="text-sm text-gray-500">Image 2</p>
+            </div>
+            <div class="w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
+                <p class="text-sm text-gray-500">Image 3</p>
+            </div>
+            <div class="w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
+                <p class="text-sm text-gray-500">Image 4</p>
+            </div>
+            <div class="w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
+                <p class="text-sm text-gray-500">Image 5</p>
+            </div>
+        </div>
+    </div>
     <script>
-        const sidebarToggle = document.querySelector(".sidebar-toggle");
-        const sidebarOverlay = document.querySelector(".sidebar-overlay");
-        const sidebarMenu = document.querySelector(".sidebar-menu");
-        const main = document.querySelector(".main");
+        const fileInput = document.getElementById('file-upload');
+        const filePreview = document.getElementById('file-preview');
+        const maxFiles = 5;
 
-        sidebarToggle.addEventListener("click", (e) => {
-            e.preventDefault();
-            main.classList.toggle("active");
-            sidebarOverlay.classList.toggle("hidden");
-            sidebarMenu.classList.toggle("-translate-x-full");
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
         });
 
-        sidebarOverlay.addEventListener("click", (e) => {
-            e.preventDefault();
-            main.classList.add("active");
-            sidebarOverlay.classList.toggle("hidden");
-            sidebarMenu.classList.toggle("-translate-x-full");
-        });
+        function handleFiles(files) {
+            const fileArray = Array.from(files).slice(0, maxFiles); // Handle only maxFiles number of files
+            const previewContainers = filePreview.querySelectorAll('div'); // Get all containers
 
-        document.querySelectorAll(".sidebar-dropdown-toggle").forEach((item) => {
-            item.addEventListener("click", (e) => {
-                e.preventDefault();
-                const parent = item.closest(".group");
-                parent.classList.add("selected");
-            });
-        });
-
-        document.querySelectorAll('.dropdown-toggle').forEach(button => {
-            button.addEventListener('click', () => {
-                const dropdownMenu = button.nextElementSibling;
-
-                // Toggle the hidden class to show/hide the dropdown
-                dropdownMenu.classList.toggle('hidden');
-
-                // Close any other open dropdowns
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    if (menu !== dropdownMenu) {
-                        menu.classList.add('hidden');
-                    }
-                });
-            });
-        });
-
-        // Optional: Close the dropdown if clicked outside
-        document.addEventListener('click', (e) => {
-            const isDropdown = e.target.matches('.dropdown-toggle') || e.target.closest('.dropdown');
-            if (!isDropdown) {
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    menu.classList.add('hidden');
-                });
-            }
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const breadCrumb = document.getElementById("breadcrumb");
-            const pageLinks = document.querySelectorAll("a[href]");
-
-            pageLinks.forEach((link) => {
-                link.addEventListener("click", function(event) {
-                    const pageName = this.textContent.trim();
-
-                    // Prevent duplicate "Dashboard / Dashboard" entries
-                    if (pageName !== "Dashboard") {
-                        breadCrumb.textContent = `Dashboard / ${pageName}`;
-                    } else {
-                        breadCrumb.textContent = "Dashboard";
-                    }
-
-                    // Store the breadcrumb in localStorage
-                    localStorage.setItem("breadcrumb", breadCrumb.textContent);
-                });
+            // Reset all containers
+            previewContainers.forEach(container => {
+                container.innerHTML = `<p class="text-sm text-gray-500">Image ${Array.from(previewContainers).indexOf(container) + 1}</p>`;
             });
 
-            // On page load, restore the breadcrumb from localStorage
-            const savedBreadcrumb = localStorage.getItem("breadcrumb");
-            if (savedBreadcrumb) {
-                breadCrumb.textContent = savedBreadcrumb;
-            } else {
-                breadCrumb.textContent = "Dashboard";
-            }
-        });
+            // Assign each image to its corresponding container
+            fileArray.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('object-cover', 'w-full', 'h-full', 'rounded-md');
+                    previewContainers[index].innerHTML = ''; // Clear placeholder text
+                    previewContainers[index].appendChild(img); // Add image
+                };
+                reader.readAsDataURL(file);
+            });
+        }
     </script>
 </body>
 

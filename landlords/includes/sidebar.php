@@ -17,7 +17,7 @@
             </a>
             <ul class="pl-7 mt-2 hidden group-[.selected]:block ">
                 <li class="mb-4">
-                    <a href="#" class="text-sm flex items-center dot hover:text-primary">Add Listings</a>
+                    <a href="add-listings" class="text-sm flex items-center dot hover:text-primary">Add Listings</a>
                 </li>
                 <li class="mb-4">
                     <a href="listings" class="text-sm flex items-center dot hover:text-primary">Active Listings</a>

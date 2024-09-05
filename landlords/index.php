@@ -78,7 +78,7 @@
                                 <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">House 1</td>
                                 <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P2,100</td>
                                 <td class="py-3 px-4">
-                                    <span class="inline-block px-4 py-1 rounded-full text-sm bg-red-400 text-white">Banned</span>
+                                    <span class="inline-block w-24 px-4 py-1 rounded-full text-xs bg-red-400 text-white">Not Paid</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -148,4 +148,5 @@
         </div>
     </div>
 </main>
+
 <?php include 'includes/footer.php'; ?>
