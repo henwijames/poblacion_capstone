@@ -2,6 +2,8 @@
 session_start();
 include 'session.php';
 include '../Controllers/Database.php';
+require_once '../Models/Listing.php';
+require_once '../Models/Landlords.php';
 
 $userName = "Guest";
 $defaultProfilePicture = "../assets/img/me.jpg"; //Default profile picture
@@ -32,6 +34,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
         $profilePicture = $landlord['profile_picture']; // Replace 'profile_picture' with the actual column name
     }
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,6 +49,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
 
     <!-- FontAwesome CDN -->
     <script src="https://kit.fontawesome.com/f284e8c7c2.js" crossorigin="anonymous"></script>
+    <!-- Swiper CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <!-- JQuery File -->
     <script src="../assets/js/jquery-3.7.1.min.js"></script>

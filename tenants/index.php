@@ -32,40 +32,45 @@ include 'includes/header.php';
         <p class="text-lg hover:text-primary duration-500" href="#"><?php echo htmlspecialchars($userName); ?></p>
     </a>
 </nav>
-<section class="relative h-[500px] tenants-home" style="background-image: url('../assets/img/bg.png'); z-index: -1; background-size: cover; background-position: center;">
+<section class="relative h-[500px] tenants-home" style="background-image: url('../assets/img/bg.png'); z-index: 1; background-size: cover; background-position: center;">
     <div class="container mx-auto flex flex-col justify-center items-center text-center h-full px-4 text-[20px]">
         <h1 class="text-4xl font-bold">Discover a New Era of Convenience and Connection</h1>
         <p class="mt-4 mb-4 text-base md:text-lg">Experience effortless living in Poblacion, Taal with Poblacion<span class="text-primary">Ease</span>.</p>
 
         <div class="flex flex-col md:flex-row items-center gap-4 mt-4 w-full max-w-xl">
-            <div class="w-full">
-                <select class="shadow px-3 py-3 w-full md:w-[100px] rounded-lg md:rounded-l-lg">
-                    <option value="">Choose Zone</option>
-                    <option value="">Zone 1</option>
-                    <option value="">Zone 2</option>
-                    <option value="">Zone 3</option>
-                    <option value="">Zone 4</option>
-                    <option value="">Zone 6</option>
-                    <option value="">Zone 7</option>
-                    <option value="">Zone 8</option>
-                    <option value="">Zone 9</option>
-                    <option value="">Zone 10</option>
-                    <option value="">Zone 11</option>
-                    <option value="">Zone 12</option>
-                    <option value="">Zone 13</option>
-                    <option value="">Zone 14</option>
-                </select>
-            </div>
-            <div class="w-full">
-                <select class="shadow px-3 py-3 w-full md:w-[100px] rounded-lg md:rounded-l-lg">
-                    <option value="">Choose Rental Term</option>
-                    <option value="">Long Term Rentals</option>
-                    <option value="">Short Term Rentals</option>
-                    <option value="">Daily Rentals</option>
-                </select>
-            </div>
-            <button class="bg-primary text-white p-2 w-full md:w-auto rounded-lg md:rounded-r-lg hover:bg-accent">Search</button>
+            <form action="search.php" method="GET" class="w-full flex flex-col md:flex-row items-center gap-4">
+                <div class="w-full">
+                    <select name="zone" class="shadow px-3 py-3 w-full md:w-[100px] rounded-lg md:rounded-l-lg">
+                        <option value="">Choose Zone</option>
+                        <option value="zone1">Zone 1</option>
+                        <option value="zone2">Zone 2</option>
+                        <option value="zone3">Zone 3</option>
+                        <option value="zone4">Zone 4</option>
+                        <option value="zone6">Zone 6</option>
+                        <option value="zone7">Zone 7</option>
+                        <option value="zone8">Zone 8</option>
+                        <option value="zone9">Zone 9</option>
+                        <option value="zone10">Zone 10</option>
+                        <option value="zone11">Zone 11</option>
+                        <option value="zone12">Zone 12</option>
+                        <option value="zone13">Zone 13</option>
+                        <option value="zone14">Zone 14</option>
+                    </select>
+                </div>
+                <div class="w-full">
+                    <select name="rental_term" class="shadow px-3 py-3 w-full md:w-[100px] rounded-lg md:rounded-l-lg">
+                        <option value="">Choose Rental Term</option>
+                        <option value="long_term">Long Term Rentals</option>
+                        <option value="short_term">Short Term Rentals</option>
+                        <option value="daily">Daily Rentals</option>
+                    </select>
+                </div>
+                <button type="submit" class="bg-primary text-white p-2 w-full md:w-auto rounded-lg md:rounded-r-lg hover:bg-accent">
+                    Search
+                </button>
+            </form>
         </div>
+
     </div>
 
 

@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $landlords->lname = trim($_POST['lname']);
     $landlords->email = trim($_POST['email']);
     $landlords->address = trim($_POST['address']);
+    $landlords->property_name = trim($_POST['property_name']);
     $landlords->phone = trim($_POST['phone']);
     $password = trim($_POST['password']);
     $confirm = trim($_POST['confirm']);
@@ -35,6 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if (empty($landlords->address)) {
         $errors['address'] = "Address is required";
+    }
+    if (empty($landlords->property_name)) {
+        $errors['address'] = "Business Property Name is required";
     }
 
     if (empty($landlords->phone)) {
@@ -58,19 +62,24 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $landlords->password = password_hash($password, PASSWORD_BCRYPT); // Hash the password
 
         if ($landlords->create()) {
-            $_SESSION['success'] = "User created successfully!";
-            header("Location: ../landlords/index"); // Redirect to a success page or another page
-            exit();
+            $foundLandlord = $landlords->findByEmail($landlords->email);
+            if ($foundLandlord) {
+                $_SESSION['user_id'] = $foundLandlord['id'];
+                $_SESSION['user_role'] = 'landlord';
+                $_SESSION['success'] = "User created successfully!";
+                header("Location: ../landlords/index"); // Redirect to a success page or another page
+                exit();
+            } else {
+                $_SESSION['errors']['database'] = "Failed to create user.";
+                header("Location: ../landlordSignup");
+                exit();
+            }
         } else {
-            $_SESSION['errors']['database'] = "Failed to create user.";
-            header("Location: ../landlords/signup");
+            // Store errors and form data in session
+            $_SESSION['errors'] = $errors;
+            $_SESSION['form_data'] = $_POST;
+            header("Location: ../landlordSignup");
             exit();
         }
-    } else {
-        // Store errors and form data in session
-        $_SESSION['errors'] = $errors;
-        $_SESSION['form_data'] = $_POST;
-        header("Location: ../landlords/signup");
-        exit();
     }
 }

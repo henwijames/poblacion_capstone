@@ -17,7 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $listing->sqft = trim($_POST['sqft']);
     $listing->rent = trim($_POST['rent']);
     $listing->description = trim($_POST['description']);
+    $listing->property_type = isset($_POST['property_type']) ? trim($_POST['property_type']) : null;
     $listing->amenities = isset($_POST['amenities']) ? $_POST['amenities'] : [];
+    $listing->user_id = $_SESSION['user_id'];
 
     // Validate input fields
     $errors = [];
@@ -39,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
     if (empty($listing->description)) {
         $errors['description'] = "Description is required";
+    }
+    if (empty($listing->property_type)) {
+        $errors['property_type'] = "Property type is required";
     }
 
     // Handle file uploads

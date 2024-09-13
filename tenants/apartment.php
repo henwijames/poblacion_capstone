@@ -30,7 +30,7 @@
         <p class="text-lg hover:text-primary duration-500" href="#"><?php echo htmlspecialchars($userName); ?></p>
     </a>
 </nav>
-<section class="bg-background" id="apartment">
+<section class="bg-background h-screen" id="apartment">
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20" id="about">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>

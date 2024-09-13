@@ -63,7 +63,9 @@
                 </div>
 
                 <!-- Edit Profile Button -->
-
+                <div class="flex justify-center mt-4">
+                    <a href="edit-profile" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Edit Profile</a>
+                </div>
             </div>
         </section>
     </div>

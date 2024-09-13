@@ -29,6 +29,22 @@ ini_set('display_errors', 1);
                         </div>
                     <?php endif; ?>
                     <div>
+                        <h3 class="text-lg font-medium text-gray-700">Property Type*</h3>
+                        <div class="flex gap-4 mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="property_type" value="apartment" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Apartment') echo 'checked'; ?>>
+                                <span class="ml-2 text-sm text-gray-700">Apartment</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="property_type" value="business" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Business Establishment') echo 'checked'; ?>>
+                                <span class="ml-2 text-sm text-gray-700">Business Establishment</span>
+                            </label>
+                        </div>
+                        <?php if (isset($errors['property_type'])): ?>
+                            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['property_type']); ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <div>
                         <label for="address" class="block text-sm font-medium text-gray-700">
                             Address*
                         </label>
@@ -148,7 +164,7 @@ ini_set('display_errors', 1);
                                         for="file-upload"
                                         class="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary-dark">
                                         <span>Upload files</span>
-                                        <input id="file-upload" class="sr-only" type="file" name="file-upload" multiple />
+                                        <input id="file-upload" class="sr-only" type="file" name="file-upload[]" accept="image/jpeg, image/png, image/jpg" multiple />
                                     </label>
                                     <p class="pl-1">or drag and drop</p>
                                 </div>

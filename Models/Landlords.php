@@ -12,6 +12,7 @@ class Landlords
     public $lname;
     public $email;
     public $address;
+    public $property_name;
     public $phone;
     public $password;
 
@@ -22,7 +23,7 @@ class Landlords
 
     public function create()
     {
-        $query = "INSERT INTO " . $this->table . " SET first_name=:fname, middle_name=:mname, last_name=:lname, email=:email, address=:address, phone_number=:phone, password=:password";
+        $query = "INSERT INTO " . $this->table . " SET first_name=:fname, middle_name=:mname, last_name=:lname, email=:email, address=:address, property_name=:property_name, phone_number=:phone, password=:password";
 
         $stmt = $this->conn->prepare($query);
 
@@ -31,6 +32,7 @@ class Landlords
         $this->lname = htmlspecialchars(strip_tags($this->lname));
         $this->email = htmlspecialchars(strip_tags($this->email));
         $this->address = htmlspecialchars(strip_tags($this->address));
+        $this->property_name = htmlspecialchars(strip_tags($this->property_name));
         $this->phone = htmlspecialchars(strip_tags($this->phone));
         $this->password = htmlspecialchars(strip_tags($this->password));
 
@@ -40,6 +42,7 @@ class Landlords
         $stmt->bindParam(':lname', $this->lname);
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':address', $this->address);
+        $stmt->bindParam(':property_name', $this->property_name);
         $stmt->bindParam(':phone', $this->phone);
         $stmt->bindParam(':password', $this->password);
 
