@@ -1,41 +1,12 @@
 <?php require 'includes/header.php'; ?>
-<nav class="shadow py-2 z-20 sticky top-0 px-5 md:px-[120px]  md:flex items-center justify-between bg-background ">
-    <div class="flex justify-between items-center">
-        <a href="index">
-            <img src="../assets/img/poblacionease.png" alt="logo" class="w-[150px]">
-        </a>
-        <span class="text-3xl cursor-pointer md:hidden block">
-            <i class="fa-solid fa-bars" onclick="onToggleMenu(this)"></i>
-        </span>
-    </div>
-    <ul id="menu" class="md:flex md:items-center gap-4 md:z-auto  md:static absolute 
-            bg-background w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 
-            opacity-0 top-[-400px] transition-all ease-in duration-500" style="z-index: -1;">
-        <li class="my-6 md:my-0 ">
-            <a href="index" class="text-lg hover:text-primary duration-500">Apartments</a>
-        </li>
-        <li class="my-6 md:my-0 ">
-            <a href="#rent" class="text-lg hover:text-primary duration-500">Commercial</a>
-        </li>
-        <li class="my-6 md:my-0 ">
-            <a href="#about" class="text-lg hover:text-primary duration-500">Find Agent</a>
-        </li>
-        <a class="profile-name md:hidden flex items-center hover:text-primary duration-50 ease-in transition-colors" href="profile">
-            <img src="../assets/img/me.jpg" alt="profile-picture" class="cursor-pointer rounded-full" style="width: 50px; height: 50px; margin-right: 20px;">
-            <h1 class="w-full text-center  md:my-2 my-6 text-primary font-bold text-2xl sm:text-3xl lg:text-4xl">
-                <?php echo htmlspecialchars($fullName) ?>
-            </h1>
-        </a>
-    </ul>
-    <a class="profile-name md:flex hidden md:items-center hover:text-primary duration-50 ease-in transition-colors" href="profile">
-        <img src="<?php echo $profilePicture; ?>" alt="profile-picture" class=" rounded-full" style="width: 50px; height: 50px; margin-right: 20px;">
-        <p class="text-lg hover:text-primary duration-500" href="#"><?php echo htmlspecialchars($userName); ?></p>
-    </a>
-</nav>
-<section class="w-full overflow-hidden bg-background">
+<?php require 'includes/sidebar.php'; ?>
+
+
+<main class="main-content main">
+    <?php require 'includes/topbar.php'; ?>
     <div class="flex flex-col">
         <!-- Cover Image -->
-        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw5fHxjb3ZlcnxlbnwwfDB8fHwxNzEwNzQxNzY0fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="User Cover"
+        <img src="../assets/img/volcano.jpg" alt="User Cover"
             class="w-full h-auto max-h-[20rem] object-cover" />
 
         <!-- Profile Image and Name -->
@@ -85,11 +56,9 @@
                 </div>
             </div>
             <div class="flex justify-center gap-2 py-2">
-                <a href="logout" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Logout</a>
                 <a href="edit-profile" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Edit Profile</a>
             </div>
         </div>
     </div>
-</section>
-
+</main>
 <?php require 'includes/footer.php'; ?>

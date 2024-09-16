@@ -110,9 +110,6 @@
                                     <button class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
                                         Edit
                                     </button>
-                                    <button class="inline-block px-4 py-1 rounded-md text-sm bg-red-400 text-white">
-                                        Delete
-                                    </button>
                                 </td>
                             </tr>
                             <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
@@ -123,9 +120,6 @@
                                     <button class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
                                         Edit
                                     </button>
-                                    <button class="inline-block px-4 py-1 rounded-md text-sm bg-red-400 text-white">
-                                        Delete
-                                    </button>
                                 </td>
                             </tr>
                             <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
@@ -135,9 +129,6 @@
                                 <td class="py-3 px-4 flex gap-2">
                                     <button class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
                                         Edit
-                                    </button>
-                                    <button class="inline-block px-4 py-1 rounded-md text-sm bg-red-400 text-white">
-                                        Delete
                                     </button>
                                 </td>
                             </tr>

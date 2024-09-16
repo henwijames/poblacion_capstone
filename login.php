@@ -13,7 +13,7 @@ unset($_SESSION['form_data']);
         <div class="flex flex-col justify-center p-8 md:p-14">
             <span class="mb-3 text-5xl font-bold text-[#C1C549] uppercase">log<span class="text-secondary">in</span></span>
             <span class="font-light text-gray-400 mb-4">
-                Welcome back to <span class="font-bold">Poblacion<span class="text-primary">Ease</span></span>. Please login to your account.
+                Welcome back to <a href="index" class="font-bold">Poblacion<span class="text-primary">Ease</span></a>. Please login to your account.
             </span>
             <form action="Controllers/LoginController.php" method="POST">
                 <?php if (isset($errors['login'])): ?>

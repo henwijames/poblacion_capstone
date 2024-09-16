@@ -71,6 +71,35 @@ class Tenants
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function updateTenant($tenantId, $data)
+    {
+        $query = 'UPDATE tenants 
+            SET first_name = :first_name, middle_name = :middle_name, last_name = :last_name,
+                address = :address, phone_number = :phone_number, email = :email 
+            WHERE id = :id';
+
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':first_name', $data['first_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':middle_name', $data['middle_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':last_name', $data['last_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':address', $data['address'], PDO::PARAM_STR);
+        $stmt->bindParam(':phone_number', $data['phone_number'], PDO::PARAM_STR);
+        $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
+        $stmt->bindParam(':id', $tenantId, PDO::PARAM_INT);
+
+        // Execute update
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            // Print error information
+            print_r($stmt->errorInfo());
+            return false;
+        }
+    }
+
+
     public function verifyPassword($password, $hash)
     {
         return password_verify($password, $hash);

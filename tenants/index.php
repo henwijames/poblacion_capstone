@@ -23,12 +23,12 @@ include 'includes/header.php';
             <a href="#about" class="text-lg hover:text-primary duration-500">Find Agent</a>
         </li>
         <a class="profile-name md:hidden flex items-center hover:text-primary duration-50 ease-in transition-colors" href="profile">
-            <img src="../assets/img/me.jpg" alt="profile-picture" class="cursor-pointer rounded-full" style="width: 50px; height: 50px; margin-right: 20px;">
+            <img src="../assets/img/me.jpg" alt="profile-picture" class="cursor-pointer rounded-full" style="width: 40px; height: 40px; margin-right: 20px;">
             <p class="text-lg " href="#"><?php echo htmlspecialchars($userName); ?></p>
         </a>
     </ul>
     <a class="profile-name md:flex hidden md:items-center hover:text-primary duration-50 ease-in transition-colors" href="profile">
-        <img src="<?php echo $profilePicture; ?>" alt="profile-picture" class=" rounded-full" style="width: 50px; height: 50px; margin-right: 20px;">
+        <img src="<?php echo $profilePicture; ?>" alt="profile-picture" class=" rounded-full" style="width: 40px; height: 40px; margin-right: 20px;">
         <p class="text-lg hover:text-primary duration-500" href="#"><?php echo htmlspecialchars($userName); ?></p>
     </a>
 </nav>

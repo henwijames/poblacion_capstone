@@ -63,5 +63,5 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
 <body class="font-custom">
     <?php
     $page = basename($_SERVER['PHP_SELF'], ".php");
-    include 'includes/sidebar.php';
+    include 'sidebar.php';
     ?>
