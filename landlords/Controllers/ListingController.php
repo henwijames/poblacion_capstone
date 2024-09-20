@@ -5,6 +5,8 @@ require_once '../../Models/Listing.php';
 
 $errors = [];
 
+
+//Add listings
 if (isset($_POST['add_listing'])) {
     $database = new Database();
     $db = $database->getConnection();
@@ -153,10 +155,10 @@ if (isset($_POST['update_listing'])) {
             // Update listing in the database
             if ($listing->updateListing($data)) {
                 $_SESSION['success_message'] = 'Listing updated successfully.';
-                header("Location: ../edit-listings.php?id=" . $listing_id);
+                header("Location: ../view-listings.php?id=" . $listing_id);
                 exit();
             } else {
-                $_SESSION['errors'] = ['update' => 'Failed to update the listing.'];
+                $_SESSION['error_message'] = ['update' => 'Failed to update the listing.'];
             }
         } else {
             $_SESSION['errors'] = $errors;

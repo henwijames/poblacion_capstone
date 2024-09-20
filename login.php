@@ -42,11 +42,12 @@ unset($_SESSION['form_data']);
                     </div>
                     <a href="#" class="font-bold text-md hover:text-gray-400 transition-colors ease">Forgot Password?</a>
                 </div>
-                <button class="w-full bg-[#C1C549] text-white p-2 rounded-lg mb-6 
+                <button id="login-button" class="w-full bg-[#C1C549] text-white p-2 rounded-lg mb-6 flex items-center justify-center
                     hover:bg-accent border-[#C1C549] hover:border 
                     hover:border-gray-300 transition-all ease-in uppercase shadow"
                     type="submit">
-                    Login
+                    <span id="login-text">Login</span>
+                    <img id="login-loader" src="assets/loader2.gif" style="display: none; width: 20px; height: 20px; vertical-align: middle; margin-left: 10px;">
                 </button>
             </form>
             <div class="text-center text-gray-400">
@@ -61,5 +62,30 @@ unset($_SESSION['form_data']);
     </div>
 
 </main>
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        // Prevent the form from submitting immediately
+        e.preventDefault();
 
-<?php include 'partials/footer.php'; ?>
+        // Show the GIF loader
+        document.getElementById('login-loader').style.display = 'inline-block';
+        document.getElementById('login-text').textContent = 'Logging in...';
+
+        // Disable the button to prevent multiple submissions
+        document.getElementById('login-button').disabled = true;
+
+        // Save the form reference to use later
+        const form = this;
+
+        // Use setTimeout to delay the form submission by 3 seconds
+        setTimeout(function() {
+
+            // Manually trigger form submission after 3 seconds
+            form.submit();
+        }, 2000); // 3000 milliseconds = 3 seconds
+    });
+</script>
+
+</body>
+
+</html>

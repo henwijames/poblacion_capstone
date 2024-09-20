@@ -3,6 +3,8 @@
 session_start();
 include 'session.php';
 include '../Controllers/Database.php';
+include '../Models/Listing.php';
+include '../Models/Landlords.php';
 
 $userName = "Guest";
 $defaultProfilePicture = "../assets/img/me.jpg"; //Default profile picture
@@ -44,9 +46,20 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
 
     <!-- FontAwesome CDN -->
     <script src="https://kit.fontawesome.com/f284e8c7c2.js" crossorigin="anonymous"></script>
-
+    <!-- Swiper CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- JQuery File -->
     <script src="../assets/js/jquery-3.7.1.min.js"></script>
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Animate CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
 
 <body class="font-custom">

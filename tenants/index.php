@@ -1,5 +1,9 @@
 <?php
 include 'includes/header.php';
+$database = new Database();
+$db = $database->getConnection();
+$listing = new Listing($db);
+$landlords = new Landlords($db);
 ?>
 <nav class="shadow py-2 z-20 sticky top-0 px-5 md:px-[120px]  md:flex items-center justify-between bg-background ">
     <div class="flex justify-between items-center">

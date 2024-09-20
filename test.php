@@ -44,10 +44,13 @@
                 <?php $count++; ?>
             <?php endforeach; ?>
         <?php else: ?>
-            <p>No images available.</p>
+            <p class="text-xl">No images available.</p>
         <?php endif; ?>
     </div>
-
+    <div class="flex items-center gap-4 mb-2">
+        <a href="index" class="rounded-full w-10 h-10 bg-none hover:bg-[#C4C4C4] flex items-center justify-center transition-colors ease-in duration-100 hover:shadow-md"><i class="fa-solid fa-chevron-left" cl</i></a></i>
+        <h1 class="text-xl lg:text-3xl font-bold">Luxury Apartment in Downtown</h1>
+    </div>
 </body>
 
 </html>

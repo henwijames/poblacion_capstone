@@ -21,11 +21,38 @@ $images = $listing->getImagesByListing($listing_id);
 
 $listingDetails['images'] = $images;
 
+if (isset($_SESSION['success_message'])) {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '{$_SESSION['success_message']}',
+            confirmButtonColor: '#C1C549',
+            confirmButtonText: 'OK'
+        });
+    </script>";
+    unset($_SESSION['success_message']); // Clear the message after displaying it
+}
+
+if (isset($_SESSION['error_message'])) {
+    echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{$_SESSION['error_message']}',
+            confirmButtonText: 'OK'
+        });
+    </script>";
+    unset($_SESSION['error_message']); // Clear the message after displaying it
+}
+
 ?>
 
 <main class="main-content main">
     <?php include 'includes/topbar.php'; ?>
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20" id="about">
+
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
                 <div class="mb-6">
@@ -36,6 +63,13 @@ $listingDetails['images'] = $images;
                     <h2 class="text-xl font-bold mb-2">Landlord</h2>
                     <p class="text-muted-foreground"><?= htmlspecialchars($fullName) ?></p>
                     <p class="text-muted-foreground">Phone : <?= htmlspecialchars($landlord['phone_number']) ?></p>
+                </div>
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-2">Rooms</h2>
+                    <div>
+                        <p class="text-muted-foreground mb-2"><?= htmlspecialchars($listingDetails['sqft']); ?> sqft | <?= htmlspecialchars($listingDetails['bedrooms']); ?> Bed | <?= htmlspecialchars($listingDetails['bathrooms']); ?> Bathrooms</p>
+                    </div>
+
                 </div>
                 <div class="mb-6">
                     <h2 class="text-xl font-bold mb-2">Amenities</h2>
@@ -94,33 +128,41 @@ $listingDetails['images'] = $images;
 
 
         </div>
-        <div class="swiper mt-4 h-[400px] md:h-[800px] w-full">
-            <!-- Additional required wrapper -->
-            <div class="swiper-wrapper">
-                <?php if (isset($listingDetails['images']) && is_array($listingDetails['images'])): ?>
+        <div class="grid gird-cols-1 lg:grid-cols-2 gap-8">
 
-                    <?php foreach ($listingDetails['images'] as $image): ?>
-
-                        <div class="swiper-slide">
-                            <img
-                                src="<?= htmlspecialchars("Controllers/" . $image); ?>"
-                                alt="Apartment Image"
-                                class="rounded-lg object-cover shadow-lg w-full h-full" />
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>No images available.</p>
-                <?php endif; ?>
+            <div class="mt-4">
+                <p class="text-muted-foreground"><?= htmlspecialchars($listingDetails['description']); ?></p>
             </div>
-            <!-- If we need pagination -->
+            <div class="swiper mt-2 h-[300px] md:h-[400px] w-full">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    <?php if (isset($listingDetails['images']) && is_array($listingDetails['images'])): ?>
 
-            <!-- If we need navigation buttons -->
-            <div class="swiper-button-prev" style="color: #C1C549"></div>
-            <div class="swiper-button-next" style="color: #C1C549"></div>
+                        <?php foreach ($listingDetails['images'] as $image): ?>
 
-            <!-- If we need scrollbar -->
-            <div class="swiper-scrollbar"></div>
+                            <div class="swiper-slide">
+                                <img
+                                    src="<?= htmlspecialchars("Controllers/" . $image); ?>"
+                                    alt="Apartment Image"
+                                    class="rounded-lg object-cover shadow-lg w-full h-full" />
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>No images available.</p>
+                    <?php endif; ?>
+                </div>
+                <!-- If we need pagination -->
+
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev" style="color: #C1C549"></div>
+                <div class="swiper-button-next" style="color: #C1C549"></div>
+
+                <!-- If we need scrollbar -->
+                <div class="swiper-scrollbar"></div>
+            </div>
+
         </div>
+
     </main>
     <!-- Slider main container -->
 

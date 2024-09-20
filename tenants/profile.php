@@ -11,7 +11,7 @@
 
         <!-- Profile Image and Name -->
         <div class="sm:w-[80%] xs:w-[90%] mx-auto flex flex-col items-center -mt-16">
-            <img src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw3fHxwZW9wbGV8ZW58MHwwfHx8MTcxMTExMTM4N3ww&ixlib=rb-4.0.3&q=80&w=1080" alt="User Profile"
+            <img src="<?php echo htmlspecialchars($profilePicture); ?>" alt="User Profile"
                 class="rounded-full w-28 h-28 sm:w-32 sm:h-32 lg:w-48 lg:h-48 outline outline-2 outline-offset-2 relative" />
 
             <h1 class="w-full text-center my-6  text-primary text-2xl sm:text-3xl lg:text-4xl">

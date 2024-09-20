@@ -11,6 +11,35 @@ require 'includes/sidebar.php';
             <div class="relative px-4 py-6">
 
                 <h1 class="text-3xl font-bold text-gray-800 mb-8">Edit Profile</h1>
+                <?php if (isset($_GET['success'])): ?>
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Profile updated successfully!',
+                            confirmButtonColor: '#C1C549',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'profile.php'; // Redirect to the same page to clear the query string
+                            }
+                        });
+                    </script>
+                <?php elseif (isset($_GET['error'])): ?>
+                    <script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong! Please try again.',
+                            confirmButtonColor: '#C1C549',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'edit-profile.php'; // Redirect to the same page to clear the query string
+                            }
+                        });
+                    </script>
+                <?php endif; ?>
                 <form class="space-y-6" method="POST" action="Controller/TenantController.php" enctype="multipart/form-data">
                     <div class="flex items-center space-x-6">
                         <div class="shrink-0">

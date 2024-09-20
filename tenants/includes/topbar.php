@@ -2,11 +2,6 @@
     <button type="button" class="text-lg sidebar-toggle">
         <i class="fa-solid fa-bars z-50"></i>
     </button>
-    <ul class="flex items-center ml-4">
-        <li class="mr-2">
-            <a id="breadcrumb" href="#" class="text-sm text-gray-600">Dashboard</a>
-        </li>
-    </ul>
     <ul class="ml-auto flex items-center ">
         <li class="mr-1 dropdown relative flex items-center gap-4">
 
@@ -24,7 +19,7 @@
                     <a href="settings" class="flex items-center text-[13px] py-1.5 px-4 hover:bg-gray-100">Settings</a>
                 </li>
                 <li>
-                    <a href="logout" class="flex items-center text-[13px] py-1.5 px-4 hover:bg-gray-100">Logout</a>
+                    <a href="logout" id="logout-btn" class="flex items-center text-[13px] py-1.5 px-4 hover:bg-gray-100">Logout</a>
                 </li>
             </ul>
         </li>

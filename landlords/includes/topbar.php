@@ -2,11 +2,6 @@
     <button type="button" class="text-lg sidebar-toggle">
         <i class="fa-solid fa-bars z-50"></i>
     </button>
-    <ul class="flex items-center ml-4">
-        <li class="mr-2">
-            <a id="breadcrumb" href="#" class="text-sm text-gray-600">Dashboard</a>
-        </li>
-    </ul>
     <ul class="ml-auto flex items-center ">
         <li class="mr-1 dropdown relative flex items-center gap-4">
 
