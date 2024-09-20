@@ -14,7 +14,7 @@
 
                 <!-- Profile Image and Name -->
                 <div class="sm:w-[80%] xs:w-[90%] mx-auto flex flex-col items-center -mt-16">
-                    <img src="../assets/img/me.jpg" alt="User Profile"
+                    <img src="<?= htmlspecialchars("Controllers/" . $profilePicture); ?>" alt="User Profile"
                         class="rounded-full w-28 h-28 sm:w-32 sm:h-32 lg:w-48 lg:h-48 relative" />
 
                     <h1 class="w-full text-center  md:my-2 my-6 text-primary font-bold text-2xl sm:text-3xl lg:text-4xl">
@@ -63,7 +63,7 @@
                 </div>
 
                 <!-- Edit Profile Button -->
-                <div class="flex justify-center mt-4">
+                <div class="flex justify-center mt-4 mb-4">
                     <a href="edit-profile" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Edit Profile</a>
                 </div>
             </div>

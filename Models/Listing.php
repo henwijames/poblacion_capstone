@@ -45,6 +45,35 @@ class Listing
 
         return false; // Return false if insertion failed
     }
+    public function updateListing($data)
+    {
+        $query = 'UPDATE listings SET 
+                property_type = :property_type,
+                address = :address,
+                bedrooms = :bedrooms,
+                bathrooms = :bathrooms,
+                amenities = :amenities,
+                sqft = :sqft,
+                rent = :rent,
+                description = :description
+              WHERE id = :id';
+
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':property_type', $data['property_type']);
+        $stmt->bindParam(':address', $data['address']);
+        $stmt->bindParam(':bedrooms', $data['bedrooms'], PDO::PARAM_INT);
+        $stmt->bindParam(':bathrooms', $data['bathrooms'], PDO::PARAM_INT);
+        $stmt->bindParam(':amenities', json_encode($data['amenities']));
+        $stmt->bindParam(':sqft', $data['sqft'], PDO::PARAM_INT);
+        $stmt->bindParam(':rent', $data['rent'], PDO::PARAM_INT);
+        $stmt->bindParam(':description', $data['description']);
+        $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
 
     // Save listing images
     public function saveImages($listingID, $imagePaths)

@@ -1,4 +1,37 @@
-<?php include 'includes/header.php'; ?>
+<?php
+include 'includes/header.php';
+
+function getCounts($db, $user_id)
+{
+    $counts = [
+        'activeListings' => 0,
+        'tenants' => 0,
+        'rents' => 0
+    ];
+
+    // Fetch active listings for this user
+    $query = "SELECT COUNT(*) as activeListings FROM listings WHERE status = 'not occupied' AND user_id = :user_id";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $counts['activeListings'] = $stmt->fetch(PDO::FETCH_ASSOC)['activeListings'];
+
+
+
+    return $counts;
+}
+
+// Initialize DB connection
+$database = new Database();
+$db = $database->getConnection();
+$user_id = $_SESSION['user_id']; // Ensure this session variable is set correctly
+
+// Get the counts for the logged-in user
+$counts = getCounts($db, $user_id);
+
+$listing = new Listing($db);
+$userListings = $listing->getListingsByUser($user_id) ?? [];
+?>
 
 <main class="main-content main">
     <?php include 'includes/topbar.php'; ?>
@@ -7,7 +40,7 @@
             <div class="bg-background rounded-md shadow-md border border-gray-100 p-6">
                 <div class="flex justify-between">
                     <div>
-                        <div class="text-2xl font-semibold mb-1">10</div>
+                        <div class="text-2xl font-semibold mb-1"><?php echo htmlspecialchars($counts['activeListings']); ?></div>
                         <div class="text-sm font-medium text-gray-400">Active Listings</div>
                     </div>
                     <div class="text-[40px]">
@@ -20,7 +53,7 @@
             <div class="bg-background rounded-md shadow-md border border-gray-100 p-6">
                 <div class="flex justify-between">
                     <div>
-                        <div class="text-2xl font-semibold mb-1">40</div>
+                        <div class="text-2xl font-semibold mb-1">0</div>
                         <div class="text-sm font-medium text-gray-400">Tenants</div>
                     </div>
                     <div class="text-[40px]">
@@ -32,7 +65,7 @@
             <div class="bg-background rounded-md shadow-md border border-gray-100 p-6">
                 <div class="flex justify-between">
                     <div>
-                        <div class="text-2xl font-semibold mb-1">23</div>
+                        <div class="text-2xl font-semibold mb-1">0</div>
                         <div class="text-sm font-medium text-gray-400">Rents</div>
                     </div>
                     <div class="text-[40px]">
@@ -102,36 +135,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium">Bahay Kubo</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P1,000</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">Apartment</td>
-                                <td class="py-3 px-4 flex gap-2">
-                                    <button class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
-                                        Edit
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium">La Zanti</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P2,000</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">Apartment</td>
-                                <td class="py-3 px-4 flex gap-2">
-                                    <button class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
-                                        Edit
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium">Valentinos</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P2,000</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">Apartment</td>
-                                <td class="py-3 px-4 flex gap-2">
-                                    <button class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
-                                        Edit
-                                    </button>
-                                </td>
-                            </tr>
+                            <?php if (!empty($userListings)): ?>
+                                <?php foreach ($userListings as $userListing): ?>
+                                    <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
+                                        <td class="py-3 px-4 text-[13px] text-slate-600 font-medium"><?= htmlspecialchars($landlord['property_name']) ?></td>
+                                        <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">₱<?= number_format($userListing['rent']) ?></td>
+                                        <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center capitalize"><?= htmlspecialchars($userListing['property_type']) ?></td>
+                                        <td class="py-3 px-4 flex gap-2">
+                                            <button class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
+                                                Edit
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="6" class="py-4 text-center">No listings found.</td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
 
@@ -140,96 +161,5 @@
         </div>
     </div>
 </main>
-<script>
-    //Start Sidebar
-    const sidebarToggle = document.querySelector(".sidebar-toggle");
-    const sidebarOverlay = document.querySelector(".sidebar-overlay");
-    const sidebarMenu = document.querySelector(".sidebar-menu");
-    const main = document.querySelector(".main");
 
-    sidebarToggle.addEventListener("click", (e) => {
-        e.preventDefault();
-        main.classList.toggle("active");
-        sidebarOverlay.classList.toggle("hidden");
-        sidebarMenu.classList.toggle("-translate-x-full");
-    });
-
-    sidebarOverlay.addEventListener("click", (e) => {
-        e.preventDefault();
-        main.classList.add("active");
-        sidebarOverlay.classList.toggle("hidden");
-        sidebarMenu.classList.toggle("-translate-x-full");
-    });
-
-    document.querySelectorAll(".sidebar-dropdown-toggle").forEach((item) => {
-        item.addEventListener("click", (e) => {
-            e.preventDefault();
-            const parent = item.closest(".group");
-            if (parent.classList.contains("selected")) {
-                parent.classList.remove("selected");
-            } else {
-                document.querySelectorAll(".sidebar-dropdown-toggle").forEach((item) => {
-                    item.closest(".group").classList.remove("selected");
-                });
-                parent.classList.add("selected");
-            }
-            parent.classList.add("selected");
-        });
-    });
-
-    document.querySelectorAll(".dropdown-toggle").forEach((button) => {
-        button.addEventListener("click", () => {
-            const dropdownMenu = button.nextElementSibling;
-
-            // Toggle the hidden class to show/hide the dropdown
-            dropdownMenu.classList.toggle("hidden");
-
-            // Close any other open dropdowns
-            document.querySelectorAll(".dropdown-menu").forEach((menu) => {
-                if (menu !== dropdownMenu) {
-                    menu.classList.add("hidden");
-                }
-            });
-        });
-    });
-
-    // Optional: Close the dropdown if clicked outside
-    document.addEventListener("click", (e) => {
-        const isDropdown =
-            e.target.matches(".dropdown-toggle") || e.target.closest(".dropdown");
-        if (!isDropdown) {
-            document.querySelectorAll(".dropdown-menu").forEach((menu) => {
-                menu.classList.add("hidden");
-            });
-        }
-    });
-
-    //End Sidebar
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const breadCrumb = document.getElementById("breadcrumb");
-        const pageLinks = document.querySelectorAll("a[href]");
-
-        pageLinks.forEach((link) => {
-            link.addEventListener("click", function(event) {
-                const pageName = this.textContent.trim();
-
-                // Prevent duplicate "Dashboard / Dashboard" entries
-
-                breadCrumb.textContent = `${pageName}`;
-
-                // Store the breadcrumb in localStorage
-                localStorage.setItem("breadcrumb", breadCrumb.textContent);
-            });
-        });
-
-        // On page load, restore the breadcrumb from localStorage
-        const savedBreadcrumb = localStorage.getItem("breadcrumb");
-        if (savedBreadcrumb) {
-            breadCrumb.textContent = savedBreadcrumb;
-        } else {
-            breadCrumb.textContent = "Dashboard";
-        }
-    });
-</script>
 <?php include 'includes/footer.php'; ?>

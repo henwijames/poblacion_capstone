@@ -70,6 +70,42 @@ class Landlords
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    public function updateLandlords($landlordId, $data, $photoPath = null)
+    {
+        $query = 'UPDATE landlords 
+        SET first_name = :first_name, middle_name = :middle_name, last_name = :last_name,
+            address = :address, phone_number = :phone_number, email = :email, property_name = :property_name';
+
+        if ($photoPath) {
+            $query .= ', profile_picture = :profile_photo';
+        }
+
+        $query .= ' WHERE id = :id';
+
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':first_name', $data['first_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':middle_name', $data['middle_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':last_name', $data['last_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':address', $data['address'], PDO::PARAM_STR);
+        $stmt->bindParam(':phone_number', $data['phone_number'], PDO::PARAM_STR);
+        $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
+        $stmt->bindParam(':property_name', $data['property_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':id', $landlordId, PDO::PARAM_INT);
+
+        if ($photoPath) {
+            $stmt->bindParam(':profile_photo', $photoPath, PDO::PARAM_STR);
+        }
+
+        // Execute update
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            print_r($stmt->errorInfo());
+            return false;
+        }
+    }
 
     public function verifyPassword($password, $hash)
     {

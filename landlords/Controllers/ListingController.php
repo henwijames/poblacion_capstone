@@ -5,7 +5,7 @@ require_once '../../Models/Listing.php';
 
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
+if (isset($_POST['add_listing'])) {
     $database = new Database();
     $db = $database->getConnection();
     $listing = new Listing($db);
@@ -26,9 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if (empty($listing->address)) {
         $errors['address'] = "Address is required";
-    }
-    if (empty($listing->bedrooms) || !is_numeric($listing->bedrooms)) {
-        $errors['bedrooms'] = "Number of bedrooms is required and must be a number";
     }
     if (empty($listing->bathrooms) || !is_numeric($listing->bathrooms)) {
         $errors['bathrooms'] = "Number of bathrooms is required and must be a number";
@@ -124,6 +121,54 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $_SESSION['errors'] = $errors;
         $_SESSION['form_data'] = $_POST;
         header("Location: ../add-listings");
+        exit();
+    }
+}
+
+//Update Listing
+if (isset($_POST['update_listing'])) {
+    $listing_id = $_GET['id'] ?? null;
+
+    if ($listing_id) {
+        $database = new Database();
+        $db = $database->getConnection();
+        $listing = new Listing($db);
+
+        // Collect form data
+        $data = [
+            'property_type' => $_POST['property_type'] ?? '',
+            'address' => $_POST['address'] ?? '',
+            'bedrooms' => $_POST['bedrooms'] ?? '',
+            'bathrooms' => $_POST['bathrooms'] ?? '',
+            'amenities' => isset($_POST['amenities']) ? $_POST['amenities'] : [],
+            'sqft' => $_POST['sqft'] ?? '',
+            'rent' => $_POST['rent'] ?? '',
+            'description' => $_POST['description'] ?? '',
+            'id' => $listing_id // Include listing_id here
+        ];
+
+        // Add more validation as needed...
+
+        if (empty($errors)) {
+            // Update listing in the database
+            if ($listing->updateListing($data)) {
+                $_SESSION['success_message'] = 'Listing updated successfully.';
+                header("Location: ../edit-listings.php?id=" . $listing_id);
+                exit();
+            } else {
+                $_SESSION['errors'] = ['update' => 'Failed to update the listing.'];
+            }
+        } else {
+            $_SESSION['errors'] = $errors;
+        }
+
+        // Redirect back to the edit page with form data if there are errors
+        $_SESSION['form_data'] = $_POST;
+        header("Location: ../edit-listings.php?id=" . $listing_id);
+        exit();
+    } else {
+        $_SESSION['errors'] = ['update' => 'Invalid listing ID.'];
+        header("Location: ../listings.php");
         exit();
     }
 }

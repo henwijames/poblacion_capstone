@@ -23,20 +23,30 @@ ini_set('display_errors', 1);
                             <strong class="font-bold">Error!</strong>
                             <ul class="list-disc pl-5 mt-2">
                                 <?php foreach ($errors as $field => $error): ?>
-                                    <li><?php echo htmlspecialchars($error); ?></li>
+                                    <?php
+                                    // Check if $error is an array and handle it
+                                    if (is_array($error)) {
+                                        foreach ($error as $subError) {
+                                            echo '<li>' . htmlspecialchars($subError) . '</li>';
+                                        }
+                                    } else {
+                                        echo '<li>' . htmlspecialchars($error) . '</li>';
+                                    }
+                                    ?>
                                 <?php endforeach; ?>
                             </ul>
                         </div>
                     <?php endif; ?>
+
                     <div>
                         <h3 class="text-lg font-medium text-gray-700">Property Type*</h3>
                         <div class="flex gap-4 mt-2">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="property_type" value="apartment" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Apartment') echo 'checked'; ?>>
+                                <input type="radio" name="property_type" value="apartment" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Apartment') echo 'checked'; ?> onchange="toggleRooms()">
                                 <span class="ml-2 text-sm text-gray-700">Apartment</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="property_type" value="business" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Business Establishment') echo 'checked'; ?>>
+                                <input type="radio" name="property_type" value="business establishment" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Business Establishment') echo 'checked'; ?> onchange="toggleRooms()">
                                 <span class="ml-2 text-sm text-gray-700">Business Establishment</span>
                             </label>
                         </div>
@@ -56,7 +66,7 @@ ini_set('display_errors', 1);
                             placeholder="123 Main St, Anytown USA" />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
+                        <div id="bedroom-container">
                             <label for="bedrooms" class="block text-sm font-medium text-gray-700">
                                 Bedrooms*
                             </label>
@@ -82,22 +92,30 @@ ini_set('display_errors', 1);
                     <div>
                         <h3 class="text-lg font-medium text-gray-700">Amenities</h3>
                         <div class="grid grid-cols-2 gap-4 mt-2">
+
+
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="amenities[]" value="water" class="rounded border-gray-300 text-primary focus:ring-primary">
-                                    <span class="ml-2 text-sm text-gray-700">Water</span>
+                                    <input type="checkbox" name="amenities[]" value="gym" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <span class="ml-2 text-sm text-gray-700">Gym</span>
                                 </label>
                             </div>
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="amenities[]" value="electricity" class="rounded border-gray-300 text-primary focus:ring-primary">
-                                    <span class="ml-2 text-sm text-gray-700">Electricity</span>
+                                    <input type="checkbox" name="amenities[]" value="balcony" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <span class="ml-2 text-sm text-gray-700">Balcony</span>
                                 </label>
                             </div>
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="amenities[]" value="wifi" class="rounded border-gray-300 text-primary focus:ring-primary">
-                                    <span class="ml-2 text-sm text-gray-700">Wi-Fi</span>
+                                    <input type="checkbox" name="amenities[]" value="swimming pool" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <span class="ml-2 text-sm text-gray-700">Swimming Pool</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="amenities[]" value="airconditioned" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <span class="ml-2 text-sm text-gray-700">Air-Conditioned</span>
                                 </label>
                             </div>
                             <div>
@@ -143,61 +161,85 @@ ini_set('display_errors', 1);
                             placeholder="Describe the property details..."></textarea>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Upload Images of the Property</label>
-                        <p class="block text-xs font-medium text-red-500">*Select 5 images in your gallery</p>
-                        <div class="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
-                            <div class="space-y-1 text-center">
-                                <svg
-                                    class="mx-auto h-12 w-12 text-gray-400"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 48 48"
-                                    aria-hidden="true">
-                                    <path
-                                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"></path>
-                                </svg>
-                                <div class="flex text-sm text-gray-600">
-                                    <label
-                                        for="file-upload"
-                                        class="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary-dark">
-                                        <span>Upload files</span>
-                                        <input id="file-upload" class="sr-only" type="file" name="file-upload[]" accept="image/jpeg, image/png, image/jpg" multiple />
-                                    </label>
-                                    <p class="pl-1">or drag and drop</p>
-                                </div>
-                                <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
-                            </div>
-                            <?php if (isset($errors['file-upload'])): ?>
-                                <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['file-upload']); ?></p>
-                            <?php endif; ?>
+                        <h1 class="block text-sm font-medium mb-2 text-gray-700">Upload Images of the Property</h1>
+                        <div class="mb-2">
+                            <label class="block">
+                                <span class="sr-only">Choose a property image</span>
+                                <input type="file" accept="image/*" id="file-upload-1" name="file-upload[]" class="block w-full text-sm text-slate-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-primary 
+                                hover:file:bg-slate-100t-100
+                                " onchange="previewImage(event, 1)" />
+                            </label>
+                        </div>
+                        <div class="mb-2">
+                            <label class="block">
+                                <span class="sr-only">Choose a property image</span>
+                                <input type="file" accept="image/*" id="file-upload-2" name="file-upload[]" class="block w-full text-sm text-slate-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-primary 
+                                hover:file:bg-slate-100
+                                "
+                                    onchange="previewImage(event, 2)" />
+                            </label>
+                        </div>
+                        <div class="mb-2">
+                            <label class="block">
+                                <span class="sr-only">Choose a property image</span>
+                                <input type="file" accept="image/*" id="file-upload-3" name="file-upload[]" class="block w-full text-sm text-slate-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-primary 
+                                hover:file:bg-slate-100
+                                "
+                                    onchange="previewImage(event, 3)" />
+                            </label>
                         </div>
 
-                        <!-- Five Image Preview Container -->
-                        <div id="file-preview" class="grid grid-cols-5 gap-4 mt-4">
-                            <!-- Placeholder containers for images -->
-                            <div class="image-container w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
-                                <p class="text-sm text-gray-500">Image 1</p>
-                            </div>
-                            <div class="image-container w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
-                                <p class="text-sm text-gray-500">Image 2</p>
-                            </div>
-                            <div class="image-container w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
-                                <p class="text-sm text-gray-500">Image 3</p>
-                            </div>
-                            <div class="image-container w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
-                                <p class="text-sm text-gray-500">Image 4</p>
-                            </div>
-                            <div class="image-container w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
-                                <p class="text-sm text-gray-500">Image 5</p>
-                            </div>
+                        <div class="mb-2">
+                            <label class="block">
+                                <span class="sr-only">Choose a property image</span>
+                                <input type="file" accept="image/*" id="file-upload-4" name="file-upload[]" class="block w-full text-sm text-slate-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-primary 
+                                hover:file:bg-slate-100
+                                "
+                                    onchange="previewImage(event, 4)" />
+                            </label>
+                        </div>
+                        <div class="mb-2">
+                            <label class="block">
+                                <span class="sr-only">Choose a property image</span>
+                                <input type="file" accept="image/*" id="file-upload-5" name="file-upload[]" class="block w-full text-sm text-slate-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-primary 
+                                hover:file:bg-slate-100
+                                "
+                                    onchange="previewImage(event, 5)" />
+                            </label>
+                        </div>
+                        <!-- Image Preview Container -->
+                        <div id="image-preview-container" class="grid grid-cols-2 gap-4 mt-4">
+                            <!-- Images will be displayed here -->
                         </div>
                     </div>
+
+
+
+
                     <div class="flex justify-center">
                         <button
                             type="submit"
+                            name="add_listing"
                             class="inline-flex justify-center rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                             Save Listing
                         </button>
@@ -267,35 +309,48 @@ ini_set('display_errors', 1);
     </div>
 </main>
 <script>
-    const fileInput = document.getElementById('file-upload');
-    const filePreview = document.getElementById('file-preview');
-    const maxFiles = 5;
+    function previewImage(event, index) {
+        const file = event.target.files[0]; // Get the first selected file
+        if (!file) return; // If no file is selected, do nothing
 
-    fileInput.addEventListener('change', (e) => {
-        handleFiles(e.target.files);
-    });
+        const imagePreviewContainer = document.getElementById('image-preview-container');
 
-    function handleFiles(files) {
-        const fileArray = Array.from(files).slice(0, maxFiles); // Limit to maxFiles (5)
-        const previewContainers = document.querySelectorAll('.image-container'); // Get the 5 containers
+        // Check if an image preview for this index already exists
+        let existingImage = document.getElementById(`image-preview-${index}`);
+        if (existingImage) {
+            existingImage.remove(); // Remove the previous preview if it exists
+        }
 
-        // Clear previous content in all containers
-        previewContainers.forEach(container => {
-            container.innerHTML = `<p class="text-sm text-gray-500">Image ${Array.from(previewContainers).indexOf(container) + 1}</p>`;
-        });
-
-        // Assign each image to a container
-        fileArray.forEach((file, index) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.classList.add('object-cover', 'w-full', 'h-full', 'rounded-md');
-                previewContainers[index].innerHTML = ''; // Clear placeholder text
-                previewContainers[index].appendChild(img); // Add image
+        // Only create a preview for image files
+        if (file.type.startsWith('image/')) {
+            const imageElement = document.createElement('img');
+            imageElement.id = `image-preview-${index}`;
+            imageElement.src = URL.createObjectURL(file); // Create a URL for the file
+            imageElement.classList.add('w-full', 'h-48', 'object-cover', 'rounded-lg', 'border', 'border-gray-200', 'shadow-sm');
+            imageElement.onload = () => {
+                URL.revokeObjectURL(imageElement.src); // Release memory once the image is loaded
             };
-            reader.readAsDataURL(file);
-        });
+
+            // Append the image element to the preview container
+            imagePreviewContainer.appendChild(imageElement);
+        } else {
+            alert("Please select a valid image file.");
+        }
+    }
+
+    function toggleRooms() {
+        const businessRadio = document.querySelector('input[name="property_type"][value="business establishment"]');
+        const bedroomContainer = document.getElementById('bedroom-container');
+
+        if (businessRadio.checked) {
+            bedroomContainer.style.display = 'none';
+        } else {
+            bedroomContainer.style.display = 'block';
+        }
+    }
+
+    window.onload = function() {
+        toggleRooms();
     }
 </script>
 <?php include 'includes/footer.php';  ?>

@@ -58,6 +58,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
 
     <!-- JQuery File -->
     <script src="../assets/js/jquery-3.7.1.min.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Animate CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
 
 <body class="font-custom">

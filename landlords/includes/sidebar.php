@@ -1,4 +1,4 @@
-<div class="fixed left-0 top-0 w-64 h-full bg-background p-4 z-50 sidebar-menu transition-transform ">
+<div class="fixed left-0 top-0 w-64 h-full bg-background p-4 z-50 sidebar-menu transition-transform shadow-md">
     <a href="#" class="flex justify-center items-center pb-4 border-b border-b-black">
         <img src="../assets/img/poblacionease.png" alt="" class="w-36 object-cover">
     </a>
