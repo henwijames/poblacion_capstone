@@ -37,8 +37,8 @@ unset($_SESSION['form_data']);
                         <?php endif; ?>
                     </div>
                     <div class="flex flex-col gap-2 w-full">
-                        <label for="mname" class="text-md">Middle Name (Optional)</label>
-                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="mname" id="mname" placeholder="Sugar" value="<?php echo htmlspecialchars($formData['mname'] ?? ''); ?>">
+                        <label for="mname" class="text-md">Middle Name</label>
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="mname" id="mname" placeholder="Optional*" value="<?php echo htmlspecialchars($formData['mname'] ?? ''); ?>">
                     </div>
                     <div class="flex flex-col gap-2 w-full">
                         <label for="lname" class="text-md">Last Name</label>
@@ -71,9 +71,21 @@ unset($_SESSION['form_data']);
                         <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['phone']); ?></p>
                     <?php endif; ?>
                 </div>
-                <div class="flex flex-col gap-2">
-                    <label for="id-file" class="text-sm font-medium leading-none">Valid ID</label>
-                    <input class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500 file:bg-transparent file:text-sm file:font-medium" name="validid" id="id-file" type="file">
+                <div class="flex items-center space-x-6">
+                    <div class="shrink-0">
+                        <img id="profilePhoto" class="h-16 w-16 object-cover rounded-full" src="assets/img/image_placeholder.png" alt="Current profile photo" />
+                    </div>
+                    <label class="block">
+                        <span class="sr-only">Choose profile photo</span>
+                        <input type="file" name="profile_photo" class="block w-full cursor-pointer text-sm text-slate-500
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-full file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-violet-50 file:text-primary
+                            hover:file:bg-accent
+                            "
+                            onchange="previewProfilePhoto(event)" />
+                    </label>
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="password" class="text-sm font-medium leading-none">Password</label>
@@ -99,4 +111,19 @@ unset($_SESSION['form_data']);
         </div>
     </main>
 </div>
+<script>
+    function previewProfilePhoto(event) {
+        const reader = new FileReader();
+        const fileInput = event.target;
+
+        reader.onload = function() {
+            const imageElement = document.getElementById('profilePhoto');
+            imageElement.src = reader.result; // Set the new image source to the uploaded file
+        };
+
+        if (fileInput.files[0]) {
+            reader.readAsDataURL(fileInput.files[0]); // Read the selected file and convert to a data URL
+        }
+    }
+</script>
 <?php include 'partials/footer.php'; ?>

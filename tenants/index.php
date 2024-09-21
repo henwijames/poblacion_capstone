@@ -4,6 +4,8 @@ $database = new Database();
 $db = $database->getConnection();
 $listing = new Listing($db);
 $landlords = new Landlords($db);
+
+$landlordListings = $listing->getAllListings();
 ?>
 <nav class="shadow py-2 z-20 sticky top-0 px-5 md:px-[120px]  md:flex items-center justify-between bg-background ">
     <div class="flex justify-between items-center">
@@ -81,28 +83,46 @@ $landlords = new Landlords($db);
 </section>
 <div class="flex flex-col z-10">
     <main class="flex-1 mx-auto py-8 px-6 md:px-8 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <?php if (!empty($landlordListings)): ?>
+            <?php foreach ($landlordListings as $landlordListing): ?>
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden bg-white">
+                    <?php
+                    $images = $listing->getImagesByListing($landlordListing['id']);
+                    // Check if $images is an array and contains data
+                    if (is_array($images) && !empty($images)) {
+                        $imageSrc = $images[0]; // Access the first image in the array
+                    } else {
+                        $imageSrc = 'assets/img/image_placeholder.png'; // Fallback if no image is available
+                    }
 
-        <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden bg-white">
-            <img
-                src="../assets/img/1.jpg"
-                alt="Featured Listing 1"
-                width="400"
-                height="300"
-                class="rounded-t-md object-cover w-full h-60"
-                style="aspect-ratio: 400 / 300; object-fit: cover;" />
-            <div class="p-4">
-                <h3 class="text-lg font-semibold">Luxury Penthouse in Downtown</h3>
-                <h3 class="text-base text-muted-foreground">Zone 14, Taal, Batangas</h3>
-                <p class="mt-2 text-muted-foreground">Hosted by Henry James</p>
-                <p class="text-muted-foreground mb-2">1,000 sq ft | 2 Bed | 2 Bath</p>
-                <p class="text-primary font-bold text-lg">4,000/month</p>
-                <div class="mt-4">
-                    <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="apartment" rel="ugc">
-                        View Details
-                    </a>
+                    $landlordDetails = $landlords->findById($landlordListing['user_id']);
+                    $property_name = $landlordDetails['property_name'] ?? 'Property Name Not Available';
+                    $fullName = $landlordDetails['first_name'] . ' ' . $landlordDetails['last_name'];
+                    ?>
+                    <img
+                        src="../landlords/Controllers/<?php echo htmlspecialchars($imageSrc); ?>"
+                        alt="Featured Listing 1"
+                        width="400"
+                        height="300"
+                        class="rounded-t-md object-cover w-full h-60"
+                        style="aspect-ratio: 400 / 300; object-fit: cover;" />
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold"><?php echo htmlspecialchars($property_name); ?></h3>
+                        <h3 class="text-base text-muted-foreground"><?php echo htmlspecialchars($landlordListing['address']); ?></h3>
+                        <p class="mt-2 text-muted-foreground">Hosted by <?php echo htmlspecialchars($fullName); ?></p>
+                        <p class="text-muted-foreground mb-2"><?= htmlspecialchars($landlordListing['sqft']); ?> sqft | <?= htmlspecialchars($landlordListing['bedrooms']); ?> Bed | <?= htmlspecialchars($landlordListing['bathrooms']); ?> Bathrooms</p>
+                        <p class="text-primary font-bold text-lg">₱<?= htmlspecialchars($landlordListing['rent']) ?>/month</p>
+                        <div class="mt-4">
+                            <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="apartment" rel="ugc">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No listings available.</p>
+        <?php endif; ?>
     </main>
 </div>
 

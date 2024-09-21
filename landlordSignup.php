@@ -15,11 +15,11 @@ unset($_SESSION['form_data']);
             <a href="../index"><img src="assets/img/poblacionease.png" alt="Poblacionease logo" class="w-[150px] h-[60px]"></a>
             <div class="flex gap-4 text-[18px]">
                 <div class=" text-[16px] ">
-                    <a href="../login" class=" bg-primary hover:bg-accent transition-all py-2 px-3 w-5 rounded-md uppercase shadow-md">Login</a>
+                    <a href="login" class=" bg-primary hover:bg-accent transition-all py-2 px-3 w-5 rounded-md uppercase shadow-md">Login</a>
 
                 </div>
                 <div class=" text-[16px] ">
-                    <a href="../choose" class=" hover:bg-accent transition-all bg-primary py-2 px-3 w-5 rounded-md uppercase shadow-md">Sign up</a>
+                    <a href="choose" class=" hover:bg-accent transition-all bg-primary py-2 px-3 w-5 rounded-md uppercase shadow-md">Sign up</a>
 
                 </div>
             </div>
@@ -39,8 +39,8 @@ unset($_SESSION['form_data']);
                         <?php endif; ?>
                     </div>
                     <div class="flex flex-col gap-2 w-full">
-                        <label for="mname" class="text-md">Middle Name(Optional)</label>
-                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="mname" id="mname" placeholder="Middle Name" value="<?php echo htmlspecialchars($formData['mname'] ?? ''); ?>">
+                        <label for="mname" class="text-md">Middle Name</label>
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" name="mname" id="mname" placeholder="Optional*" value="<?php echo htmlspecialchars($formData['mname'] ?? ''); ?>">
                     </div>
                     <div class="flex flex-col gap-2 w-full">
                         <label for="lname" class="text-md">Last Name</label>

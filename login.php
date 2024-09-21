@@ -64,6 +64,8 @@ unset($_SESSION['form_data']);
 </main>
 <script>
     document.querySelector('form').addEventListener('submit', function(e) {
+
+        let loginButton = document.getElementById('login-button');
         // Prevent the form from submitting immediately
         e.preventDefault();
 
@@ -72,17 +74,13 @@ unset($_SESSION['form_data']);
         document.getElementById('login-text').textContent = 'Logging in...';
 
         // Disable the button to prevent multiple submissions
-        document.getElementById('login-button').disabled = true;
+        loginButton.disabled = true;
+        loginButton.classList.remove('hover:bg-accent');
 
-        // Save the form reference to use later
         const form = this;
-
-        // Use setTimeout to delay the form submission by 3 seconds
         setTimeout(function() {
-
-            // Manually trigger form submission after 3 seconds
             form.submit();
-        }, 2000); // 3000 milliseconds = 3 seconds
+        }, 2000);
     });
 </script>
 

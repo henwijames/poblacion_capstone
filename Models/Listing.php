@@ -112,6 +112,18 @@ class Listing
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getAllListings()
+    {
+        $query = "SELECT l.*, ln.property_name 
+              FROM listings l
+              LEFT JOIN landlords ln ON l.id = ln.id"; // Assuming landlord_id is in the listings table
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     public function getImagesByListing($listingID)
     {
         $query = "SELECT image_path FROM listing_images WHERE listing_id = :listing_id";
