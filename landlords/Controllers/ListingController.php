@@ -146,19 +146,47 @@ if (isset($_POST['update_listing'])) {
             'sqft' => $_POST['sqft'] ?? '',
             'rent' => $_POST['rent'] ?? '',
             'description' => $_POST['description'] ?? '',
-            'id' => $listing_id // Include listing_id here
+            'id' => $listing_id
         ];
 
         // Add more validation as needed...
 
         if (empty($errors)) {
-            // Update listing in the database
-            if ($listing->updateListing($data)) {
-                $_SESSION['success_message'] = 'Listing updated successfully.';
-                header("Location: ../view-listings.php?id=" . $listing_id);
-                exit();
+            // Delete existing images
+            if ($listing->deleteImagesByListing($listing_id)) {
+                // Process image upload after deletion
+                $uploadedImages = [];
+                if (!empty($_FILES['file-upload']['name'][0])) {
+                    // Path where images will be uploaded
+                    $upload_dir = 'uploads/';
+
+                    // Make sure the directory exists or create it
+                    if (!is_dir($upload_dir)) {
+                        mkdir($upload_dir, 0777, true);
+                    }
+
+                    foreach ($_FILES['file-upload']['tmp_name'] as $key => $tmp_name) {
+                        $file_name = basename($_FILES['file-upload']['name'][$key]);
+                        $upload_path = $upload_dir . $file_name;
+
+                        if (move_uploaded_file($tmp_name, $upload_path)) {
+                            $uploadedImages[] = $upload_path; // Save the uploaded image path
+                        } else {
+                            $errors['file-upload'][] = "Failed to upload file: " . $file_name;
+                        }
+                    }
+                }
+
+                // Update listing in the database
+                if ($listing->saveImages($data, $uploadedImages)) {
+                    $_SESSION['success_message'] = 'Listing updated successfully.';
+                    header("Location: ../view-listings.php?id=" . $listing_id);
+                    exit();
+                } else {
+                    $_SESSION['error_message'] = ['update' => 'Failed to update the listing.'];
+                }
             } else {
-                $_SESSION['error_message'] = ['update' => 'Failed to update the listing.'];
+                $_SESSION['error_message'] = ['update' => 'Failed to delete old images.'];
             }
         } else {
             $_SESSION['errors'] = $errors;

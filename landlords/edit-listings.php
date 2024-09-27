@@ -159,7 +159,7 @@ unset($_SESSION['form_data']);
                                 file:rounded-full file:border-0
                                 file:text-sm file:font-semibold
                                 file:bg-primary 
-                                hover:file:bg-slate-100t-100
+                                cursor-pointer
                                 " onchange="previewImage(event, 1)" />
                             </label>
                         </div>
@@ -171,7 +171,7 @@ unset($_SESSION['form_data']);
                                 file:rounded-full file:border-0
                                 file:text-sm file:font-semibold
                                 file:bg-primary 
-                                hover:file:bg-slate-100
+                                
                                 "
                                     onchange="previewImage(event, 2)" />
                             </label>
@@ -184,7 +184,7 @@ unset($_SESSION['form_data']);
                                 file:rounded-full file:border-0
                                 file:text-sm file:font-semibold
                                 file:bg-primary 
-                                hover:file:bg-slate-100
+                                
                                 "
                                     onchange="previewImage(event, 3)" />
                             </label>
@@ -198,7 +198,7 @@ unset($_SESSION['form_data']);
                                 file:rounded-full file:border-0
                                 file:text-sm file:font-semibold
                                 file:bg-primary 
-                                hover:file:bg-slate-100
+                                
                                 "
                                     onchange="previewImage(event, 4)" />
                             </label>
@@ -211,7 +211,7 @@ unset($_SESSION['form_data']);
                                 file:rounded-full file:border-0
                                 file:text-sm file:font-semibold
                                 file:bg-primary 
-                                hover:file:bg-slate-100
+                                
                                 "
                                     onchange="previewImage(event, 5)" />
                             </label>

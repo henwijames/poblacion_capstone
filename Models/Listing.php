@@ -45,8 +45,9 @@ class Listing
 
         return false; // Return false if insertion failed
     }
-    public function updateListing($data)
+    public function updateListing($data, $uploadedImages = null)
     {
+        // Update listing data query
         $query = 'UPDATE listings SET 
                 property_type = :property_type,
                 address = :address,
@@ -60,7 +61,7 @@ class Listing
 
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
+        // Bind parameters for listing data
         $stmt->bindParam(':property_type', $data['property_type']);
         $stmt->bindParam(':address', $data['address']);
         $stmt->bindParam(':bedrooms', $data['bedrooms'], PDO::PARAM_INT);
@@ -71,26 +72,48 @@ class Listing
         $stmt->bindParam(':description', $data['description']);
         $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
 
-        return $stmt->execute();
+        // Execute the query to update the listing details
+        $listingUpdated = $stmt->execute();
+
+        // Check if there are images to update
+        if ($uploadedImages && $listingUpdated) {
+            // Logic to handle uploaded images (e.g., save, replace, or delete images)
+            $this->uploadImages($data['id'], $uploadedImages);
+        }
+
+        return $listingUpdated;
     }
+
 
 
     // Save listing images
-    public function saveImages($listingID, $imagePaths)
+    public function saveImages($data, $uploadedImages)
     {
-        $query = "INSERT INTO listing_images (listing_id, image_path) VALUES (:listing_id, :image_path)";
+        // Make sure you are passing the correct listing ID
+        $listing_id = $data['id'];
+
+        // Update the listing first (assuming you have an update function)
+        if (!$this->updateListing($data)) {
+            return false; // Exit if the listing update fails
+        }
+
+        // Prepare SQL to insert images
+        $query = 'INSERT INTO listing_images (listing_id, image_path) VALUES (:listing_id, :image_path)';
         $stmt = $this->conn->prepare($query);
 
-        foreach ($imagePaths as $imagePath) {
-            $stmt->bindParam(':listing_id', $listingID);
-            $stmt->bindParam(':image_path', $imagePath);
+        foreach ($uploadedImages as $image) {
+            // Bind parameters
+            $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
+            $stmt->bindParam(':image_path', $image);
+
             if (!$stmt->execute()) {
-                return false; // Return false if any image fails to save
+                return false; // Return false if any insert fails
             }
         }
 
-        return true;
+        return true; // Successfully saved images
     }
+
 
     public function getListingsByUser($user_id)
     {
@@ -132,5 +155,48 @@ class Listing
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch all image paths
+    }
+    public function deleteImagesByListing($listing_id)
+    {
+        // Fetch the images from the database
+        $query = "SELECT image_path FROM listing_images WHERE listing_id = :listing_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':listing_id', $listing_id);
+        $stmt->execute();
+        $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Delete images from the filesystem
+        foreach ($images as $image) {
+            $filePath = "uploads/" . $image['image_path']; // Adjust the path accordingly
+            if (file_exists($filePath)) {
+                unlink($filePath); // Delete the file from the server
+            }
+        }
+
+        // Delete images from the database
+        $query = "DELETE FROM listing_images WHERE listing_id = :listing_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':listing_id', $listing_id);
+        return $stmt->execute();
+    }
+    public function uploadImages($files, $listing_id)
+    {
+        $uploadedImages = [];
+        foreach ($files['name'] as $index => $fileName) {
+            $tmpFilePath = $files['tmp_name'][$index];
+            if ($tmpFilePath) {
+                $newFilePath = "uploads/" . basename($fileName); // Adjust the path
+                if (move_uploaded_file($tmpFilePath, $newFilePath)) {
+                    // Store image path in the database
+                    $query = "INSERT INTO listing_images (listing_id, image_path) VALUES (:listing_id, :image_path)";
+                    $stmt = $this->conn->prepare($query);
+                    $stmt->bindParam(':listing_id', $listing_id);
+                    $stmt->bindParam(':image_path', $fileName);
+                    $stmt->execute();
+                    $uploadedImages[] = $fileName;
+                }
+            }
+        }
+        return $uploadedImages;
     }
 }

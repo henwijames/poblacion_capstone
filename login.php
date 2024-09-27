@@ -7,6 +7,7 @@ $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
 // Clear session data
 unset($_SESSION['errors']);
 unset($_SESSION['form_data']);
+
 ?>
 <main class="home  flex flex-col items-center justify-center min-h-screen">
     <div class="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
