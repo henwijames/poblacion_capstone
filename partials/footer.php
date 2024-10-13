@@ -7,6 +7,10 @@
         </div>
     </div>
 </footer>
+<script src="assets/js/aos.js"></script>
+<script>
+    AOS.init();
+</script>
 </body>
 
 </html>

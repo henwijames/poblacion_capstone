@@ -11,6 +11,7 @@ include 'session.php';
     <title>PoblacionEase</title>
 
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/aos.css">
 
     <!-- FontAwesome CDN -->
     <script src="https://kit.fontawesome.com/f284e8c7c2.js" crossorigin="anonymous"></script>

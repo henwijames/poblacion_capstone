@@ -63,3 +63,4 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
 </head>
 
 <body class="font-custom">
+    <?php include 'navbar.php'; ?>

@@ -27,13 +27,6 @@
   text-shadow: 2px 2px 3px #000;
 }
 
-.tenants-home {
-  height: 500px;
-  background-image: url("../assets/img/bg.png");
-  background-size: cover;
-  background-position: center;
-}
-
 .dot::before {
   content: "";
   width: 0.25rem;

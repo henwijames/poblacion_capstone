@@ -3,7 +3,7 @@
 
     <header class="home">
         <!-- Navigation Bar -->
-        <nav class="py-2 sticky top-0 px-5 md:px-[120px]  md:flex items-center justify-between bg-background shadow">
+        <nav class="py-2 sticky top-0 px-5 md:px-[120px]  md:flex items-center justify-between bg-background shadow" style="z-index: 100;">
             <div class="flex justify-between items-center">
                 <img src="assets/img/poblacionease.png" alt="logo" class="w-[150px]">
                 <span class="text-3xl cursor-pointer md:hidden block">
@@ -12,7 +12,7 @@
             </div>
             <ul id="menu" class="md:flex md:items-center gap-4 z-1 md:z-auto md:static absolute 
             bg-background w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 
-            opacity-0 top-[-400px] transition-all ease-in duration-500">
+            opacity-0 top-[-400px] transition-all ease-in duration-500" style="z-index: 50;">
                 <li class="my-6 md:my-0 ">
                     <a href="index" class="text-xl hover:text-primary duration-500">Home</a>
                 </li>
@@ -34,13 +34,13 @@
 
         <div class=" banner container mx-auto md:px-[60px] px-6 gap-0 mt-[60px]">
             <div class="text-banner flex flex-col justify-center w-[300px] md:w-[730px] h-[500px] ">
-                <p class=" uppercase font-bold text-[16px] leading-[20px] mb-1">welcome to poblacion<span class="text-[#C1C549]">ease</span></p>
-                <h1 class=" uppercase font-bold text-[30px] md:text-[65px] leading-[30px] md:leading-[75px] ">Discover a New Era of Convenience and Connection</h1>
-                <p class="text-[16px] md:text-[24px]">Experience effortless living in Poblacion, Taal with Poblacion<span class="text-[#C1C549]">Ease</span>. Discover apartments, connect with local businesses, and embrace community. Your gateway to convenience in Batangas.</p>
+                <p class=" uppercase font-bold text-[16px] leading-[20px] mb-1" data-aos="fade-right" data-aos-delay="50" data-aos-duration="1000">welcome to poblacion<span class="text-[#C1C549]">ease</span></p>
+                <h1 class=" uppercase font-bold text-[30px] md:text-[65px] leading-[30px] md:leading-[75px] " data-aos="fade-right" data-aos-delay="100" data-aos-duration="1050">Discover a New Era of Convenience and Connection</h1>
+                <p class="text-[16px] md:text-[24px]" data-aos="fade-right" data-aos-delay="150" data-aos-duration="1100">Experience effortless living in Poblacion, Taal with Poblacion<span class="text-[#C1C549]">Ease</span>. Discover apartments, connect with local businesses, and embrace community. Your gateway to convenience in Batangas.</p>
 
                 <a href="login" class="flex items-center justify-between w-[213px] bg-primary 
                 px-3 py-3 md:px-5 md:py-5 text-white font-bold mt-[32px] rounded-[5px] hover:bg-accent 
-                 transition-all ease-in shadow-md">
+                 transition-all ease-in shadow-md" data-aos="fade-right" data-aos-delay="200">
                     FIND PROPERTIES
                     <i class="fa-solid fa-chevron-right text-white"></i>
                 </a>
@@ -53,7 +53,7 @@
 
             <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8">
 
-                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card" data-aos="fade-down">
                     <img
                         src="assets/img/house1.jpg"
                         alt="Featured Listing 1"
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card" data-aos="fade-down">
                     <img
                         src="assets/img/house2.jpg"
                         alt="Featured Listing 2"
@@ -91,7 +91,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card" data-aos="fade-down">
                     <img
                         src="assets/img/house3.jpg"
                         alt="Featured Listing 3"

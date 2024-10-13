@@ -99,10 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 
-    // if (!empty($errors)) {
-    //     $_SESSION['errors'] = $errors;
-    //     $_SESSION['form_data'] = $_POST;
-    //     header("Location: ../login.php");
-    //     exit();
-    // }
+    if (!empty($errors)) {
+        $_SESSION['errors'] = $errors;
+        $_SESSION['form_data'] = $_POST;
+        header("Location: ../login.php");
+        exit();
+    }
 }
