@@ -31,7 +31,7 @@
                 <div class="hidden sm:ml-6 sm:block">
                     <div class="flex space-x-4">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                        <a href="#" class="rounded-md px-3 py-2 text-base font-medium text-black">Apartments</a>
+                        <a href="#" class="rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Apartments</a>
                         <a href="#" class="rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Business Establishments</a>
                         <a href="#" class="rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Agents</a>
                     </div>

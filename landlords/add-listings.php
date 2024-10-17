@@ -38,15 +38,15 @@ ini_set('display_errors', 1);
                         </div>
                     <?php endif; ?>
 
-                    <div>
+                    <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-700">Property Type*</h3>
                         <div class="flex gap-4 mt-2">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="property_type" value="apartment" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Apartment') echo 'checked'; ?> onchange="toggleRooms()">
+                                <input type="radio" name="property_type" value="apartment" class="radio" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Apartment') echo 'checked'; ?> onchange="toggleRooms()">
                                 <span class="ml-2 text-sm text-gray-700">Apartment</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="property_type" value="business establishment" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Business Establishment') echo 'checked'; ?> onchange="toggleRooms()">
+                                <input type="radio" name="property_type" value="business establishment" class="radio" <?php if (isset($_POST['property_type']) && $_POST['property_type'] == 'Business Establishment') echo 'checked'; ?> onchange="toggleRooms()">
                                 <span class="ml-2 text-sm text-gray-700">Business Establishment</span>
                             </label>
                         </div>
@@ -54,38 +54,58 @@ ini_set('display_errors', 1);
                             <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['property_type']); ?></p>
                         <?php endif; ?>
                     </div>
+                    <div class="mb-6">
+                        <h3 class="text-lg font-medium text-gray-700">Payment Options</h3>
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="payment_options[]" value="one month deposit" class="checkbox">
+                                    <span class="ml-2 text-sm text-gray-700">One Month Deposit</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="payment_options[]" value="one month advance" class="checkbox">
+                                    <span class="ml-2 text-sm text-gray-700">One Month Advance</span>
+                                </label>
+                            </div>
+                        </div>
+                        <?php if (isset($errors['payment_options'])): ?>
+                            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['payment_options']); ?></p>
+                        <?php endif; ?>
+                    </div>
                     <div>
-                        <label for="address" class="block text-sm font-medium text-gray-700">
+                        <label for="address" class="block text-lg font-medium text-gray-700">
                             Address*
                         </label>
                         <input
                             type="text"
                             id="address"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                            class="input input-bordered w-full"
                             name="address"
                             placeholder="123 Main St, Anytown USA" />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div id="bedroom-container">
-                            <label for="bedrooms" class="block text-sm font-medium text-gray-700">
+                            <label for="bedrooms" class="block text-lg font-medium text-gray-700">
                                 Bedrooms*
                             </label>
                             <input
                                 id="bedrooms"
                                 type="number"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                                class="input input-bordered w-full"
                                 placeholder="2"
                                 name="bedrooms" />
                         </div>
                         <div>
-                            <label for="bathrooms" class="block text-sm font-medium text-gray-700">
+                            <label for="bathrooms" class="block text-lg font-medium text-gray-700">
                                 Bathrooms*
                             </label>
                             <input
                                 id="bathrooms"
                                 type="number"
                                 name="bathrooms"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                                class="input input-bordered w-full"
                                 placeholder="1" />
                         </div>
                     </div>
@@ -96,31 +116,31 @@ ini_set('display_errors', 1);
 
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="amenities[]" value="gym" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <input type="checkbox" name="amenities[]" value="gym" class="checkbox">
                                     <span class="ml-2 text-sm text-gray-700">Gym</span>
                                 </label>
                             </div>
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="amenities[]" value="balcony" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <input type="checkbox" name="amenities[]" value="balcony" class="checkbox">
                                     <span class="ml-2 text-sm text-gray-700">Balcony</span>
                                 </label>
                             </div>
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="amenities[]" value="swimming pool" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <input type="checkbox" name="amenities[]" value="swimming pool" class="checkbox">
                                     <span class="ml-2 text-sm text-gray-700">Swimming Pool</span>
                                 </label>
                             </div>
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="amenities[]" value="airconditioned" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <input type="checkbox" name="amenities[]" value="airconditioned" class="checkbox">
                                     <span class="ml-2 text-sm text-gray-700">Air-Conditioned</span>
                                 </label>
                             </div>
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="amenities[]" value="parking" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <input type="checkbox" name="amenities[]" value="parking" class="checkbox">
                                     <span class="ml-2 text-sm text-gray-700">Parking</span>
                                 </label>
                             </div>
@@ -128,24 +148,24 @@ ini_set('display_errors', 1);
                         </div>
                     </div>
                     <div>
-                        <label for="sqft" class="block text-sm font-medium text-gray-700">
+                        <label for="sqft" class="block text-lg font-medium text-gray-700">
                             Square Meters*
                         </label>
                         <input
                             id="sqft"
                             type="number"
                             name="sqft"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                            class="input input-bordered w-full"
                             placeholder="1200" />
                     </div>
                     <div>
-                        <label for="rent" class="block text-sm font-medium text-gray-700">
+                        <label for="rent" class="block text-lg font-medium text-gray-700">
                             Rent Price*
                         </label>
                         <input
                             id="rent"
                             type="number"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                            class="input input-bordered w-full"
                             placeholder="1500"
                             name="rent" />
                     </div>
@@ -157,7 +177,7 @@ ini_set('display_errors', 1);
                             id="description"
                             name="description"
                             rows="3"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                            class="textarea textarea-bordered w-full"
                             placeholder="Describe the property details..."></textarea>
                     </div>
                     <div>

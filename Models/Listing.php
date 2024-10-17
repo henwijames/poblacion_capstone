@@ -12,6 +12,7 @@ class Listing
     public $description;
     public $property_type;
     public $user_id;
+    public $payment_options;
 
     public function __construct($db)
     {
@@ -22,7 +23,7 @@ class Listing
     public function create()
     {
         // SQL query to insert listing data
-        $query = "INSERT INTO listings (address, bedrooms, bathrooms, sqft, rent, description, amenities, property_type, user_id) VALUES (:address, :bedrooms, :bathrooms, :sqft, :rent, :description, :amenities, :property_type, :user_id)";
+        $query = "INSERT INTO listings (address, bedrooms, bathrooms, sqft, rent, description, amenities, property_type, user_id, payment_options) VALUES (:address, :bedrooms, :bathrooms, :sqft, :rent, :description, :amenities, :property_type, :user_id, :payment_options)";
 
         // Prepare statement
         $stmt = $this->conn->prepare($query);
@@ -37,6 +38,7 @@ class Listing
         $stmt->bindParam(':amenities', json_encode($this->amenities)); // Convert array to JSON
         $stmt->bindParam(':property_type', $this->property_type);
         $stmt->bindParam(':user_id', $this->user_id);
+        $stmt->bindParam(':payment_options', json_encode($this->payment_options));
 
         // Execute query
         if ($stmt->execute()) {
@@ -49,15 +51,16 @@ class Listing
     {
         // Update listing data query
         $query = 'UPDATE listings SET 
-                property_type = :property_type,
-                address = :address,
-                bedrooms = :bedrooms,
-                bathrooms = :bathrooms,
-                amenities = :amenities,
-                sqft = :sqft,
-                rent = :rent,
-                description = :description
-              WHERE id = :id';
+            property_type = :property_type,
+            address = :address,
+            bedrooms = :bedrooms,
+            bathrooms = :bathrooms,
+            amenities = :amenities,
+            sqft = :sqft,
+            rent = :rent,
+            payment_options = :payment_options,
+            description = :description
+          WHERE id = :id';
 
         $stmt = $this->conn->prepare($query);
 
@@ -66,7 +69,14 @@ class Listing
         $stmt->bindParam(':address', $data['address']);
         $stmt->bindParam(':bedrooms', $data['bedrooms'], PDO::PARAM_INT);
         $stmt->bindParam(':bathrooms', $data['bathrooms'], PDO::PARAM_INT);
-        $stmt->bindParam(':amenities', json_encode($data['amenities']));
+
+        // Fix for passing by reference: Assign to variables first
+        $amenities = json_encode($data['amenities']);
+        $payment_options = json_encode($data['payment_options']);
+
+        $stmt->bindParam(':amenities', $amenities);
+        $stmt->bindParam(':payment_options', $payment_options);
+
         $stmt->bindParam(':sqft', $data['sqft'], PDO::PARAM_INT);
         $stmt->bindParam(':rent', $data['rent'], PDO::PARAM_INT);
         $stmt->bindParam(':description', $data['description']);
@@ -78,7 +88,7 @@ class Listing
         // Check if there are images to update
         if ($uploadedImages && $listingUpdated) {
             // Logic to handle uploaded images (e.g., save, replace, or delete images)
-            $this->uploadImages($data['id'], $uploadedImages);
+            $this->uploadImages($uploadedImages, $data['id']);
         }
 
         return $listingUpdated;
@@ -86,16 +96,17 @@ class Listing
 
 
 
+
     // Save listing images
     public function saveImages($data, $uploadedImages)
     {
-        // Make sure you are passing the correct listing ID
-        $listing_id = $data['id'];
-
-        // Update the listing first (assuming you have an update function)
-        if (!$this->updateListing($data)) {
-            return false; // Exit if the listing update fails
+        // Ensure $data is an array and has the 'id' key
+        if (!is_array($data) || !isset($data['id'])) {
+            throw new InvalidArgumentException('Invalid data provided. Listing ID is required.');
         }
+
+        // Get the listing ID from the data
+        $listing_id = $data['id'];
 
         // Prepare SQL to insert images
         $query = 'INSERT INTO listing_images (listing_id, image_path) VALUES (:listing_id, :image_path)';
@@ -106,13 +117,19 @@ class Listing
             $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
             $stmt->bindParam(':image_path', $image);
 
+            // Execute the query for each image
             if (!$stmt->execute()) {
+                // Output error information for debugging
+                $error = $stmt->errorInfo();
+                var_dump($error);
                 return false; // Return false if any insert fails
             }
         }
 
         return true; // Successfully saved images
     }
+
+
 
 
     public function getListingsByUser($user_id)
@@ -185,15 +202,16 @@ class Listing
         foreach ($files['name'] as $index => $fileName) {
             $tmpFilePath = $files['tmp_name'][$index];
             if ($tmpFilePath) {
-                $newFilePath = "uploads/" . basename($fileName); // Adjust the path
+                // Define the upload path, ensure this directory exists
+                $newFilePath = "uploads/" . basename($fileName);
                 if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                     // Store image path in the database
                     $query = "INSERT INTO listing_images (listing_id, image_path) VALUES (:listing_id, :image_path)";
                     $stmt = $this->conn->prepare($query);
-                    $stmt->bindParam(':listing_id', $listing_id);
-                    $stmt->bindParam(':image_path', $fileName);
+                    $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
+                    $stmt->bindParam(':image_path', $newFilePath); // Use the file path for the database
                     $stmt->execute();
-                    $uploadedImages[] = $fileName;
+                    $uploadedImages[] = $newFilePath; // Store the file path for further use
                 }
             }
         }

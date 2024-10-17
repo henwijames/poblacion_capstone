@@ -60,6 +60,29 @@ unset($_SESSION['form_data']);
                         <?php endif; ?>
                     </div>
                     <div>
+                        <h3 class="text-lg font-medium text-gray-700">Payment Options</h3>
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            <?php
+                            $payment_options = json_decode($listingDetails['payment_options'], true) ?? [];
+                            ?>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="payment_options[]" value="one month deposit" class="rounded border-gray-300 text-primary focus:ring-primary" <?php echo in_array("one month deposit", $payment_options) ? 'checked' : ''; ?>>
+                                    <span class="ml-2 text-sm text-gray-700">One Month Deposit</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="payment_options[]" value="one month advance" class="rounded border-gray-300 text-primary focus:ring-primary" <?php echo in_array("one month advance", $payment_options) ? 'checked' : ''; ?>>
+                                    <span class="ml-2 text-sm text-gray-700">One Month Advance</span>
+                                </label>
+                            </div>
+                        </div>
+                        <?php if (isset($errors['payment_options'])): ?>
+                            <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['payment_options']); ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <div>
                         <label for="address" class="block text-sm font-medium text-gray-700">Address*</label>
                         <input type="text" id="address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" name="address" value="<?= htmlspecialchars($listingDetails['address']); ?>" />
                     </div>
