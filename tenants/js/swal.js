@@ -1,6 +1,7 @@
 $(document).ready(function () {
-  $("#logout-btn").on("click", function (e) {
+  $(".logout-btn").on("click", function (e) {
     e.preventDefault();
+    console.log("Logout button clicked");
     // SweetAlert confirmation
     Swal.fire({
       title: "Are you sure you want to logout?",

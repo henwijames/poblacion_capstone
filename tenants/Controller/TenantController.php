@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'last_name' => $_POST['lastName'] ?? '',
         'address' => $_POST['address'] ?? '',
         'phone_number' => $_POST['phoneNumber'] ?? '',
-        'email' => $_POST['email'] ?? '',
     ];
 
     // Update tenant profile

@@ -14,6 +14,8 @@ class Tenants
     public $phone;
     public $validid;
     public $password;
+    public $verification_code;
+    public $verification_expires_at;
 
     public function __construct($db)
     {
@@ -23,7 +25,8 @@ class Tenants
     // Create a new tenant
     public function create()
     {
-        $query = "INSERT INTO " . $this->table . " SET first_name=:fname, middle_name=:mname, last_name=:lname, email=:email, address=:address, phone_number=:phone, validid=:validid, password=:password";
+        $query = "INSERT INTO " . $this->table . " 
+              SET first_name=:fname, middle_name=:mname, last_name=:lname, email=:email, address=:address, phone_number=:phone, validid=:validid, password=:password, verification_code=:verification_code, verification_expires_at=:verification_expires_at";
 
         $stmt = $this->conn->prepare($query);
 
@@ -35,6 +38,8 @@ class Tenants
         $this->phone = htmlspecialchars(strip_tags($this->phone));
         $this->validid = htmlspecialchars(strip_tags($this->validid));
         $this->password = htmlspecialchars(strip_tags($this->password));
+        $this->verification_code = htmlspecialchars(strip_tags($this->verification_code)); // Sanitize verification code
+        $this->verification_expires_at = htmlspecialchars(strip_tags($this->verification_expires_at)); // Sanitize expiration time
 
         // Bind parameters
         $stmt->bindParam(':fname', $this->fname);
@@ -45,9 +50,13 @@ class Tenants
         $stmt->bindParam(':phone', $this->phone);
         $stmt->bindParam(':validid', $this->validid);
         $stmt->bindParam(':password', $this->password);
+        $stmt->bindParam(':verification_code', $this->verification_code); // Bind verification code
+        $stmt->bindParam(':verification_expires_at', $this->verification_expires_at); // Bind expiration time
+
 
         // Execute query
         if ($stmt->execute()) {
+            $this->id = $this->conn->lastInsertId();
             return true;
         }
 
@@ -75,7 +84,7 @@ class Tenants
     {
         $query = 'UPDATE tenants 
             SET first_name = :first_name, middle_name = :middle_name, last_name = :last_name,
-                address = :address, phone_number = :phone_number, email = :email 
+                address = :address, phone_number = :phone_number
             WHERE id = :id';
 
         $stmt = $this->conn->prepare($query);
@@ -86,7 +95,6 @@ class Tenants
         $stmt->bindParam(':last_name', $data['last_name'], PDO::PARAM_STR);
         $stmt->bindParam(':address', $data['address'], PDO::PARAM_STR);
         $stmt->bindParam(':phone_number', $data['phone_number'], PDO::PARAM_STR);
-        $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
         $stmt->bindParam(':id', $tenantId, PDO::PARAM_INT);
 
         // Execute update
@@ -97,6 +105,13 @@ class Tenants
             print_r($stmt->errorInfo());
             return false;
         }
+    }
+    public function verifyPhoneNumber($id)
+    {
+        $query = "UPDATE tenants SET mobile_verified = 1 WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
 
 

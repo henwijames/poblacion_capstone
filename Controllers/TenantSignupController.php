@@ -2,6 +2,7 @@
 session_start();
 require_once 'Database.php';
 require_once '../Models/Tenants.php';
+require_once '../Models/Semaphore.php';
 
 $errors = [];
 
@@ -62,27 +63,33 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (empty($errors)) {
         $tenants->password = password_hash($password, PASSWORD_BCRYPT); // Hash the password
 
+        // Generate a 6-digit verification code
+        $verificationCode = mt_rand(100000, 999999);
+
+        // Set the expiration time for the code (5 minutes from now)
+        $expiresAt = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+
+        // Assign the verification code and expiration to the tenant model
+        $tenants->verification_code = $verificationCode;
+        $tenants->verification_expires_at = $expiresAt;
+
         if ($tenants->create()) {
-            // Auto-login after successful signup
-            $foundUser = $tenants->findByEmail($tenants->email);
-            if ($foundUser && $tenants->verifyPassword($password, $foundUser['password'])) {
-                // Successful login
-                $_SESSION['user_id'] = $foundUser['id'];
-                $_SESSION['success'] = "User created and logged in successfully!";
-                header("Location: ../tenants/index"); // Redirect to the tenant's dashboard or homepage
-                exit();
-            } else {
-                $_SESSION['errors']['login'] = "Login failed after signup.";
-            }
+            sendVerificationSMS($tenants->phone, $verificationCode); // Send the verification code via SMS
+
+            // Successful login
+            $_SESSION['user_id'] = $tenants->id;
+            $_SESSION['success'] = "User created successfully! Please verify your phone number.";
+            header("Location: ../account_verify"); // Redirect to the tenant's dashboard or homepage
+            exit();
         } else {
             $_SESSION['errors']['database'] = "Failed to create user.";
-            header("Location: ../tenants/signup");
+            header("Location: ../signupTenants");
         }
     }
 
     // If there are errors, or if login failed after signup
     $_SESSION['errors'] = $errors;
     $_SESSION['form_data'] = $_POST;
-    header("Location: ../tenants/signup.php");
+    header("Location: ../signupTenants");
     exit();
 }

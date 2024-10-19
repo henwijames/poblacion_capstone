@@ -76,8 +76,9 @@ unset($_SESSION['form_data']);
                         <img id="profilePhoto" class="h-16 w-16 object-cover rounded-full" src="assets/img/image_placeholder.png" alt="Current profile photo" />
                     </div>
                     <label class="block">
-                        <span class="sr-only">Choose profile photo</span>
-                        <input type="file" name="profile_photo" class="block w-full cursor-pointer text-sm text-slate-500
+                        
+                        <span class="ml-2">Choose profile photo</span>
+                        <input type="file" name="validid" class="block w-full cursor-pointer text-sm text-slate-500
                             file:mr-4 file:py-2 file:px-4
                             file:rounded-full file:border-0
                             file:text-sm file:font-semibold

@@ -1,4 +1,4 @@
-<footer class="py-12 bg-background shadow">
+<footer class="py-12 bg-background shadow px-4 sm:px-12 text-center">
     <div class="container mx-auto">
         <div class="flex items-center justify-center">
             <div class="text-muted-foreground uppercase font-bold">

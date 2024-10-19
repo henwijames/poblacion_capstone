@@ -83,12 +83,12 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
             </div>
         </div>
         <hr>
-        <div class="grid grid-cols-4 gap-4 mt-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 sm gap-4 mt-6">
             <div class="mb-6">
                 <h2 class="text-xl font-bold mb-2">Landlord</h2>
                 <p class="text-muted-foreground"><?= htmlspecialchars($fullName); ?></p>
                 <p class="text-muted-foreground"><?= htmlspecialchars($listingDetails['address']); ?></p>
-                <p class="text-muted-foreground">Phone: <?= htmlspecialchars($landlord['phone_number']); ?></p>
+                <p class="text-muted-foreground">Phone Number: <span class=" font-bold"><?= htmlspecialchars($landlord['phone_number']); ?></span></p>
             </div>
             <div class="mb-6">
                 <h2 class="text-xl font-bold mb-2">Rooms</h2>
@@ -97,7 +97,7 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
                 </div>
             </div>
             <div class="mb-6">
-                <h2 class="text-xl font-bold mb-2">Amenities</h2>
+                <h2 class="text-xl font-bold mb-2">Payment Rules</h2>
                 <ul class="grid grid-cols-1 gap-4 capitalize">
                     <?php
                     // Decode the amenities and handle null cases
@@ -168,31 +168,27 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
             <div class="w-full mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
                 <div class="p-6">
                     <h2 class="text-3xl font-bold mb-4">₱<?= htmlspecialchars($listingDetails['rent']); ?> <span class="text-lg font-normal">/month</span></h2>
-                    <div class="border rounded p-2 mb-2">
-                        <label for="check-in" class="font-semibold block mb-1">CHECK-IN</label>
-                        <input type="date" id="check-in" name="check-in" class="w-full text-sm" value="2024-11-03">
-                    </div>
-                    <button class="w-full btn bg-primary text-white py-3 rounded-lg font-semibold mb-4">
-                        Book
-                    </button>
+                    <a href="booking.php?id=<?= $listingDetails['id'] ?>" class="w-full btn bg-primary text-white py-3 rounded-lg font-semibold mb-4">
+                        Rent
+                    </a>
                     <p class="text-center text-gray-600 mb-4">You won't be charged yet</p>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
                             <span>Monthly Rent</span>
-                            <span>₱<?= htmlspecialchars($listingDetails['rent']); ?></span>
+                            <span>₱<?= htmlspecialchars(number_format($listingDetails['rent'])); ?></span>
                         </div>
 
                         <?php if (in_array("one month advance", $paymentOptions)): ?>
                             <div class="flex justify-between">
                                 <span>One month advance</span>
-                                <span>₱<?= htmlspecialchars($listingDetails['rent']); ?></span>
+                                <span>₱<?= htmlspecialchars(number_format($listingDetails['rent'])); ?></span>
                             </div>
                         <?php endif; ?>
 
                         <?php if (in_array("one month deposit", $paymentOptions)): ?>
                             <div class="flex justify-between">
                                 <span>One month deposit</span>
-                                <span>₱<?= htmlspecialchars($listingDetails['rent']); ?></span>
+                                <span>₱<?= htmlspecialchars(number_format($listingDetails['rent'])); ?></span>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -202,9 +198,11 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
                             <span>Total before payment</span>
                             <span>
                                 ₱<?= htmlspecialchars(
-                                        ($listingDetails['rent']) +
-                                            (in_array("one month advance", $paymentOptions) ? $listingDetails['rent'] : 0) +
-                                            (in_array("one month deposit", $paymentOptions) ? $listingDetails['rent'] : 0)
+                                        number_format(
+                                            ($listingDetails['rent']) +
+                                                (in_array("one month advance", $paymentOptions) ? $listingDetails['rent'] : 0) +
+                                                (in_array("one month deposit", $paymentOptions) ? $listingDetails['rent'] : 0)
+                                        )
                                     ); ?>
                             </span>
                         </div>

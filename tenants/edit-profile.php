@@ -77,10 +77,6 @@ require 'includes/sidebar.php';
                             <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
                             <input type="tel" id="phoneNumber" name="phoneNumber" value="<?php echo htmlspecialchars($tenant['phone_number']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         </div>
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($tenant['email']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                        </div>
                     </div>
                     <div class="flex justify-end space-x-4">
                         <a href="profile" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
