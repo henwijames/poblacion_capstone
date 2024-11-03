@@ -31,9 +31,9 @@
                 <div class="hidden sm:ml-6 sm:block">
                     <div class="flex space-x-4">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                        <a href="#" class="rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Apartments</a>
-                        <a href="#" class="rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Business Establishments</a>
-                        <a href="#" class="rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Agents</a>
+                        <a href="index" class="rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Apartments</a>
+                        <a href="establishments" class="rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Business Establishments</a>
+                        <a href="landlord" class="rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Landlords</a>
                     </div>
                 </div>
             </div>
@@ -73,10 +73,9 @@
     <div class="sm:hidden hidden absolute w-full bg-background" id="mobile-menu" style="z-index: 99999;">
         <div class="space-y-1 px-2 pb-3 pt-2">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Dashboard</a>
-            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Team</a>
-            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Projects</a>
-            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Calendar</a>
+            <a href="index" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Apartments</a>
+            <a href="establishments" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Business Establishment</a>
+            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Landlords</a>
         </div>
     </div>
 </nav>

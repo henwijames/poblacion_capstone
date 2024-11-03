@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             // Successful login
             $_SESSION['user_id'] = $tenants->id;
+            $_SESSION['email'] = $tenants->email;
             $_SESSION['success'] = "User created successfully! Please verify your phone number.";
             header("Location: ../account_verify"); // Redirect to the tenant's dashboard or homepage
             exit();

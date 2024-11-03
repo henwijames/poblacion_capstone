@@ -134,7 +134,7 @@ class Listing
 
     public function getListingsByUser($user_id)
     {
-        $query = "SELECT * FROM listings WHERE user_id = :user_id";
+        $query = "SELECT * FROM listings WHERE user_id = :user_id AND status = 'not occupied'";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
@@ -152,11 +152,25 @@ class Listing
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getAllListings()
+    public function getAllApartmentListings()
     {
         $query = "SELECT l.*, ln.property_name 
-              FROM listings l
-              LEFT JOIN landlords ln ON l.id = ln.id"; // Assuming landlord_id is in the listings table
+          FROM listings l
+          LEFT JOIN landlords ln ON l.user_id = ln.id 
+          WHERE l.status = 'not occupied' and l.property_type  = 'apartment'";
+        // Assuming landlord_id is in the listings table
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getAllEstablishmentListings()
+    {
+        $query = "SELECT l.*, ln.property_name 
+          FROM listings l
+          LEFT JOIN landlords ln ON l.user_id = ln.id 
+          WHERE l.status = 'not occupied' and l.property_type  = 'business establishment'";
+        // Assuming landlord_id is in the listings table
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 

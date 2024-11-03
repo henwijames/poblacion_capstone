@@ -27,10 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Update tenant profile
     if ($tenantModel->updateTenant($tenantId, $data)) {
         // Redirect or inform user of success
-        header('Location: ../profile.php?status=success');
+        header('Location: ../edit-profile.php?success=1');
         exit();
     } else {
         // Handle error
-        echo 'Error updating profile.';
+        header('Location: ../edit-profile.php?error=update_failed');
+        exit();
     }
 }

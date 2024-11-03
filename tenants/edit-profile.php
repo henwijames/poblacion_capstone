@@ -1,94 +1,156 @@
+<!DOCTYPE html>
 <?php
-require 'includes/header.php';
-require 'includes/sidebar.php';
+session_start();
+include 'session.php';
+include '../Controllers/Database.php';
+include '../Models/Listing.php';
+include '../Models/Landlords.php';
+
+$userName = "Guest";
+$defaultProfilePicture = "../assets/img/me.jpg"; //Default profile picture
+
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
+    require_once '../Models/Tenants.php';
+    require_once '../Models/Landlords.php';
+
+
+    $database = new Database();
+    $db = $database->getConnection();
+
+    if ($_SESSION['user_role'] == 'tenant') {
+        $tenants = new Tenants($db);
+        $tenant = $tenants->findById($_SESSION['user_id']);
+        $fullName = $tenant['first_name'] . " " . $tenant['middle_name'] . " " . $tenant['last_name']; // Full name of the tenant
+        $userName = $tenant['first_name']; // Replace 'first_name' with the actual column name
+        if (empty($tenant['profile_picture'])) {
+            $profilePicture = $defaultProfilePicture;
+        } else {
+            $profilePicture = $tenant['profile_picture']; // Assuming 'profile_picture' is the column name for the profile picture
+        }
+    } elseif ($_SESSION['user_role'] == 'landlord') {
+        $landlords = new Landlords($db);
+        $landlord = $landlords->findById($_SESSION['user_id']);
+        $userName = $landlord['name']; // Replace 'name' with the actual column name
+        $profilePicture = $landlord['profile_picture']; // Replace 'profile_picture' with the actual column name
+    }
+}
 ?>
+<html lang="en" class="scroll-smooth">
 
-<main class="main-content main">
-    <?php require 'includes/topbar.php'; ?>
-    <div class="p-6">
-        <div class="bg-white rounded-lg overflow-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoblacionEase</title>
 
-            <div class="relative px-4 py-6">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">Edit Profile</h1>
-                <?php if (isset($_GET['success'])): ?>
-                    <script>
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: 'Profile updated successfully!',
-                            confirmButtonColor: '#C1C549',
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'profile.php'; // Redirect to the same page to clear the query string
-                            }
-                        });
-                    </script>
-                <?php elseif (isset($_GET['error'])): ?>
-                    <script>
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Something went wrong! Please try again.',
-                            confirmButtonColor: '#C1C549',
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'edit-profile.php'; // Redirect to the same page to clear the query string
-                            }
-                        });
-                    </script>
-                <?php endif; ?>
-                <form class="space-y-6" method="POST" action="Controller/TenantController.php" enctype="multipart/form-data">
-                    <div class="flex items-center space-x-6">
-                        <div class="shrink-0">
-                            <img class="h-16 w-16 object-cover rounded-full" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1361&q=80" alt="Current profile photo" />
-                        </div>
-                        <label class="block">
-                            <span class="sr-only">Choose profile photo</span>
-                            <input type="file" class="block w-full cursor-pointer text-sm text-slate-500
+    <!-- FontAwesome CDN -->
+    <script src="https://kit.fontawesome.com/f284e8c7c2.js" crossorigin="anonymous"></script>
+    <!-- Swiper CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- JQuery File -->
+    <script src="../assets/js/jquery-3.7.1.min.js"></script>
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Animate CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body class="font-custom">
+    <?php require 'includes/sidebar.php'; ?>
+
+    <main class="main-content main">
+        <?php require 'includes/topbar.php'; ?>
+        <div class="p-6">
+            <div class="bg-white rounded-lg overflow-hidden">
+
+                <div class="relative px-4 py-6">
+
+                    <h1 class="text-3xl font-bold text-gray-800 mb-8">Edit Profile</h1>
+                    <?php if (isset($_GET['success'])): ?>
+                        <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Profile updated successfully!',
+                                confirmButtonColor: '#C1C549',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = 'profile.php'; // Redirect to the same page to clear the query string
+                                }
+                            });
+                        </script>
+                    <?php elseif (isset($_GET['error'])): ?>
+                        <script>
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong! Please try again.',
+                                confirmButtonColor: '#C1C549',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = 'edit-profile.php'; // Redirect to the same page to clear the query string
+                                }
+                            });
+                        </script>
+                    <?php endif; ?>
+                    <form class="space-y-6" method="POST" action="Controller/TenantController.php" enctype="multipart/form-data">
+                        <div class="flex items-center space-x-6">
+                            <div class="shrink-0">
+                                <img class="h-16 w-16 object-cover rounded-full" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1361&q=80" alt="Current profile photo" />
+                            </div>
+                            <label class="block">
+                                <span class="sr-only">Choose profile photo</span>
+                                <input type="file" class="block w-full cursor-pointer text-sm text-slate-500
                             file:mr-4 file:py-2 file:px-4
                             file:rounded-full file:border-0
                             file:text-sm file:font-semibold
                             file:bg-violet-50 file:text-primary
                             hover:file:bg-accent
                             " />
-                        </label>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
-                            <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($tenant['first_name']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            </label>
                         </div>
-                        <div>
-                            <label for="middleName" class="block text-sm font-medium text-gray-700">Middle Name</label>
-                            <input type="text" id="middleName" name="middleName" value="<?php echo htmlspecialchars($tenant['middle_name']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                                <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($tenant['first_name']); ?>" class="input input-bordered w-full">
+                            </div>
+                            <div>
+                                <label for="middleName" class="block text-sm font-medium text-gray-700">Middle Name</label>
+                                <input type="text" id="middleName" name="middleName" value="<?php echo htmlspecialchars($tenant['middle_name']); ?>" class="input input-bordered w-full">
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($tenant['last_name']); ?>" class="input input-bordered w-full">
+                            </div>
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                                <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($tenant['address']); ?>" class="input input-bordered w-full">
+                            </div>
+                            <div>
+                                <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" value="<?php echo htmlspecialchars($tenant['phone_number']); ?>" class="input input-bordered w-full">
+                            </div>
                         </div>
-                        <div>
-                            <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($tenant['last_name']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <div class="flex justify-end space-x-4">
+                            <a href="profile" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-accent ">
+                                Save Changes
+                            </button>
                         </div>
-                        <div>
-                            <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                            <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($tenant['address']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                        </div>
-                        <div>
-                            <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                            <input type="tel" id="phoneNumber" name="phoneNumber" value="<?php echo htmlspecialchars($tenant['phone_number']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                        </div>
-                    </div>
-                    <div class="flex justify-end space-x-4">
-                        <a href="profile" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                            Cancel
-                        </a>
-                        <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-accent ">
-                            Save Changes
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</main>
-<?php require 'includes/footer.php'; ?>
+    </main>
+    <?php require 'includes/footer.php'; ?>

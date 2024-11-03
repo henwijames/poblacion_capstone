@@ -111,4 +111,13 @@ class Landlords
     {
         return password_verify($password, $hash);
     }
+
+    public function getAllLandlords()
+    {
+        $query = "SELECT id, first_name, middle_name, last_name, email, address, property_name, phone_number, profile_picture FROM " . $this->table;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

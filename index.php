@@ -1,4 +1,12 @@
-<?php include 'partials/header.php'; ?>
+<?php include 'partials/header.php';
+require 'vendor/autoload.php'; // Ensure this path is correct
+use Dotenv\Dotenv;
+
+// Specify the path to your .env file
+$dotenv = Dotenv::createImmutable(__DIR__); // Change __DIR__ if your .env is in another directory
+$dotenv->load();
+?>
+
 <main class="font-custom">
 
     <header class="home">

@@ -5,56 +5,12 @@ $db = $database->getConnection();
 $listing = new Listing($db);
 $landlords = new Landlords($db);
 
-$landlordListings = $listing->getAllApartmentListings();
+$landlordListings = $listing->getAllEstablishmentListings();
 
 $user_id = $_SESSION['user_id'];
 $userListings = $listing->getListingsByUser($user_id);
 ?>
 
-<section class="h-[500px] tenants-home" style="background-image: url('../assets/img/bg.png');  background-size: cover; background-position: center;">
-    <div class="container mx-auto flex flex-col justify-center items-center text-center h-full px-4 text-[20px]">
-        <h1 class="text-4xl font-bold">Discover a New Era of Convenience and Connection</h1>
-        <p class="mt-4 mb-4 text-base md:text-lg">Experience effortless living in Poblacion, Taal with Poblacion<span class="text-primary">Ease</span>.</p>
-
-        <div class="flex flex-col md:flex-row items-center gap-4 mt-4 w-full max-w-xl">
-            <form action="search.php" method="GET" class="w-full flex flex-col md:flex-row items-center gap-4">
-                <div class="w-full">
-
-                    <select name="zone" class="select select-success w-full ">
-                        <option disabled selected>Choose Zone</option>
-                        <option value="zone1">Zone 1</option>
-                        <option value="zone2">Zone 2</option>
-                        <option value="zone3">Zone 3</option>
-                        <option value="zone4">Zone 4</option>
-                        <option value="zone6">Zone 6</option>
-                        <option value="zone7">Zone 7</option>
-                        <option value="zone8">Zone 8</option>
-                        <option value="zone9">Zone 9</option>
-                        <option value="zone10">Zone 10</option>
-                        <option value="zone11">Zone 11</option>
-                        <option value="zone12">Zone 12</option>
-                        <option value="zone13">Zone 13</option>
-                        <option value="zone14">Zone 14</option>
-                    </select>
-                </div>
-                <div class="w-full">
-                    <select name="rental_term" class="select select-success w-full ">
-                        <option disabled selected>Choose Rental Term</option>
-                        <option value="long_term">Long Term Rentals</option>
-                        <option value="short_term">Short Term Rentals</option>
-                        <option value="daily">Daily Rentals</option>
-                    </select>
-                </div>
-                <button type="submit" class=" btn bg-primary text-white border-none">
-                    Search
-                </button>
-            </form>
-        </div>
-
-    </div>
-
-
-</section>
 <div class="flex flex-col">
     <main class="flex-1 mx-auto py-8 px-6 md:px-8 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <?php if (!empty($landlordListings)): ?>

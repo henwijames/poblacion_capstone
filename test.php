@@ -26,24 +26,21 @@
 </head>
 
 <body>
-    <div class="container mx-auto h-full flex items-center justify-center">
-        <div class="flex flex-col items-center justify-center gap-4 py-12">
-            <h1 class="text-4xl text-primary font-bold">Enter OTP from SMS</h1>
-            <p class="text-center text-muted-foreground">Please verify your account to continue.</p>
-            <div class=" p-8 rounded-lg  w-96">
-                <form id="otpForm" class="space-y-4">
-                    <div class="flex justify-between">
-                        <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300">Verify OTP</button>
-                </form>
-            </div>
+    <div class="container mx-auto flex items-center justify-center gap-16 ">
+        <img src=" assets/img/notif.svg" alt="notif" class="relative">
+        <div class="container mx-auto md:px-[120px] mb-4 px-6 py-2 absolute top-10">
+            <nav class="flex justify-center items-center mb-2">
+                <a href="index"><img src="assets/img/poblacionease.png" alt="Poblacionease logo" class="w-[150px] h-[60px]"></a>
+            </nav>
         </div>
+        <div class="flex flex-col items-center justify-center gap-4 py-12 absolute bottom-5">
+            <h1 class="text-xl sm:text-3xl font-bold">Email Verification</h1>
+            <p>Please verify your email to continue.</p>
+            <form method="POST">
+                <button type="submit" class="btn bg-primary text-white">Send to Email</button>
+            </form>
+        </div>
+
     </div>
 
 </body>

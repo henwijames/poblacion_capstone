@@ -37,7 +37,7 @@ $userListings = $listing->getListingsByUser($user_id);
                                 <td class="py-2 px-4 border-r border-gray-200 capitalize"><?= htmlspecialchars($userListing['property_type']) ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200"><?= htmlspecialchars($userListing['address']) ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200">₱<?= number_format($userListing['rent']) ?>/month</td>
-                                <td class="py-2 px-4 border-r border-gray-200 capitalize"><?= htmlspecialchars($userListing['status']) ?></td>
+                                <td class="py-2 px-4 border-r border-gray-200 capitalize text-center"><?= htmlspecialchars($userListing['status']) ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200 text-center">
                                     <a href="edit-listings.php?id=<?= $userListing['id'] ?>" class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
                                         Edit

@@ -1,3 +1,7 @@
 /node_modules
 
 .htaccess
+
+Models/Semaphore.php
+
+.env

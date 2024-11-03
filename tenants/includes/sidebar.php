@@ -18,6 +18,7 @@
             <ul class="pl-7 mt-2 hidden group-[.selected]:block ">
                 <li class="mb-4">
                     <a href="rent" class="text-sm flex items-center dot hover:text-primary">My Rent</a>
+                    <a href="inquiries" class="text-sm flex items-center dot hover:text-primary">Inquiries</a>
                 </li>
             </ul>
         </li>

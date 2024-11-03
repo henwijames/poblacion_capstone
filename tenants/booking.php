@@ -66,17 +66,17 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
                             <span>₱<?= htmlspecialchars(number_format($listingDetails['rent'])); ?></span>
                         </div>
 
-                        <?php if (in_array("one month advance", $paymentOptions)): ?>
+                        <?php if (is_array($paymentOptions) && in_array("one month advance", $paymentOptions)): ?>
                             <div class="flex justify-between">
                                 <span>One month advance</span>
-                                <span>₱<?= htmlspecialchars(number_format($oneMonthAdvance)); ?></span>
+                                <span>₱<?= htmlspecialchars(number_format($listingDetails['rent'])); ?></span>
                             </div>
                         <?php endif; ?>
 
-                        <?php if (in_array("one month deposit", $paymentOptions)): ?>
+                        <?php if (is_array($paymentOptions) && in_array("one month deposit", $paymentOptions)): ?>
                             <div class="flex justify-between">
                                 <span>One month deposit</span>
-                                <span>₱<?= htmlspecialchars(number_format($oneMonthDeposit)); ?></span>
+                                <span>₱<?= htmlspecialchars(number_format($listingDetails['rent'])); ?></span>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -88,12 +88,11 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
                                 ₱<?= htmlspecialchars(
                                         number_format(
                                             ($listingDetails['rent']) +
-                                                (in_array("one month advance", $paymentOptions) ? $listingDetails['rent'] : 0) +
-                                                (in_array("one month deposit", $paymentOptions) ? $listingDetails['rent'] : 0)
+                                                (is_array($paymentOptions) && in_array("one month advance", $paymentOptions) ? $listingDetails['rent'] : 0) +
+                                                (is_array($paymentOptions) && in_array("one month deposit", $paymentOptions) ? $listingDetails['rent'] : 0)
                                         )
                                     ); ?>
                             </span>
-
                         </div>
                     </div>
                 </div>

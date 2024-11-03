@@ -1,15 +1,26 @@
 <?php
 session_start();
 require_once '../../Controllers/Database.php';
+require_once '../../Models/Landlords.php';
 require_once '../../Models/Tenants.php';
 require_once '../../Models/Listing.php';
 $database = new Database();
 $db = $database->getConnection();
+
 $listing = new Listing($db);
+$landlords = new Landlords($db);
+
 $listing_id =  $_GET['id'] ?? null;
+
 $user_id = $_SESSION['user_id'];
+
 $listingDetails = $listing->getListingById($listing_id);
+$landlord = $landlords->findById($listingDetails['user_id']);
+
+$landlord_id = $listingDetails['user_id'];
+
 $paymentOptions = json_decode($listingDetails['payment_options'], true);
+
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
     $errors = [];
 
@@ -40,13 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
 
     try {
         // Insert the booking into the bookings table
-        $query = "INSERT INTO bookings (listing_id, user_id, check_in, total_amount) 
-                  VALUES (:listing_id, :user_id, :check_in, :total_amount)";
+        $query = "INSERT INTO bookings (listing_id, user_id, check_in, total_amount, landlord_id) 
+                  VALUES (:listing_id, :user_id, :check_in, :total_amount, :landlord_id)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindParam(':check_in', $check_in);
         $stmt->bindParam(':total_amount', $total_amount);
+        $stmt->bindParam(':landlord_id', $landlord_id, PDO::PARAM_INT);
         $stmt->execute();
 
         // Update the status of the listing to 'pending'

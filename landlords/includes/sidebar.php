@@ -35,6 +35,9 @@
                     <a href="rents" class="text-sm flex items-center dot hover:text-primary">Rents</a>
                 </li>
                 <li class="mb-4">
+                    <a href="inquiries" class="text-sm flex items-center dot hover:text-primary">Inquiries</a>
+                </li>
+                <li class="mb-4">
                     <a href="tenants" class="text-sm flex items-center dot hover:text-primary">Tenants</a>
                 </li>
             </ul>

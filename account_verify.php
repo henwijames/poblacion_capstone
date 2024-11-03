@@ -1,9 +1,8 @@
 <?php
 session_start();
-include 'partials/session.php';
+// include 'partials/session.php';
 require_once 'Controllers/Database.php';
 require_once 'Models/Tenants.php';
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $database = new Database();
@@ -25,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $_SESSION['success'] = "Phone number verified successfully!";
         $_SESSION['user_role'] = "tenant";
-        header("Location: tenants/index");
+        header("Location: email_verification.php");
         exit();
     } else {
         // Code is invalid or expired
