@@ -22,7 +22,7 @@ function sendVerificationSMS($phone, $code)
     $senderName = 'SNIHS';
     $message = "Your verification code is: $code. It will expire in 5 minutes.";
 
-    $url = "https://api.semaphore.co/api/v4/messages";
+    $url = "https://api.semaphore.co/api/v4/priority";
     $data   = [
         'apikey' => $apiKey,
         'number' => $phone,

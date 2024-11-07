@@ -25,9 +25,6 @@ $dotenv->load();
                     <a href="index" class="text-xl hover:text-primary duration-500">Home</a>
                 </li>
                 <li class="my-6 md:my-0 ">
-                    <a href="#rent" class="text-xl hover:text-primary duration-500">Rent</a>
-                </li>
-                <li class="my-6 md:my-0 ">
                     <a href="#about" class="text-xl hover:text-primary duration-500">About</a>
                 </li>
                 <a
@@ -56,71 +53,6 @@ $dotenv->load();
 
         </div>
     </header>
-    <section class="py-12 md:py-20 lg:py-24" id="rent">
-        <div class="container mx-auto px-4 md:px-6">
-
-            <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8">
-
-                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card" data-aos="fade-down">
-                    <img
-                        src="assets/img/house1.jpg"
-                        alt="Featured Listing 1"
-                        width="400"
-                        height="300"
-                        class="rounded-t-md object-cover w-full h-60"
-                        style="aspect-ratio: 400 / 300; object-fit: cover;" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">Luxury Penthouse in Downtown</h3>
-                        <p class="mt-2 text-muted-foreground">3 Bedrooms, 2 Bathrooms</p>
-                        <p class="mt-3 font-bold">$1,200,000</p>
-                        <div class="mt-4">
-                            <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="login" rel="ugc">
-                                View Details
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card" data-aos="fade-down">
-                    <img
-                        src="assets/img/house2.jpg"
-                        alt="Featured Listing 2"
-                        width="400"
-                        height="300"
-                        class="rounded-t-md object-cover w-full h-60"
-                        style="aspect-ratio: 400 / 300; object-fit: cover;" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">Cozy Bungalow in the Suburbs</h3>
-                        <p class="mt-2 text-muted-foreground">2 Bedrooms, 1 Bathroom</p>
-                        <p class="mt-4 font-bold">$450,000</p>
-                        <div class="mt-4">
-                            <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="login" rel="ugc">
-                                View Details
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card" data-aos="fade-down">
-                    <img
-                        src="assets/img/house3.jpg"
-                        alt="Featured Listing 3"
-                        width="400"
-                        height="300"
-                        class="rounded-t-md object-cover w-full h-60"
-                        style="aspect-ratio: 400 / 300; object-fit: cover;" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">Modern Townhouse in the City</h3>
-                        <p class="mt-2 text-muted-foreground">3 Bedrooms, 2.5 Bathrooms</p>
-                        <p class="mt-4 font-bold">$800,000</p>
-                        <div class="mt-4">
-                            <a class="text-white bg-primary px-5 py-2 border border-[#C1C549] rounded-md hover:bg-accent ease transition-colors" href="login" rel="ugc">
-                                View Details
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <section class="w-full py-12 md:py-24 lg:py-32 bg-background" id="about">
         <div class="grid items-center justify-center gap-4 px-4  text-center md:px-6 lg:gap-10">
             <div class="space-y-3">

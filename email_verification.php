@@ -1,6 +1,9 @@
 <?php
 session_start();
+require 'Controllers/Database.php';
+require 'Models/Tenants.php';
 require 'vendor/autoload.php'; // Load PHPMailer if using Composer
+
 use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -14,38 +17,64 @@ try {
 } catch (Exception $e) {
     die('Failed to load .env file: ' . $e->getMessage());
 }
+
 // Check if the environment variable is set
-if (!$_ENV['SMTP_HOST']) {
+if (!isset($_ENV['SMTP_HOST'])) {
     die("SMTP_HOST is not set in the environment variables.");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (!isset($_SESSION['email'])) {
+        die("No email found in session. Please log in first.");
+    }
+
+    $database = new Database();
+    $db = $database->getConnection();
+    $tenants = new Tenants($db);
+
     $email = $_SESSION['email']; // Make sure the user's email is stored in the session
 
+    // Generate a random token
+    $token = bin2hex(random_bytes(16));
+
+    // Insert the token into the database
+    $tenants->insertEmailVerificationToken($email, $token);
+
     // Sending verification email using PHPMailer
-    $mail = new PHPMailer();
+    $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host = $_ENV['SMTP_HOST']; // Update with your SMTP server
+        $mail->Host = $_ENV['SMTP_HOST'];
         $mail->SMTPAuth = true;
-        $mail->Username = $_ENV['SMTP_USER']; // Your SMTP username
-        $mail->Password = $_ENV['SMTP_PASS']; // Your SMTP password
+        $mail->Username = $_ENV['SMTP_USER'];
+        $mail->Password = $_ENV['SMTP_PASS'];
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = $_ENV['SMTP_PORT']; // Your SMTP port
+        $mail->Port = $_ENV['SMTP_PORT'];
+
+        // Debugging output
+        $mail->SMTPDebug = 2;  // Enable verbose debug output
+        $mail->Debugoutput = function ($str, $level) {
+            echo "Debug level $level; message: $str<br>";
+        };
 
         // Email settings
-        $mail->setFrom('poblacionease@gmail.com', 'poblacion');
+        $mail->setFrom('poblacionease@gmail.com', 'PoblacionEase');
         $mail->addAddress($email); // Send to user's email
 
         $mail->isHTML(true);
         $mail->Subject = 'PoblacionEase Email Verification';
-        $mail->Body    = 'Click the link to verify your email: <a href="http://yourwebsite.com/verify_email.php">Verify Email</a>';
+        $mail->Body = 'Click the link to verify your email: <a href="localhost/poblacion/verify_email.php?token=' . $token . '">Verify Email</a>';
 
-        $mail->send();
-        $_SESSION['success'] = "Verification email sent. Please check your email.";
+
+        // Send the email
+        if ($mail->send()) {
+            $_SESSION['success'] = "Verification email sent. Please check your email.";
+        }
     } catch (Exception $e) {
         $_SESSION['errors']['email'] = "Error sending email: {$mail->ErrorInfo}";
     }
+
+    // Redirect after email is sent
     header("Location: email_verification.php");
     exit();
 }

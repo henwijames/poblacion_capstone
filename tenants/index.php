@@ -45,7 +45,7 @@ $userListings = $listing->getListingsByUser($user_id);
                         <option value="daily">Daily Rentals</option>
                     </select>
                 </div>
-                <button type="submit" class=" btn bg-primary text-white border-none">
+                <button type="submit" class=" btn bg-primary text-white border-none w-full sm:w-20 ">
                     Search
                 </button>
             </form>

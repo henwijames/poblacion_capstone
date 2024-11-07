@@ -22,6 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $password = trim($_POST['password']);
     $confirm = trim($_POST['confirm']);
 
+    if ($tenants->checkEmailExists($tenants->email)) {
+        $_SESSION['same_email'] = "Email is already used. Please try another email.";
+        header("Location: ../signupTenants");
+        exit();
+    }
+
     // Validate input fields
     if (empty($tenants->fname)) {
         $errors['fname'] = "First name is required";

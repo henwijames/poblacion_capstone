@@ -105,17 +105,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
                     <form class="space-y-6" method="POST" action="Controller/TenantController.php" enctype="multipart/form-data">
                         <div class="flex items-center space-x-6">
                             <div class="shrink-0">
-                                <img class="h-16 w-16 object-cover rounded-full" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1361&q=80" alt="Current profile photo" />
+                                <img id="profilePhoto" class="h-16 w-16 object-cover rounded-full" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1361&q=80" alt="Current profile photo" />
                             </div>
                             <label class="block">
                                 <span class="sr-only">Choose profile photo</span>
-                                <input type="file" class="block w-full cursor-pointer text-sm text-slate-500
+                                <input type="file" name="profile_picture" class="block w-full cursor-pointer text-sm text-slate-500
                             file:mr-4 file:py-2 file:px-4
                             file:rounded-full file:border-0
                             file:text-sm file:font-semibold
                             file:bg-violet-50 file:text-primary
                             hover:file:bg-accent
-                            " />
+                            "
+                                    onchange="previewProfilePhoto(event)"
+                                    value="<?php echo htmlspecialchars($tenant['profile_picture']); ?>" />
                             </label>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -135,10 +137,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
                                 <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
                                 <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($tenant['address']); ?>" class="input input-bordered w-full">
                             </div>
-                            <div>
-                                <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                                <input type="tel" id="phoneNumber" name="phoneNumber" value="<?php echo htmlspecialchars($tenant['phone_number']); ?>" class="input input-bordered w-full">
-                            </div>
                         </div>
                         <div class="flex justify-end space-x-4">
                             <a href="profile" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
@@ -153,4 +151,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
             </div>
         </div>
     </main>
+    <script>
+        function previewProfilePhoto(event) {
+            const reader = new FileReader();
+            const fileInput = event.target;
+
+            reader.onload = function() {
+                const imageElement = document.getElementById('profilePhoto');
+                imageElement.src = reader.result; // Set the new image source to the uploaded file
+            };
+
+            if (fileInput.files[0]) {
+                reader.readAsDataURL(fileInput.files[0]); // Read the selected file and convert to a data URL
+            }
+        }
+    </script>
     <?php require 'includes/footer.php'; ?>

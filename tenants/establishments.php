@@ -12,7 +12,7 @@ $userListings = $listing->getListingsByUser($user_id);
 ?>
 
 <div class="flex flex-col">
-    <main class="flex-1 mx-auto py-8 px-6 md:px-8 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <main class="flex-1 mx-auto py-8 px-6 md:px-8 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
         <?php if (!empty($landlordListings)): ?>
             <?php foreach ($landlordListings as $landlordListing): ?>
                 <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden bg-white">
@@ -49,12 +49,24 @@ $userListings = $listing->getListingsByUser($user_id);
                         </div>
                     </div>
                 </div>
+
             <?php endforeach; ?>
-        <?php else: ?>
-            <p>No listings available.</p>
+
         <?php endif; ?>
+
+
     </main>
+
 </div>
+<?php if (empty($landlordListings)): ?>
+    <div class="flex flex-col justify-center items-center w-full h-full mt-36">
+        <img src="../assets/img/nolistings.svg" alt="no listings" class="mx-auto w-80 sm:w-[600px]">
+        <h1 class="text-2xl text-center font-bold mt-6">No listings available</h1>
+    </div>
+<?php endif; ?>
+
+
+
 
 
 

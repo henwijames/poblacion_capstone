@@ -75,8 +75,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
 
             <!-- Profile Image and Name -->
             <div class="sm:w-[80%] xs:w-[90%] mx-auto flex flex-col items-center -mt-16">
-                <img src="<?php echo htmlspecialchars($profilePicture); ?>" alt="User Profile"
-                    class="rounded-full w-28 h-28 sm:w-32 sm:h-32 lg:w-48 lg:h-48 outline outline-2 outline-offset-2 relative" />
+                <img src="<?php echo !empty($tenant['profile_picture']) ? 'Controller/uploads/' . htmlspecialchars($tenant['profile_picture']) : '../assets/img/me.jpg'; ?>" alt="User Profile"
+                    class="rounded-full object-cover w-28 h-28 sm:w-32 sm:h-32 lg:w-48 lg:h-48 outline outline-2 outline-offset-2 relative" />
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-4 my-6">
                     <h1 class="text-center text-primary text-2xl sm:text-3xl lg:text-4xl">
                         <?php echo htmlspecialchars($fullName); ?>

@@ -23,6 +23,16 @@ class Tenants
     }
 
     // Create a new tenant
+
+    public function checkEmailExists($email)
+    {
+        $query = "SELECT id FROM " . $this->table . " WHERE email = :email LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0; // Returns true if email exists
+    }
     public function create()
     {
         $query = "INSERT INTO " . $this->table . " 
@@ -84,7 +94,7 @@ class Tenants
     {
         $query = 'UPDATE tenants 
             SET first_name = :first_name, middle_name = :middle_name, last_name = :last_name,
-                address = :address, phone_number = :phone_number
+                address = :address, profile_picture = :profile_picture
             WHERE id = :id';
 
         $stmt = $this->conn->prepare($query);
@@ -94,7 +104,12 @@ class Tenants
         $stmt->bindParam(':middle_name', $data['middle_name'], PDO::PARAM_STR);
         $stmt->bindParam(':last_name', $data['last_name'], PDO::PARAM_STR);
         $stmt->bindParam(':address', $data['address'], PDO::PARAM_STR);
-        $stmt->bindParam(':phone_number', $data['phone_number'], PDO::PARAM_STR);
+
+        // Bind the profile picture (it may be null if no new picture is uploaded)
+        // Using ternary operator to ensure it isn't passed as null by reference
+        $profilePicture = $data['profile_picture'] ?? null;
+        $stmt->bindParam(':profile_picture', $profilePicture, PDO::PARAM_STR);
+
         $stmt->bindParam(':id', $tenantId, PDO::PARAM_INT);
 
         // Execute update
@@ -106,6 +121,7 @@ class Tenants
             return false;
         }
     }
+
     public function verifyPhoneNumber($id)
     {
         $query = "UPDATE tenants SET mobile_verified = 1 WHERE id = :id";
@@ -113,6 +129,25 @@ class Tenants
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
+
+    // In Tenants.php model
+
+    public function insertEmailVerificationToken($email, $token)
+    {
+        $query = "INSERT INTO email_verification (email, token) VALUES (:email, :token)";
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':token', $token);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
 
 
     public function verifyPassword($password, $hash)

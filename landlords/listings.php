@@ -14,7 +14,7 @@ $userListings = $listing->getListingsByUser($user_id);
     <?php include 'includes/topbar.php'; ?>
     <div class="p-6">
         <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-bold">Listings</h1>
+            <h1 class="text-2xl font-bold">Active Listings</h1>
             <a href="add-listing.php" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Add Listing</a>
         </div>
         <div class="mt-4">

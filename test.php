@@ -26,25 +26,117 @@
 </head>
 
 <body>
-    <div class="container mx-auto flex items-center justify-center gap-16 ">
-        <img src=" assets/img/notif.svg" alt="notif" class="relative">
-        <div class="container mx-auto md:px-[120px] mb-4 px-6 py-2 absolute top-10">
-            <nav class="flex justify-center items-center mb-2">
-                <a href="index"><img src="assets/img/poblacionease.png" alt="Poblacionease logo" class="w-[150px] h-[60px]"></a>
-            </nav>
-        </div>
-        <div class="flex flex-col items-center justify-center gap-4 py-12 absolute bottom-5">
-            <h1 class="text-xl sm:text-3xl font-bold">Email Verification</h1>
-            <p>Please verify your email to continue.</p>
-            <form method="POST">
-                <button type="submit" class="btn bg-primary text-white">Send to Email</button>
-            </form>
-        </div>
+    <a href="approve.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-info btn-sm text-sm text-white">Profile</a>
+    <a href="approve.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm bg-primary text-white">Approve</a>
+    <a href="reject.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm btn-error text-white">Reject</a>
 
-    </div>
 
 </body>
 <script>
+    $(document).ready(function() {
+
+        let clickedEyeIcon = false;
+
+        // Toggle password visibility
+        $('#show-password').on('mousedown', function() {
+            clickedEyeIcon = true;
+            const passwordInput = $('#password');
+            const icon = $(this).find('i');
+
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                passwordInput.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        }).on('mouseup', function() {
+            setTimeout(() => clickedEyeIcon = false, 0);
+        });
+
+        $('#password').on('focus', function() {
+            $('#requirements').removeClass('hidden');
+            $('#show-password').removeClass('hidden');
+        }).on('focusout', function() {
+            if (!clickedEyeIcon) {
+                $('#requirements').addClass('hidden');
+                $('#show-password').addClass('hidden');
+            }
+        });
+
+        $('#password').on('input', function() {
+            const password = $(this).val();
+
+            // Show requirements box when typing
+            if (password.length > 0) {
+                $('#requirements').removeClass('hidden');
+            } else {
+                $('#requirements').addClass('hidden');
+            }
+
+            // Validation checks
+            $('#length').toggleClass('text-green-500', password.length >= 8)
+                .toggleClass('text-red-500', password.length < 8);
+
+            $('#special').toggleClass('text-green-500', /[!@#$%^&*(),.?":{}|<>]/.test(password))
+                .toggleClass('text-red-500', !/[!@#$%^&*(),.?":{}|<>]/.test(password));
+
+            $('#lowercase').toggleClass('text-green-500', /[a-z]/.test(password))
+                .toggleClass('text-red-500', !/[a-z]/.test(password));
+
+            $('#uppercase').toggleClass('text-green-500', /[A-Z]/.test(password))
+                .toggleClass('text-red-500', !/[A-Z]/.test(password));
+
+            $('#number').toggleClass('text-green-500', /\d/.test(password))
+                .toggleClass('text-red-500', !/\d/.test(password));
+
+
+            const requirements = [{
+                    selector: '#length',
+                    condition: password.length >= 8
+                },
+                {
+                    selector: '#special',
+                    condition: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+                },
+                {
+                    selector: '#lowercase',
+                    condition: /[a-z]/.test(password)
+                },
+                {
+                    selector: '#uppercase',
+                    condition: /[A-Z]/.test(password)
+                },
+                {
+                    selector: '#number',
+                    condition: /\d/.test(password)
+                },
+            ];
+
+            let allValid = true;
+            requirements.forEach(requirement => {
+                const icon = $(requirement.selector).find('i');
+                if (requirement.condition) {
+                    icon.removeClass('fa-times-circle text-red-500').addClass('fa-check-circle text-green-500');
+                } else {
+                    icon.removeClass('fa-check-circle text-green-500').addClass('fa-times-circle text-red-500');
+                    allValid = false;
+                }
+            });
+
+            // Update validation icon based on allValid status
+            const validationIcon = $('#validation-icon i');
+            if (allValid) {
+                $('#validation-icon').removeClass('text-red-500').addClass('text-green-500');
+                validationIcon.removeClass('fa-times-circle').addClass('fa-check-circle');
+                $('#requirements').addClass('hidden'); // Hide requirements box if valid
+            } else {
+                $('#validation-icon').removeClass('text-green-500').addClass('text-red-500');
+                validationIcon.removeClass('fa-check-circle').addClass('fa-times-circle');
+            }
+        });
+    });
+
     //Start Sidebar
     const sidebarToggle = document.querySelector(".sidebar-toggle");
     const sidebarOverlay = document.querySelector(".sidebar-overlay");
@@ -107,6 +199,20 @@
             });
         }
     });
+
+    function previewProfilePhoto(event) {
+        const reader = new FileReader();
+        const fileInput = event.target;
+
+        reader.onload = function() {
+            const imageElement = document.getElementById('profilePhoto');
+            imageElement.src = reader.result; // Set the new image source to the uploaded file
+        };
+
+        if (fileInput.files[0]) {
+            reader.readAsDataURL(fileInput.files[0]); // Read the selected file and convert to a data URL
+        }
+    }
 
     //End Sidebar
 </script>

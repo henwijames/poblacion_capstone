@@ -6,10 +6,23 @@ include 'partials/header.php';
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
 
+// Check if there is an email error in session and show a Swal popup
+if (isset($_SESSION['same_email'])) {
+    echo "<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '" . addslashes($_SESSION['same_email']) . "'
+    });
+    </script>";
+}
+
 // Clear session data
 unset($_SESSION['errors']);
 unset($_SESSION['form_data']);
+unset($_SESSION['same_email']);
 ?>
+
 <div class="w-full flex flex-col justify-center items-center">
     <div class="container mx-auto md:px-[120px] mb-4 px-6 py-2">
         <nav class="flex justify-between items-center mb-2">
@@ -90,14 +103,39 @@ unset($_SESSION['form_data']);
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="password" class="text-sm font-medium leading-none">Password</label>
-                    <input class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" id="password" name="password" placeholder="Password" type="password" value="<?php echo isset($formData['password']) ? htmlspecialchars($formData['password']) : ''; ?>">
+                    <div class="relative">
+                        <input class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" id="password" name="password" placeholder="Password" type="password" value="<?php echo isset($formData['password']) ? htmlspecialchars($formData['password']) : ''; ?>">
+                        <span id="validation-icon" class="absolute top-1/2 right-11 transform -translate-y-1/2 text-red-500 hidden">
+                            <i class="fas fa-times-circle"></i>
+                        </span>
+                        <span id="show-password" class="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer hidden">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                        <div id="requirements" class="absolute top-full mt-2 w-full bg-background shadow-lg text-black text-sm rounded-lg p-3 hidden z-50">
+                            <p id="length" class="requirement">* Must be at least 8 characters long</p>
+                            <p id="special" class="requirement">* Must have at least 1 special character</p>
+                            <p id="lowercase" class="requirement">* Must have at least 1 lowercase character</p>
+                            <p id="uppercase" class="requirement">* Must have at least 1 uppercase character</p>
+                            <p id="number" class="requirement">* Must have at least 1 number</p>
+                        </div>
+                    </div>
+
                     <?php if (isset($errors['password'])): ?>
                         <p class=" text-red-500 text-sm"><?php echo htmlspecialchars($errors['password']); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="confirm" class="text-sm font-medium leading-none">Confirm Password</label>
-                    <input class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" id="confirm" name="confirm" placeholder="Confirm Password" type="password">
+                    <div class="relative">
+                        <input class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500" id="confirm" name="confirm" placeholder="Confirm Password" type="password">
+                        <span id="validation-pass" class="absolute top-1/2 right-11 transform -translate-y-1/2 text-red-500 hidden">
+                            <i class="fas fa-times-circle"></i>
+                        </span>
+
+                        <span id="show-confirm" class="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer hidden">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                    </div>
                     <?php if (isset($errors['confirm'])): ?>
                         <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['confirm']); ?></p>
                     <?php endif; ?>
@@ -113,6 +151,152 @@ unset($_SESSION['form_data']);
     </main>
 </div>
 <script>
+    $(document).ready(function() {
+
+        $('#password, #confirm').on('input', function() {
+            // Check if the passwords match
+            if ($('#password').val() === $('#confirm').val() && $('#confirm').val() !== '') {
+                // Show the validation icon as a check (green color)
+                $('#validation-pass').removeClass('hidden text-red-500').addClass('text-green-500');
+                $('#validation-pass i').removeClass('fa-times-circle').addClass('fa-check-circle');
+            } else {
+                // Show the validation icon as an error (red color)
+                $('#validation-pass').removeClass('hidden text-green-500').addClass('text-red-500');
+                $('#validation-pass i').removeClass('fa-check-circle').addClass('fa-times-circle');
+            }
+        });
+
+        let clickedEyeIcon = false;
+
+        // Toggle password visibility
+        $('#show-password').on('mousedown', function() {
+            clickedEyeIcon = true;
+            const passwordInput = $('#password');
+            const icon = $(this).find('i');
+
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                passwordInput.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        }).on('mouseup', function() {
+            setTimeout(() => clickedEyeIcon = false, 0);
+        });
+
+        let clickedEyeConfirm = false
+        $('#show-confirm').on('mousedown', function() {
+            clickedEyeConfirm = true;
+            const passwordInput = $('#confirm');
+            const icon = $(this).find('i');
+
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                passwordInput.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        }).on('mouseup', function() {
+            setTimeout(() => clickedEyeConfirm = false, 0);
+        });
+
+        $('#password').on('focus', function() {
+            $('#requirements').removeClass('hidden');
+            $('#show-password').removeClass('hidden');
+            $('#validation-icon').removeClass('hidden');
+        }).on('focusout', function() {
+            if (!clickedEyeIcon) {
+                $('#requirements').addClass('hidden');
+                $('#show-password').addClass('hidden');
+                $('#validation-icon').addClass('hidden');
+            }
+        });
+
+        $('#confirm').on('focus', function() {
+            $('#validation-pass').removeClass('hidden');
+            $('#show-confirm').removeClass('hidden');
+        }).on('focusout', function() {
+            if (!clickedEyeConfirm) {
+                $('#validation-pass').addClass('hidden');
+                $('#show-confirm').addClass('hidden');
+            }
+        });
+
+        $('#password').on('input', function() {
+            const password = $(this).val();
+
+            // Show requirements box when typing
+            if (password.length > 0) {
+                $('#requirements').removeClass('hidden');
+            } else {
+                $('#requirements').addClass('hidden');
+            }
+
+            // Validation checks
+            $('#length').toggleClass('text-green-500', password.length >= 8)
+                .toggleClass('text-red-500', password.length < 8);
+
+            $('#special').toggleClass('text-green-500', /[!@#$%^&*(),.?":{}|<>]/.test(password))
+                .toggleClass('text-red-500', !/[!@#$%^&*(),.?":{}|<>]/.test(password));
+
+            $('#lowercase').toggleClass('text-green-500', /[a-z]/.test(password))
+                .toggleClass('text-red-500', !/[a-z]/.test(password));
+
+            $('#uppercase').toggleClass('text-green-500', /[A-Z]/.test(password))
+                .toggleClass('text-red-500', !/[A-Z]/.test(password));
+
+            $('#number').toggleClass('text-green-500', /\d/.test(password))
+                .toggleClass('text-red-500', !/\d/.test(password));
+
+
+            const requirements = [{
+                    selector: '#length',
+                    condition: password.length >= 8
+                },
+                {
+                    selector: '#special',
+                    condition: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+                },
+                {
+                    selector: '#lowercase',
+                    condition: /[a-z]/.test(password)
+                },
+                {
+                    selector: '#uppercase',
+                    condition: /[A-Z]/.test(password)
+                },
+                {
+                    selector: '#number',
+                    condition: /\d/.test(password)
+                },
+            ];
+
+            let allValid = true;
+            requirements.forEach(requirement => {
+                const icon = $(requirement.selector).find('i');
+                if (requirement.condition) {
+                    icon.removeClass('fa-times-circle text-red-500').addClass('fa-check-circle text-green-500');
+                } else {
+                    icon.removeClass('fa-check-circle text-green-500').addClass('fa-times-circle text-red-500');
+                    allValid = false;
+                }
+            });
+
+            // Update validation icon based on allValid status
+            const validationIcon = $('#validation-icon i');
+            if (allValid) {
+                $('#validation-icon').removeClass('text-red-500').addClass('text-green-500');
+                validationIcon.removeClass('fa-times-circle').addClass('fa-check-circle');
+                $('#requirements').addClass('hidden'); // Hide requirements box if valid
+            } else {
+                $('#validation-icon').removeClass('text-green-500').addClass('text-red-500');
+                validationIcon.removeClass('fa-check-circle').addClass('fa-times-circle');
+            }
+        });
+    });
+
     function previewProfilePhoto(event) {
         const reader = new FileReader();
         const fileInput = event.target;

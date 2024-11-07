@@ -173,7 +173,7 @@ unset($_SESSION['form_data']);
                                 <p>No images available.</p>
                             <?php endif; ?>
                         </div>
-                        <h1 class="block font-medium mb-2 text-gray-700">Upload Images of the Property</h1>
+                        <h1 class="block font-medium mb-2 text-gray-700">Update Images of the Property (Please upload 5 images*)</h1>
                         <div class="mb-2">
                             <label class="block">
                                 <span class="sr-only">Choose a property image</span>

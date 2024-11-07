@@ -19,6 +19,8 @@ include 'session.php';
     <!-- FontAwesome CDN -->
     <script src="https://kit.fontawesome.com/f284e8c7c2.js" crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- JQuery File -->
     <script src="./assets/js/jquery-3.7.1.min.js"></script>
 </head>
