@@ -1,39 +1,81 @@
 <?php
 session_start();
-// include 'partials/session.php';
 require_once 'Controllers/Database.php';
 require_once 'Models/Tenants.php';
+require_once 'Models/Landlords.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $database = new Database();
     $db = $database->getConnection();
     $tenants = new Tenants($db);
+    $landlords = new Landlords($db);
 
     $user_id = $_SESSION['user_id'];
-    echo $user_id;
-    $code = implode('', $_POST['verification_code']);
-
-    // Retrieve the tenant by ID
-    $tenant = $tenants->findById($user_id);
+    $code = implode('', array_map('trim', $_POST['verification']));
 
 
-    // Check if the code matches and is not expired
-    if ($tenant['verification_code'] === $code && strtotime($tenant['verification_expires_at']) > time()) {
-        // Code is valid, mark the phone number as verified
-        $tenants->verifyPhoneNumber($user_id);
+    // Check if the user is a tenant or landlord
+    if ($_SESSION['user_role'] == 'tenant') {
+        // Retrieve the tenant by ID
+        $tenant = $tenants->findById($user_id);
 
-        $_SESSION['success'] = "Phone number verified successfully!";
-        $_SESSION['user_role'] = "tenant";
-        header("Location: email_verification.php");
-        exit();
-    } else {
-        // Code is invalid or expired
-        $_SESSION['errors']['verification'] = "Invalid or expired verification code.";
-        header("Location: account_verify.php");
-        exit();
+        date_default_timezone_set('Asia/Manila');
+
+        // Get the current time and expiration time
+        $current_time = time();
+        $expires_at = strtotime($tenant['verification_expires_at']);
+
+        // Check if the code matches and is not expired
+        if ($tenant['verification_code'] === $code && $expires_at > $current_time) {
+            // Code is valid, mark the phone number as verified
+            $tenants->verifyPhoneNumber($user_id);
+
+            $_SESSION['success'] = "Phone number verified successfully!";
+            header("Location: email_verification.php"); // Redirect to email verification page
+            exit();
+        } else {
+            // Code is invalid or expired
+            $_SESSION['errors']['verification'] = "Invalid or expired verification code.";
+            header("Location: account_verify.php"); // Redirect back to verification page
+            exit();
+        }
+    }
+    if ($_SESSION['user_role'] == 'landlord') {
+        $verificationCode = $_SESSION['verification'];
+        $landlords = new Landlords($db);
+        $landlord = $landlords->findById($user_id);
+
+        // Set timezone to Manila
+        date_default_timezone_set('Asia/Manila');
+
+        // Get the current time and expiration time
+        $current_time = time();
+
+        // Ensure the expiration time is parsed correctly
+        $expires_at = strtotime($landlord['verification_expires_at']);
+
+        // Debugging output for expiration time and current time
+        echo "Current time (timestamp): " . $current_time . "<br>";
+        echo "Expires at (timestamp): " . $expires_at . "<br>";
+
+        // Check if the code matches and if the expiration time is greater than the current time
+        if ($landlord["verification_code"] === $code && $expires_at > $current_time) {
+            // Code is valid, mark the phone number as verified
+            $landlords->verifyPhoneNumber($user_id);
+
+            $_SESSION['success'] = "Phone number verified successfully!";
+            header("Location: email_verification.php"); // Redirect to email verification page
+            exit();
+        } else {
+            // Code is invalid or expired
+            $_SESSION['errors'] = "Invalid or expired verification code.";
+            header("Location: account_verify.php"); // Redirect back to verification page
+            exit();
+        }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
@@ -68,12 +110,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class=" p-8 rounded-lg  w-96">
                 <form id="otpForm" class="space-y-4" method="POST" action="account_verify.php">
                     <div class=" flex justify-between">
-                        <input type="text" name="verification_code[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" name="verification_code[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" name="verification_code[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" name="verification_code[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" name="verification_code[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
-                        <input type="text" name="verification_code[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
+                        <input type="text" name="verification[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
+                        <input type="text" name="verification[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
+                        <input type="text" name="verification[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
+                        <input type="text" name="verification[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
+                        <input type="text" name="verification[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
+                        <input type="text" name="verification[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
                     </div>
                     <button type="submit" class="btn bg-primary w-full">Verify OTP</button>
                 </form>

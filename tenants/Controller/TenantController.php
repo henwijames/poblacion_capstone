@@ -2,18 +2,64 @@
 session_start();
 require_once '../../Controllers/Database.php';
 require_once '../../Models/Tenants.php';
+require '../../vendor/autoload.php'; // Ensure this path is correct
+use Dotenv\Dotenv;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Initialize Tenant model
-    $database = new Database();
-    $db = $database->getConnection();
-    $tenantModel = new Tenants($db);
+// Specify the path to your .env file
+$dotenv = Dotenv::createImmutable('D:\xampp\htdocs\Poblacion'); // Change __DIR__ if your .env is in another directory
 
-    // Get tenant ID (make sure this is available, for example from the session or a hidden field)
-    $tenantId = $_SESSION['user_id']; // or another method of retrieving the tenant ID
-    if (!$tenantId) {
-        die('Tenant ID not found.');
+// Load the .env file and check for success
+try {
+    $dotenv->load();
+} catch (Exception $e) {
+    die('Failed to load .env file: ' . $e->getMessage());
+}
+// Check if the environment variable is set
+if (!$_ENV['SMS_API']) {
+    die("SMS_API is not set in the environment variables.");
+}
+function sendVerificationSMS($phone, $code)
+{
+    $ch = curl_init();
+    $apiKey = $_ENV['SMS_API'];
+    $senderName = 'SNIHS';
+    $message = "Your verification code is: $code. It will expire in 5 minutes.";
+
+    $url = "https://api.semaphore.co/api/v4/priority";
+    $data   = [
+        'apikey' => $apiKey,
+        'number' => $phone,
+        'message' => $message,
+        'sendername' => $senderName
+    ];
+
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+
+    if (!$output) {
+        error_log('Error sending SMS: ' . curl_error($ch));
     }
+}
+
+$database = new Database();
+$db = $database->getConnection();
+$tenantModel = new Tenants($db);
+$tenantId = $_SESSION['user_id']; // or another method of retrieving the tenant ID
+if (!$tenantId) {
+    die('Tenant ID not found.');
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_tenant'])) {
+    // Initialize Tenant model
+    // Get tenant ID (make sure this is available, for example from the session or a hidden field)
+
 
     $currentTenant = $tenantModel->findById($tenantId);
     $currentProfilePicture = $currentTenant['profile_picture'] ?? null;
@@ -68,6 +114,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // Handle error
         header('Location: ../edit-profile.php?error=update_failed');
+        exit();
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['verify_mobile'])) {
+    // Fetch the tenant details to check the stored verification code and expiration time
+    $currentTenant = $tenantModel->findById($tenantId);
+    $verificationCode = mt_rand(100000, 999999);
+    $expiresAt = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+
+    $phone = $currentTenant['phone_number'] ?? null;
+
+    if ($phone) {
+        sendVerificationSMS($phone, $verificationCode);
+
+        $updateData = [
+            'verification_code' => $verificationCode,
+            'verification_expires_at' => $expiresAt
+        ];
+
+        if ($tenantModel->smsVerCode($tenantId, $updateData)) {
+            header('Location: ../verify-otp.php');
+            exit();
+        } else {
+            header('Location: ../verifymobile.php?error=verification_failed');
+            exit();
+        }
+    } else {
+        $_SESSION['errors']['phone'] = "Phone number not found.";
+        header('Location: ../verifymobile.php?error=phone_not_found');
         exit();
     }
 }

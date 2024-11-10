@@ -51,10 +51,10 @@
 
                 <div class="relative ml-3 ">
                     <div>
-                        <button type="button" class="relative p-1 flex items-center gap-4 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                        <button type="button" class="relative p-1 flex items-center gap-4 rounded-full border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                             <span class="absolute -inset-1.5"></span>
                             <span class="sr-only">Open user menu</span>
-                            <img class="h-8 w-8 rounded-full" src="<?php echo htmlspecialchars($profilePicture); ?>" alt="">
+                            <img class="h-8 w-8 rounded-full object-cover" src="<?php echo htmlspecialchars($profilePicture); ?>" alt="">
                         </button>
                     </div>
 
@@ -75,7 +75,7 @@
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
             <a href="index" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Apartments</a>
             <a href="establishments" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Business Establishment</a>
-            <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Landlords</a>
+            <a href="landlord" class="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-primary hover:text-white">Landlords</a>
         </div>
     </div>
 </nav>

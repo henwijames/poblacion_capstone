@@ -142,7 +142,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
                             <a href="profile" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                                 Cancel
                             </a>
-                            <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-accent ">
+                            <button type="submit" name="update_tenant" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-accent ">
                                 Save Changes
                             </button>
                         </div>

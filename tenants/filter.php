@@ -4,18 +4,31 @@ $database = new Database();
 $db = $database->getConnection();
 $listing = new Listing($db);
 $landlords = new Landlords($db);
+// Get search filters from the query string
+$priceRange = isset($_GET['price_range']) ? $_GET['price_range'] : null;
+$rentalTerm = isset($_GET['rental_term']) ? $_GET['rental_term'] : null;
 
-$landlordListings = $listing->getAllApartmentListings();
+// Build price filter SQL clause
+$priceFilter = '';
+if ($priceRange) {
+    $priceParts = explode('-', $priceRange);
+    if (count($priceParts) == 2) {
+        $minPrice = (int)$priceParts[0];
+        $maxPrice = (int)$priceParts[1];
+        $priceFilter = "AND rent BETWEEN $minPrice AND $maxPrice";
+    } elseif ($priceParts[0] === '30001+') {
+        $priceFilter = "AND rent > 30000";
+    }
+}
 
-$user_id = $_SESSION['user_id'];
-$userListings = $listing->getListingsByUser($user_id);
+// Get listings based on filters
+$landlordListings = $listing->searchListings($priceFilter);
 ?>
 
 <section class="h-[500px] tenants-home" style="background-image: url('../assets/img/bg.png');  background-size: cover; background-position: center;">
     <div class="container mx-auto flex flex-col justify-center items-center text-center h-full px-4 text-[20px]">
         <h1 class="text-4xl font-bold">Discover a New Era of Convenience and Connection</h1>
         <p class="mt-4 mb-4 text-base md:text-lg">Experience effortless living in Poblacion, Taal with Poblacion<span class="text-primary">Ease</span>.</p>
-
         <div class="flex flex-col md:flex-row items-center gap-4 mt-4 w-full max-w-xl">
             <form action="filter" method="GET" class="w-full flex flex-col md:flex-row items-center gap-4">
                 <div class="w-full">
@@ -36,11 +49,9 @@ $userListings = $listing->getListingsByUser($user_id);
                 </button>
             </form>
         </div>
-
     </div>
-
-
 </section>
+
 <div class="flex flex-col">
     <main class="flex-1 mx-auto py-8 px-6 md:px-8 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <?php if (!empty($landlordListings)): ?>
@@ -48,11 +59,10 @@ $userListings = $listing->getListingsByUser($user_id);
                 <div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden bg-white">
                     <?php
                     $images = $listing->getImagesByListing($landlordListing['id']);
-                    // Check if $images is an array and contains data
                     if (is_array($images) && !empty($images)) {
-                        $imageSrc = $images[0]; // Access the first image in the array
+                        $imageSrc = $images[0];
                     } else {
-                        $imageSrc = 'assets/img/image_placeholder.png'; // Fallback if no image is available
+                        $imageSrc = 'assets/img/image_placeholder.png';
                     }
 
                     $landlordDetails = $landlords->findById($landlordListing['user_id']);
@@ -73,19 +83,21 @@ $userListings = $listing->getListingsByUser($user_id);
                         <p class="text-muted-foreground mb-2"><?= htmlspecialchars($landlordListing['sqft']); ?> sqft | <?= htmlspecialchars($landlordListing['bedrooms']); ?> Bed | <?= htmlspecialchars($landlordListing['bathrooms']); ?> Bathrooms</p>
                         <p class="text-primary font-bold text-lg">₱<?= htmlspecialchars($landlordListing['rent']) ?>/month</p>
                         <div class="mt-4">
-                            <a class=" btn bg-primary text-white" href="apartment?id=<?= $landlordListing['id'] ?>" rel="ugc">
+                            <a class=" btn bg-primary text-white" href="apartment.php?id=<?= $landlordListing['id'] ?>" rel="ugc">
                                 View Details
                             </a>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
-        <?php else: ?>
-            <p>No listings available.</p>
         <?php endif; ?>
     </main>
 </div>
-
-
+<?php if (empty($landlordListings)): ?>
+    <div class="flex flex-col justify-center items-center w-full h-full ">
+        <img src="../assets/img/nolistings.svg" alt="no listings" class="mx-auto w-80 sm:w-[500px]">
+        <h1 class="text-2xl text-center font-bold mt-6">No listings available</h1>
+    </div>
+<?php endif; ?>
 
 <?php include 'includes/footer.php'; ?>

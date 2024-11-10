@@ -33,6 +33,17 @@ class Tenants
 
         return $stmt->rowCount() > 0; // Returns true if email exists
     }
+    public function checkNumberExist($number)
+    {
+        $query = "SELECT id FROM " . $this->table . " WHERE phone_number = :phone_number LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':phone_number', $number);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0; // Returns true if email exists
+    }
+
+
     public function create()
     {
         $query = "INSERT INTO " . $this->table . " 
@@ -122,6 +133,21 @@ class Tenants
         }
     }
 
+    public function smsVerCode($id, $data)
+    {
+        $query = "UPDATE tenants SET verification_code = :verification_code, verification_expires_at = :verification_expires_at WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':verification_code', $data['verification_code']);
+        $stmt->bindParam(':verification_expires_at', $data['verification_expires_at']);
+        $stmt->bindParam(':id', $id);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            error_log("Database error: " . implode(" | ", $stmt->errorInfo()));
+            return false;
+        }
+    }
+
     public function verifyPhoneNumber($id)
     {
         $query = "UPDATE tenants SET mobile_verified = 1 WHERE id = :id";
@@ -134,19 +160,61 @@ class Tenants
 
     public function insertEmailVerificationToken($email, $token)
     {
-        $query = "INSERT INTO email_verification (email, token) VALUES (:email, :token)";
+        // Check if a token already exists for this email
+        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM email_verification WHERE email = :email");
+        $stmt->execute([':email' => $email]);
+        $count = $stmt->fetchColumn();
+
+        if ($count > 0) {
+            // Update the existing token
+            $stmt = $this->conn->prepare("UPDATE email_verification SET token = :token, created_at = NOW() WHERE email = :email");
+            $stmt->execute([':token' => $token, ':email' => $email]);
+        } else {
+            // Insert a new token
+            $stmt = $this->conn->prepare("INSERT INTO email_verification (email, token, created_at) VALUES (:email, :token, NOW())");
+            $stmt->execute([':email' => $email, ':token' => $token]);
+        }
+    }
+    public function getEmailVerificationToken($email)
+    {
+        $query = "SELECT token. expires_at FROM email_verification  WHERE email = :email LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row['verification_token'] : null;
+    }
+
+    public function deleteEmailVerificationToken($email)
+    {
+        // SQL query to delete the existing token for the landlord
+        $query = "DELETE FROM email_verification WHERE email = :email";
+
+        // Prepare the query
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
+        // Bind the email parameter to prevent SQL injection
         $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':token', $token);
 
-        // Execute the query
+        // Execute the query and return the result
         if ($stmt->execute()) {
             return true;
         }
+
         return false;
     }
+
+    public function getVerificationStatusByEmail($email)
+    {
+        $query = "SELECT email_verified, mobile_verified FROM tenants WHERE email = :email LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 
 
 

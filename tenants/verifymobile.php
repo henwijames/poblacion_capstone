@@ -5,7 +5,6 @@ include 'session.php';
 include '../Controllers/Database.php';
 include '../Models/Listing.php';
 include '../Models/Landlords.php';
-include '../Models/Tenants.php';
 
 $userName = "Guest";
 $defaultProfilePicture = "../assets/img/me.jpg"; //Default profile picture
@@ -26,7 +25,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
         if (empty($tenant['profile_picture'])) {
             $profilePicture = $defaultProfilePicture;
         } else {
-            $profilePicture = "Controller/uploads/" . $tenant['profile_picture']; // Assuming 'profile_picture' is the column name for the profile picture
+            $profilePicture = $tenant['profile_picture']; // Assuming 'profile_picture' is the column name for the profile picture
         }
     } elseif ($_SESSION['user_role'] == 'landlord') {
         $landlords = new Landlords($db);
@@ -64,4 +63,33 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
 </head>
 
 <body class="font-custom">
-    <?php include 'navbar.php'; ?>
+    <?php require 'includes/sidebar.php'; ?>
+
+
+    <main class="main-content main">
+        <?php require 'includes/topbar.php'; ?>
+        <div class="p-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900 capitalize">Verify Mobile Number</hjson_encode2>
+            </div>
+            <div class="mt-4">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <form action="Controller/TenantController.php" method="POST">
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile Number</label>
+                                <input type="text" name="mobile" id="mobile" autocomplete="mobile" value="<?php echo htmlspecialchars($tenant['phone_number']); ?>"" required
+                                    class=" input input-bordered max-w-xs mt-4">
+                            </div>
+                            <div>
+                                <button type="submit" name="verify_mobile"
+                                    class="btn bg-primary">
+                                    Verify
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </main>
+    <?php require 'includes/footer.php'; ?>

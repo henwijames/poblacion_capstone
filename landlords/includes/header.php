@@ -4,15 +4,12 @@ include 'session.php';
 include '../Controllers/Database.php';
 require_once '../Models/Listing.php';
 require_once '../Models/Landlords.php';
+require_once '../Models/Tenants.php';
 
 $userName = "Guest";
 $defaultProfilePicture = "../assets/img/me.jpg"; //Default profile picture
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
-    require_once '../Models/Tenants.php';
-    require_once '../Models/Landlords.php';
-
-
     $database = new Database();
     $db = $database->getConnection();
 

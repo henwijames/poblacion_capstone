@@ -2,6 +2,7 @@
 session_start();
 require_once 'Database.php';
 require_once '../Models/Landlords.php';
+require_once '../Models/Semaphore.php';
 
 $errors = [];
 
@@ -20,6 +21,25 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $landlords->phone = trim($_POST['phone']);
     $password = trim($_POST['password']);
     $confirm = trim($_POST['confirm']);
+
+    if ($landlords->checkEmailExists($landlords->email) &&  $landlords->checkNumberExist($landlords->phone)) {
+        $_SESSION['same'] = "Email and Number is already used. Please try another email and mobile number.";
+        header("Location: ../landlordSignup");
+        exit();
+    }
+
+    if ($landlords->checkEmailExists($landlords->email)) {
+        $_SESSION['same_email'] = "Email is already used. Please try another email.";
+        header("Location: ../landlordSignup");
+        exit();
+    }
+    if ($landlords->checkNumberExist($landlords->phone)) {
+        $_SESSION['same_number'] = "Number is already used. Please try another email.";
+        header("Location: ../landlordSignup");
+        exit();
+    }
+
+
 
     // Validate input fields
     if (empty($landlords->fname)) {
@@ -61,25 +81,31 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (empty($errors)) {
         $landlords->password = password_hash($password, PASSWORD_BCRYPT); // Hash the password
 
+        $verificationCode = mt_rand(100000, 999999);
+        date_default_timezone_set('Asia/Manila');
+
+        // Set the expiration time for the code (5 minutes from now)
+        $expiresAt = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        $landlords->verification_code = $verificationCode;
+        $landlords->verification_expires_at = $expiresAt;
+
         if ($landlords->create()) {
-            $foundLandlord = $landlords->findByEmail($landlords->email);
-            if ($foundLandlord) {
-                $_SESSION['user_id'] = $foundLandlord['id'];
-                $_SESSION['user_role'] = 'landlord';
-                $_SESSION['success'] = "User created successfully!";
-                header("Location: ../landlords/index"); // Redirect to a success page or another page
-                exit();
-            } else {
-                $_SESSION['errors']['database'] = "Failed to create user.";
-                header("Location: ../landlordSignup");
-                exit();
-            }
-        } else {
-            // Store errors and form data in session
-            $_SESSION['errors'] = $errors;
-            $_SESSION['form_data'] = $_POST;
-            header("Location: ../landlordSignup");
+            sendVerificationSMS($landlords->phone, $verificationCode);
+
+            $_SESSION['user_id']  = $landlords->id;
+            $_SESSION['email']  =  $landlords->email;
+            $_SESSION['user_role'] = 'landlord';
+            $_SESSION['success'] = "User created successfully! Please verify your phone number.";
+            header("Location:  ../account_verify");
             exit();
+        } else {
+            $_SESSION['errors']['database'] = "Failed to create user.";
+            header("Location: ../landlordsSignup");
         }
     }
+
+    $_SESSION['errors'] = $errors;
+    $_SESSION['form_data'] = $_POST;
+    header("Location: ../landlordSignup");
+    exit();
 }

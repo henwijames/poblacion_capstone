@@ -129,7 +129,32 @@ class Listing
         return true; // Successfully saved images
     }
 
+    public function searchListings($priceFilter = '')
+    {
+        // Base SQL query
+        $query = "SELECT * FROM " . "listings" . " WHERE status = 'not occupied'";
 
+        // Add price filter if provided
+        if ($priceFilter) {
+            $query .= " " . $priceFilter; // price filter is an SQL snippet passed from the controller
+        }
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Execute query
+        $stmt->execute();
+
+        // Check if any records were returned
+        if ($stmt->rowCount() > 0) {
+            // Fetch all results
+            $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $listings; // Return the fetched listings
+        }
+
+        // Return empty array if no listings found
+        return [];
+    }
 
 
     public function getListingsByUser($user_id)

@@ -1,8 +1,50 @@
 <?php
+ob_start();
 include 'includes/header.php';
 $listing = new Listing($db);
 $landlords = new Landlords($db);
+
 $listing_id = $_GET['id'] ?? null;
+
+if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'tenant') {
+    $tenantId = $_SESSION['user_id'];
+    $tenant = new Tenants($db);
+    $tenantDetails = $tenant->findById($tenantId);
+
+    // Redirect if tenant is not verified
+    if ($tenantDetails['email_verified'] != 1 || $tenantDetails['mobile_verified'] != 1 || $tenantDetails['account_status'] != 'verified') {
+        echo "
+            <script>
+                Swal.fire({
+                    title: 'Verification Required',
+                    text: 'You must verify your account to proceed.',
+                    icon: 'warning',
+                    confirmButtonColor: '#C1C549',
+                    confirmButtonText: 'OK',
+                    showClass: {
+                    popup: `
+      animate__animated
+      animate__fadeInUp
+      animate__faster
+    `,
+                },
+                hideClass: {
+                    popup: `
+      animate__animated
+      animate__fadeOutDown
+      animate__faster
+    `,
+                },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'apartment.php?id=$listing_id';
+                    }
+                });
+            </script>
+        ";
+        exit;
+    }
+}
 
 if ($listing_id) {
     $database = new Database();
@@ -29,6 +71,8 @@ $oneMonthAdvance = $listingDetails['rent'];
 
 // Get the landlord's full name from the database
 $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_name']);
+
+ob_end_flush(); // End output buffering and send output
 ?>
 
 <section class="" id="apartment">
@@ -36,7 +80,7 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
         <!-- Landlord's Apartment/Business Establishment Name -->
         <div class="mb-6">
             <div class="flex items-center gap-4">
-                <a href="apartment.php?id=<?= $listingDetails["id"]; ?>" class="rounded-full w-10 h-10 hover:bg-primary hover:text-white flex items-center justify-center transition-colors ease-in duration-100  hover:shadow-md">
+                <a href="apartment?id=<?= $listingDetails["id"]; ?>" class="rounded-full w-10 h-10 hover:bg-primary hover:text-white flex items-center justify-center transition-colors ease-in duration-100  hover:shadow-md">
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
                 <h1 class="text-3xl font-bold">Request to Rent</h1>

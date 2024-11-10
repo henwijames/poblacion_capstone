@@ -1,4 +1,4 @@
-<div class="py-2 px-4 flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-50 bg-white">
+<div class="py-2 px-4 flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-20 bg-white">
     <button type="button" class="text-lg sidebar-toggle">
         <i class="fa-solid fa-bars z-50"></i>
     </button>

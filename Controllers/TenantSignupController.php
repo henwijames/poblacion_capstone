@@ -22,8 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $password = trim($_POST['password']);
     $confirm = trim($_POST['confirm']);
 
+    if ($tenants->checkEmailExists($tenants->email) &&  $tenants->checkNumberExist($tenants->phone)) {
+        $_SESSION['same'] = "Email and Number is already used. Please try another email and mobile number.";
+        header("Location: ../signupTenants");
+        exit();
+    }
+
     if ($tenants->checkEmailExists($tenants->email)) {
         $_SESSION['same_email'] = "Email is already used. Please try another email.";
+        header("Location: ../signupTenants");
+        exit();
+    }
+    if ($tenants->checkNumberExist($tenants->phone)) {
+        $_SESSION['same_number'] = "Number is already used. Please try another email.";
         header("Location: ../signupTenants");
         exit();
     }
@@ -71,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         // Generate a 6-digit verification code
         $verificationCode = mt_rand(100000, 999999);
+        date_default_timezone_set('Asia/Manila');
 
         // Set the expiration time for the code (5 minutes from now)
         $expiresAt = date('Y-m-d H:i:s', strtotime('+5 minutes'));
@@ -85,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             // Successful login
             $_SESSION['user_id'] = $tenants->id;
             $_SESSION['email'] = $tenants->email;
+            $_SESSION['user_role'] = 'tenant';
             $_SESSION['success'] = "User created successfully! Please verify your phone number.";
             header("Location: ../account_verify"); // Redirect to the tenant's dashboard or homepage
             exit();

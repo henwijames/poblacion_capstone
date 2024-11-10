@@ -168,7 +168,7 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
             <div class="w-full mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
                 <div class="p-6">
                     <h2 class="text-3xl font-bold mb-4">₱<?= htmlspecialchars($listingDetails['rent']); ?> <span class="text-lg font-normal">/month</span></h2>
-                    <a href="booking.php?id=<?= $listingDetails['id'] ?>" class="w-full btn bg-primary text-white py-3 rounded-lg font-semibold mb-4">
+                    <a href="booking?id=<?= $listingDetails['id'] ?>" class="w-full btn bg-primary text-white py-3 rounded-lg font-semibold mb-4">
                         Rent
                     </a>
                     <p class="text-center text-gray-600 mb-4">You won't be charged yet</p>

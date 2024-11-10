@@ -26,9 +26,12 @@
 </head>
 
 <body>
-    <a href="approve.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-info btn-sm text-sm text-white">Profile</a>
-    <a href="approve.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm bg-primary text-white">Approve</a>
-    <a href="reject.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm btn-error text-white">Reject</a>
+    <?php if (empty($landlordListings)): ?>
+        <div class="flex flex-col justify-center items-center w-full h-full mt-20">
+            <img src="../assets/img/nolistings.svg" alt="no listings" class="mx-auto w-80 sm:w-[500px]">
+            <h1 class="text-2xl text-center font-bold mt-6">No listings available</h1>
+        </div>
+    <?php endif; ?>
 
 
 </body>
