@@ -18,10 +18,10 @@ $userListings = $listing->getListingsByUser($user_id);
             <a href="add-listing.php" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Add Listing</a>
         </div>
         <div class="mt-4">
-            <table class="w-full border border-gray-200 rounded-md">
+            <table class="table table-zebra">
                 <thead class="bg-gray-50">
                     <tr class="bg-slate-100">
-                        <th class="py-2 px-4 border-r border-gray-200">Property</th>
+                        <th class="py-2 px-4 border-r border-gray-200">Property Name</th>
                         <th class="py-2 px-4 border-r border-gray-200">Type</th>
                         <th class="py-2 px-4 border-r border-gray-200">Location</th>
                         <th class="py-2 px-4 border-r border-gray-200">Price</th>
@@ -33,7 +33,7 @@ $userListings = $listing->getListingsByUser($user_id);
                     <?php if (!empty($userListings)): ?>
                         <?php foreach ($userListings as $userListing): ?>
                             <tr class="border-b">
-                                <td class="py-2 px-4 border-r border-gray-200"><?= htmlspecialchars($landlord['property_name']) ?></td>
+                                <td class="py-2 px-4 border-r border-gray-200"><?= htmlspecialchars($userListing['listing_name']) ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200 capitalize"><?= htmlspecialchars($userListing['property_type']) ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200"><?= htmlspecialchars($userListing['address']) ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200">₱<?= number_format($userListing['rent']) ?>/month</td>

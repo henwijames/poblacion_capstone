@@ -50,6 +50,24 @@ class Admins
 
         return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the result as an associative array
     }
+    public function findById($id)
+    {
+        $query = "SELECT * FROM admins WHERE id = :id LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the result as an associative array
+    }
+
+    public function getAllLandlords()
+    {
+        $query = "SELECT * FROM landlords";
+        $stmt =   $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     // Method to verify the password
     public function verifyPassword($inputPassword, $storedPassword)

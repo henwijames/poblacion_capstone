@@ -2,7 +2,19 @@
 session_start();
 include 'session.php';
 include '../Controllers/Database.php';
-require_once '../Models/Landlords.php';
+require_once '../Models/Admins.php';
+
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
+    $database =  new Database();
+    $db = $database->getConnection();
+
+    if ($_SESSION['user_role'] ==  'admin') {
+        $admins =  new Admins($db);
+        $admin =   $admins->findById($_SESSION['user_id']);
+        $fullname  =   $admin['first_name']  . " " .  $admin['middle_name'] . " " . $admin['last_name'];
+        $username  =  $admin['first_name'];
+    }
+}
 
 
 

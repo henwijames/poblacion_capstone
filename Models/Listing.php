@@ -3,6 +3,7 @@ class Listing
 {
     private $conn;
     public $id;
+    public $listing_name;
     public $address;
     public $bedrooms;
     public $bathrooms;
@@ -52,6 +53,7 @@ class Listing
         // Update listing data query
         $query = 'UPDATE listings SET 
             property_type = :property_type,
+            listing_name = :listing_name,
             address = :address,
             bedrooms = :bedrooms,
             bathrooms = :bathrooms,
@@ -66,6 +68,7 @@ class Listing
 
         // Bind parameters for listing data
         $stmt->bindParam(':property_type', $data['property_type']);
+        $stmt->bindParam(':listing_name', $data['listing_name']);
         $stmt->bindParam(':address', $data['address']);
         $stmt->bindParam(':bedrooms', $data['bedrooms'], PDO::PARAM_INT);
         $stmt->bindParam(':bathrooms', $data['bathrooms'], PDO::PARAM_INT);

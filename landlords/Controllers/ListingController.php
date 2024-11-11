@@ -13,6 +13,7 @@ if (isset($_POST['add_listing'])) {
     $listing = new Listing($db);
 
     // Retrieve and trim form data
+    $listing->listing_name = trim($_POST['listing_name']);
     $listing->address = trim($_POST['address']);
     $listing->bedrooms = trim($_POST['bedrooms']);
     $listing->bathrooms = trim($_POST['bathrooms']);
@@ -27,6 +28,9 @@ if (isset($_POST['add_listing'])) {
     // Validate input fields
     $errors = [];
 
+    if (empty($listing->listing_name)) {
+        $errors['listing_name'] = "Property Name is required";
+    }
     if (empty($listing->address)) {
         $errors['address'] = "Address is required";
     }
@@ -144,6 +148,7 @@ if (isset($_POST['update_listing'])) {
         // Collect form data
         $data = [
             'property_type' => $_POST['property_type'] ?? '',
+            'listing_name' => $_POST['listing_name'] ?? '',
             'address' => $_POST['address'] ?? '',
             'bedrooms' => $_POST['bedrooms'] ?? '',
             'bathrooms' => $_POST['bathrooms'] ?? '',

@@ -60,6 +60,10 @@ if (isset($_SESSION['error_message'])) {
                     <p class="text-muted-foreground"><?= htmlspecialchars($listingDetails['address']); ?></p>
                 </div>
                 <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-2">Property Name</h2>
+                    <p class="text-muted-foreground">Phone : <?= htmlspecialchars($listingDetails['listing_name']) ?></p>
+                </div>
+                <div class="mb-6">
                     <h2 class="text-xl font-bold mb-2">Landlord</h2>
                     <p class="text-muted-foreground"><?= htmlspecialchars($fullName) ?></p>
                     <p class="text-muted-foreground">Phone : <?= htmlspecialchars($landlord['phone_number']) ?></p>

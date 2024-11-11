@@ -40,7 +40,7 @@
                 <form class="space-y-6" method="POST" action="Controllers/LandlordsController.php" enctype="multipart/form-data">
                     <div class="flex items-center space-x-6">
                         <div class="shrink-0">
-                            <img id="profilePhoto" class="h-16 w-16 object-cover rounded-full" src="Controllers/<?php echo htmlspecialchars($profilePicture); ?>" alt="Current profile photo" />
+                            <img id="profilePhoto" class="h-16 w-16 object-cover rounded-full" src="<?php echo !empty($landlord['profile_picture']) ? 'Controllers/' . htmlspecialchars($landlord['profile_picture']) : '../assets/img/me.jpg'; ?>" alt="Current profile photo" />
                         </div>
                         <label class="block">
                             <span class="sr-only">Choose profile photo</span>
@@ -57,31 +57,27 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="propertyName" class="block text-sm font-medium text-gray-700">Property Name</label>
-                            <input type="text" id="propertyName" name="propertyName" value="<?php echo htmlspecialchars($landlord['property_name']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <input type="text" id="propertyName" name="propertyName" value="<?php echo htmlspecialchars($landlord['property_name']); ?>" class="input input-bordered w-full">
                         </div>
                         <div>
                             <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
-                            <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($landlord['first_name']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <input type="text" id="firstName" name="firstName" value="<?php echo htmlspecialchars($landlord['first_name']); ?>" class="input input-bordered w-full">
                         </div>
                         <div>
                             <label for="middleName" class="block text-sm font-medium text-gray-700">Middle Name</label>
-                            <input type="text" id="middleName" name="middleName" value="<?php echo htmlspecialchars($landlord['middle_name']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <input type="text" id="middleName" name="middleName" value="<?php echo htmlspecialchars($landlord['middle_name']); ?>" class="input input-bordered w-full">
                         </div>
                         <div>
                             <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($landlord['last_name']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <input type="text" id="lastName" name="lastName" value="<?php echo htmlspecialchars($landlord['last_name']); ?>" class="input input-bordered w-full">
                         </div>
                         <div>
                             <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                            <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($landlord['address']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                        </div>
-                        <div>
-                            <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                            <input type="tel" id="phoneNumber" name="phoneNumber" value="<?php echo htmlspecialchars($landlord['phone_number']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($landlord['address']); ?>" class="input input-bordered w-full">
                         </div>
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($landlord['email']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($landlord['email']); ?>" class="input input-bordered w-full">
                         </div>
                     </div>
                     <div class="flex justify-end space-x-4">

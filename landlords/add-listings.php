@@ -7,8 +7,46 @@ $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
 unset($_SESSION['errors']);
 unset($_SESSION['form_data']);
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'landlord') {
+    $landlordId = $_SESSION['user_id'];
+    $landlord = new Landlords($db);
+    $landlordDetails = $landlord->findById($landlordId);
+
+    // Redirect if tenant is not verified
+    if ($landlordDetails['email_verified'] != 1 || $landlordDetails['mobile_verified'] != 1 || $landlordDetails['account_status'] != 'verified') {
+        echo "
+            <script>
+                Swal.fire({
+                    title: 'Verification Required',
+                    text: 'You must verify your account to proceed.',
+                    allowOutsideClick: false,
+                    icon: 'warning',
+                    confirmButtonColor: '#C1C549',
+                    confirmButtonText: 'OK',
+                    showClass: {
+                    popup: `
+      animate__animated
+      animate__fadeInUp
+      animate__faster
+    `,
+                },
+                hideClass: {
+                    popup: `
+      animate__animated
+      animate__fadeOutDown
+      animate__faster
+    `,
+                },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'index';
+                    }
+                });
+            </script>
+        ";
+        exit;
+    }
+}
 
 ?>
 <main class="main-content main">
@@ -59,7 +97,7 @@ ini_set('display_errors', 1);
                         <div class="grid grid-cols-2 gap-4 mt-2">
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="payment_options[]" value="one month deposit" class="checkbox">
+                                    <input type="checkbox" name="payment_options[]" value="one month deposit" class="checkbox checkbox-md">
                                     <span class="ml-2 text-sm text-gray-700">One Month Deposit</span>
                                 </label>
                             </div>
@@ -75,6 +113,17 @@ ini_set('display_errors', 1);
                         <?php endif; ?>
                     </div>
                     <div>
+                        <label for="listing_name" class="block text-lg font-medium text-gray-700">
+                            Property Name*
+                        </label>
+                        <input
+                            type="text"
+                            id="listing_name"
+                            class="input input-bordered w-full"
+                            name="listing_name"
+                            placeholder="House 1" />
+                    </div>
+                    <div>
                         <label for="address" class="block text-lg font-medium text-gray-700">
                             Address*
                         </label>
@@ -83,7 +132,7 @@ ini_set('display_errors', 1);
                             id="address"
                             class="input input-bordered w-full"
                             name="address"
-                            placeholder="123 Main St, Anytown USA" />
+                            placeholder="Poblacion, Taal, Batangas" />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div id="bedroom-container">

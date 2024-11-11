@@ -30,9 +30,10 @@ unset($_SESSION['form_data']);
     <?php include 'includes/topbar.php'; ?>
     <div class="container mx-auto px-4 sm:px-6 md:px-8 py-12">
         <h1 class="text-3xl font-bold mb-8">Edit Listing</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-                <form class="space-y-6" action="Controllers/ListingController.php?id=<?= htmlspecialchars($listing_id); ?>" method="POST" enctype="multipart/form-data">
+        <form class="space-y-6" action="Controllers/ListingController.php?id=<?= htmlspecialchars($listing_id); ?>" method="POST" enctype="multipart/form-data">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+
                     <?php if (!empty($errors)): ?>
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <strong class="font-bold">Error!</strong>
@@ -47,11 +48,11 @@ unset($_SESSION['form_data']);
                         <h3 class="text-lg font-medium text-gray-700">Property Type*</h3>
                         <div class="flex gap-4 mt-2">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="property_type" value="apartment" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if ($listingDetails['property_type'] == 'apartment') echo 'checked'; ?> onchange="toggleRooms()">
+                                <input type="radio" name="property_type" value="apartment" class="radio" <?php if ($listingDetails['property_type'] == 'apartment') echo 'checked'; ?> onchange="toggleRooms()">
                                 <span class="ml-2 text-sm text-gray-700">Apartment</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="property_type" value="business establishment" class="rounded border-gray-300 text-primary focus:ring-primary" <?php if ($listingDetails['property_type'] == 'business') echo 'checked'; ?> onchange="toggleRooms()">
+                                <input type="radio" name="property_type" value="business establishment" class="radio" <?php if ($listingDetails['property_type'] == 'business') echo 'checked'; ?> onchange="toggleRooms()">
                                 <span class="ml-2 text-sm text-gray-700">Business Establishment</span>
                             </label>
                         </div>
@@ -67,13 +68,13 @@ unset($_SESSION['form_data']);
                             ?>
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="payment_options[]" value="one month deposit" class="rounded border-gray-300 text-primary focus:ring-primary" <?php echo in_array("one month deposit", $payment_options) ? 'checked' : ''; ?>>
+                                    <input type="checkbox" name="payment_options[]" value="one month deposit" class="checkbox checkbox-sm" <?php echo in_array("one month deposit", $payment_options) ? 'checked' : ''; ?>>
                                     <span class="ml-2 text-sm text-gray-700">One Month Deposit</span>
                                 </label>
                             </div>
                             <div>
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="payment_options[]" value="one month advance" class="rounded border-gray-300 text-primary focus:ring-primary" <?php echo in_array("one month advance", $payment_options) ? 'checked' : ''; ?>>
+                                    <input type="checkbox" name="payment_options[]" value="one month advance" class="checkbox checkbox-sm" <?php echo in_array("one month advance", $payment_options) ? 'checked' : ''; ?>>
                                     <span class="ml-2 text-sm text-gray-700">One Month Advance</span>
                                 </label>
                             </div>
@@ -83,17 +84,21 @@ unset($_SESSION['form_data']);
                         <?php endif; ?>
                     </div>
                     <div>
-                        <label for="address" class="block text-sm font-medium text-gray-700">Address*</label>
-                        <input type="text" id="address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" name="address" value="<?= htmlspecialchars($listingDetails['address']); ?>" />
+                        <label for="address" class="block text-sm font-medium text-gray-700">Property Name</label>
+                        <input type="text" id="address" class="input input-bordered w-full" name="listing_name" value="<?= htmlspecialchars($listingDetails['listing_name']); ?>" />
+                    </div>
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                        <input type="text" id="address" class="input input-bordered w-full" name="address" value="<?= htmlspecialchars($listingDetails['address']); ?>" />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div id="bedroom-container">
-                            <label for="bedrooms" class="block text-sm font-medium text-gray-700">Bedrooms*</label>
-                            <input id="bedrooms" type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" placeholder="2" name="bedrooms" value="<?= htmlspecialchars($listingDetails['bedrooms']); ?>" />
+                            <label for="bedrooms" class="block text-sm font-medium text-gray-700">Bedrooms</label>
+                            <input id="bedrooms" type="number" class="input input-bordered w-full" placeholder="2" name="bedrooms" value="<?= htmlspecialchars($listingDetails['bedrooms']); ?>" />
                         </div>
                         <div>
-                            <label for="bathrooms" class="block text-sm font-medium text-gray-700">Bathrooms*</label>
-                            <input id="bathrooms" type="number" name="bathrooms" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" placeholder="1" value="<?= htmlspecialchars($listingDetails['bathrooms']); ?>" />
+                            <label for="bathrooms" class="block text-sm font-medium text-gray-700">Bathrooms</label>
+                            <input id="bathrooms" type="number" name="bathrooms" class="input input-bordered w-full" placeholder="1" value="<?= htmlspecialchars($listingDetails['bathrooms']); ?>" />
                         </div>
                     </div>
                     <div>
@@ -138,17 +143,19 @@ unset($_SESSION['form_data']);
                         </div>
                     </div>
                     <div>
-                        <label for="sqft" class="block text-sm font-medium text-gray-700">Square Meters*</label>
-                        <input id="sqft" type="number" name="sqft" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" placeholder="1200" value="<?= htmlspecialchars($listingDetails['sqft']); ?>" />
+                        <label for="sqft" class="block text-sm font-medium text-gray-700">Square Meters</label>
+                        <input id="sqft" type="number" name="sqft" class="input input-bordered w-full" placeholder="1200" value="<?= htmlspecialchars($listingDetails['sqft']); ?>" />
                     </div>
                     <div>
-                        <label for="rent" class="block text-sm font-medium text-gray-700">Rent Price*</label>
-                        <input id="rent" type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" placeholder="1500" name="rent" value="<?= htmlspecialchars($listingDetails['rent']); ?>" />
+                        <label for="rent" class="block text-sm font-medium text-gray-700">Rent Price</label>
+                        <input id="rent" type="number" class="input input-bordered w-full" placeholder="1500" name="rent" value="<?= htmlspecialchars($listingDetails['rent']); ?>" />
                     </div>
                     <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700">Description*</label>
-                        <textarea id="description" name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" placeholder="Describe the property details..."><?= htmlspecialchars($listingDetails['description']); ?></textarea>
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" name="description" rows="3" class="textarea textarea-bordered  w-full" placeholder="Describe the property details..."><?= htmlspecialchars($listingDetails['description']); ?></textarea>
                     </div>
+                </div>
+                <div>
                     <div>
 
                         <h1 class="mb-2">Current Property Images</h1>
@@ -245,15 +252,20 @@ unset($_SESSION['form_data']);
 
                         </div>
 
-                        <div class="flex justify-end">
-                            <button type="submit" name="update_listing" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        <div class="flex justify-end gap-1">
+                            <a href="listings" class="btn">
+                                Cancel
+                            </a>
+                            <button type="submit" name="update_listing" class="btn bg-primary text-white">
                                 Update Listing
                             </button>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
+        </form>
+    </div>
+    </div>
     </div>
 </main>
 <script>

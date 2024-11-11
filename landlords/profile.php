@@ -10,15 +10,26 @@
             <div class="flex flex-col">
                 <!-- Cover Image -->
                 <img src="../assets/img/volcano.jpg" alt="User Cover"
-                    class="w-full h-auto max-h-[20rem] object-cover" />
+                    class="w-full h-auto max-h-[10rem] object-cover" />
 
                 <!-- Profile Image and Name -->
                 <div class="sm:w-[80%] xs:w-[90%] mx-auto flex flex-col items-center -mt-16">
-                    <img src="<?= htmlspecialchars("Controllers/" . $profilePicture); ?>" alt="User Profile"
-                        class="rounded-full w-28 h-28 sm:w-32 sm:h-32 lg:w-48 lg:h-48 relative" />
+                    <img src="<?php echo !empty($landlord['profile_picture']) ? 'Controllers/' . htmlspecialchars($landlord['profile_picture']) : '../assets/img/me.jpg'; ?>" alt="User Profile"
+                        class="rounded-full w-28 h-28 sm:w-32 sm:h-32 lg:w-48 lg:h-48 relative object-cover" />
 
                     <h1 class="w-full text-center  md:my-2 my-6 text-primary font-bold text-2xl sm:text-3xl lg:text-4xl">
-                        <?php echo htmlspecialchars($fullName) ?>
+                        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 my-6">
+                            <h1 class="text-center text-primary text-2xl sm:text-3xl lg:text-4xl">
+                                <?php echo htmlspecialchars($fullName) ?>
+                            </h1>
+
+                            <span class=" badge text-sm inline-flex items-center capitalize text-white
+                                <?php echo ($landlord['account_status'] == 'pending') ? 'badge-warning' : ''; ?>
+                                <?php echo ($landlord['account_status'] == 'verified') ? 'badge-success' : ''; ?>
+                                <?php echo ($landlord['account_status'] == 'not verified') ? 'badge-error' : ''; ?>">
+                                <?php echo htmlspecialchars($landlord['account_status']); ?>
+                            </span>
+                        </div>
                     </h1>
                 </div>
 
@@ -51,12 +62,26 @@
                                 </div>
                                 <div class="flex flex-col pt-3">
                                     <dt class="mb-1 text-gray-500 text-md md:text-lg dark:text-gray-400">Phone Number</dt>
-                                    <dd class="text-lg font-semibold"><?php echo htmlspecialchars($landlord["phone_number"]); ?></dd>
+                                    <div class="flex items-center gap-2">
+                                        <dd class="text-lg font-semibold"><?php echo htmlspecialchars($landlord["phone_number"]); ?></dd>
+                                        <span class="badge text-sm inline-flex items-center capitalize text-white
+                                            <?php echo ($landlord['mobile_verified'] == '1') ? 'badge-success' : ''; ?>
+                                            <?php echo ($landlord['mobile_verified'] == '0') ? 'badge-error' : ''; ?>">
+                                            <?php echo (!$landlord['mobile_verified'] == '1') ? 'Not verified' : ''; ?>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="flex flex-col pt-3">
                                     <dt class="mb-1 text-gray-500 text-md md:text-lg dark:text-gray-400">Email</dt>
-                                    <dd class="text-lg font-semibold"><?php echo htmlspecialchars($landlord["email"]); ?></dd>
-                                </div>
+                                    <div class="flex items-center gap-2">
+
+                                        <dd class="text-lg font-semibold"><?php echo htmlspecialchars($landlord["email"]); ?></dd>
+                                        <span class="badge text-sm inline-flex items-center capitalize text-white
+                                            <?php echo ($landlord['email_verified'] == '1') ? 'badge-success' : ''; ?>
+                                            <?php echo ($landlord['email_verified'] == '0') ? 'badge-error' : ''; ?>">
+                                            <?php echo (!$landlord['email_verified'] == '1') ? 'Not verified' : ''; ?>
+                                        </span>
+                                    </div>
                             </dl>
                         </div>
                     </div>

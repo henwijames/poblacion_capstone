@@ -27,6 +27,7 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="flex items-center justify-between">
             <h1 class="text-2xl font-bold">Inquiries</h1>
         </div>
+
         <div class="mt-4 overflow-x-auto">
             <table class="table table-zebra">
                 <thead class="bg-gray-50">
@@ -39,22 +40,30 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($inquiries as $inquiry): ?>
-                        <tr>
-                            <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($inquiry['tenant_name']); ?></td>
-                            <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($inquiry['check_in']); ?></td>
-                            <td class="px-6 py-3 border-b"><?php echo htmlspecialchars(number_format($inquiry['total_amount'], 2)); ?></td>
-                            <td class="px-6 py-3 border-b">Pending</td>
-                            <td class="px-6 py-3 border-b">
-                                <a href="tenants-profile?id=<?php echo $inquiry['user_id']; ?>" class="btn btn-info btn-sm text-sm text-white">Profile</a>
-                                <a href="approve.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm bg-primary text-white">Approve</a>
-                                <a href="reject.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm btn-error text-white">Reject</a>
-                            </td>
+                    <?php if (!empty($inquiries)): ?>
+                        <?php foreach ($inquiries as $inquiry): ?>
+                            <tr>
+                                <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($inquiry['tenant_name']); ?></td>
+                                <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($inquiry['check_in']); ?></td>
+                                <td class="px-6 py-3 border-b"><?php echo htmlspecialchars(number_format($inquiry['total_amount'], 2)); ?></td>
+                                <td class="px-6 py-3 border-b">Pending</td>
+                                <td class="px-6 py-3 border-b">
+                                    <a href="tenants-profile?id=<?php echo $inquiry['user_id']; ?>" class="btn btn-info btn-sm text-sm text-white">Profile</a>
+                                    <a href="approve.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm bg-primary text-white">Approve</a>
+                                    <a href="reject.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm btn-error text-white">Reject</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr colspan="6" class="mt-4 text-3xl text-center text-gray-500 font-semibold">
+                            <td colspan="6" class="py-4 text-center">No inquiries.</td>
                         </tr>
-                    <?php endforeach; ?>
+
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
+
     </div>
 
 </main>
