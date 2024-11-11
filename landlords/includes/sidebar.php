@@ -59,10 +59,16 @@
             </ul>
         </li>
         <li class="mb-1 group">
-            <a href="#" class="flex items-center py-2 px-3 rounded-md hover:text-white hover:bg-primary group-[.active]:bg-primary group-[.active]:text-white group-[.selected]:bg-primary group-[.selected]:text-white">
+            <a href="#" class="flex items-center py-2 px-3 rounded-md hover:text-white hover:bg-primary group-[.active]:bg-primary group-[.active]:text-white group-[.selected]:bg-primary group-[.selected]:text-white sidebar-dropdown-toggle">
                 <i class="fa-solid fa-gears mr-3 text-lg"></i>
                 <span>Settings</span>
+                <i class="fa-solid fa-chevron-right ml-auto group-[.selected]:rotate-90"></i>
             </a>
+            <ul class="pl-7 mt-2 hidden group-[.selected]:block">
+                <li class="mb-4">
+                    <a href="permit" class="text-sm flex items-center dot hover:text-primary">Upload Business Permit</a>
+                </li>
+            </ul>
         </li>
     </ul>
 </div>

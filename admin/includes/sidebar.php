@@ -3,13 +3,13 @@
         <img src="../assets/img/poblacionease.png" alt="" class="w-36 object-cover">
     </a>
     <ul class="mt-4">
-        <li class="mb-1 group  <?php echo ($page == 'index') ? 'active' : ''; ?>">
+        <li class="mb-1 group  ">
             <a href="index" class=" flex items-center py-2 px-3 rounded-md hover:text-white hover:bg-primary group-[.active]:bg-primary group-[.active]:text-white group-[.selected]:bg-primary group-[.selected]:text-white ">
                 <i class="fa-solid fa-house mr-3 text-lg"></i>
                 <span>Dashboard</span>
             </a>
         </li>
-        <li class="mb-1 group <?php echo ($page == 'tenants' || $page == 'rents') ? 'active' : ''; ?>">
+        <li class="mb-1 group ">
             <a href="#" class="flex items-center py-2 px-3 rounded-md hover:text-white hover:bg-primary group-[.active]:bg-primary group-[.active]:text-white sidebar-dropdown-toggle group-[.selected]:bg-primary group-[.selected]:text-white">
                 <i class="fa-solid fa-key mr-3 text-lg"></i>
                 <span>Manage Approvals</span>

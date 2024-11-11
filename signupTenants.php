@@ -2,6 +2,8 @@
 // Include header and database
 include 'partials/header.php';
 
+
+
 // Retrieve errors and form data from session
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
@@ -21,6 +23,7 @@ if (isset($_SESSION['same_email'])) {
 unset($_SESSION['errors']);
 unset($_SESSION['form_data']);
 unset($_SESSION['same_email']);
+
 ?>
 
 <div class="w-full flex flex-col justify-center items-center">
@@ -39,8 +42,9 @@ unset($_SESSION['same_email']);
     </div>
     <main class="flex items-center justify-center gap-8 px-8 w-full max-w-lg pb-4 mb-4">
         <div class=" flex flex-col items-center">
+
             <h1 class="text-4xl font-bold text-center mb-6">Sign up as a <span class="text-primary">Tenant</span></h1>
-            <form class="space-y-4 flex flex-col w-full gap-4" method="POST" action="Controllers/TenantSignupController.php">
+            <form class="space-y-4 flex flex-col w-full gap-4" method="POST" action="Controllers/TenantSignupController.php" enctype="multipart/form-data">
                 <div class="flex flex-col md:flex-row w-full justify-center items-center gap-4">
                     <div class="flex flex-col gap-2 w-full">
                         <label for="fname" class="text-md">First Name</label>
@@ -100,6 +104,9 @@ unset($_SESSION['same_email']);
                             "
                             onchange="previewProfilePhoto(event)" />
                     </label>
+                    <?php if (isset($errors['validid'])): ?>
+                        <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['validid']); ?></p>
+                    <?php endif; ?>
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="password" class="text-sm font-medium leading-none">Password</label>

@@ -3,6 +3,8 @@ session_start();
 include 'session.php';
 include '../Controllers/Database.php';
 require_once '../Models/Admins.php';
+require_once '../Models/Tenants.php';
+require_once '../Models/Landlords.php';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
     $database =  new Database();

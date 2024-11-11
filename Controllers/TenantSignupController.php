@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $tenants->email = trim($_POST['email']);
     $tenants->address = trim($_POST['address']);
     $tenants->phone = trim($_POST['phone']);
-    $tenants->validid = trim($_POST['validid']);
     $password = trim($_POST['password']);
     $confirm = trim($_POST['confirm']);
 
@@ -60,10 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $errors['phone'] = "Phone number is required";
     }
 
-    if (empty($tenants->validid)) {
-        $errors['validid'] = "Valid ID is required";
-    }
-
     if (empty($password)) {
         $errors['password'] = "Password is required";
     } elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
@@ -74,6 +69,34 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $errors['confirm'] = "Confirm password is required";
     } elseif ($password !== $confirm) {
         $errors['confirm'] = "Passwords do not match";
+    }
+
+    // Check if a file was uploaded and process it
+    if (isset($_FILES['validid']) && $_FILES['validid']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['validid']['tmp_name'];
+        $fileName = $_FILES['validid']['name'];
+        $fileSize = $_FILES['validid']['size'];
+        $fileType = $_FILES['validid']['type'];
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
+
+        $allowedfileExtensions = array('jpg', 'jpeg', 'png', 'pdf');
+        if (in_array($fileExtension, $allowedfileExtensions)) {
+            // Create a unique name for the image and save it
+            $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+            $uploadFileDir = '../tenants/Controller/uploads/';
+            $dest_path = $uploadFileDir . $newFileName;
+
+            if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                $tenants->validid = $newFileName; // Save the filename in the database
+            } else {
+                $errors['validid'] = 'File could not be uploaded. Try again.';
+            }
+        } else {
+            $errors['validid'] = 'Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed.';
+        }
+    } else {
+        $errors['validid'] = 'Please upload a valid ID image.';
     }
 
     // Only hash the password and create the user if no errors
@@ -98,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $_SESSION['user_id'] = $tenants->id;
             $_SESSION['email'] = $tenants->email;
             $_SESSION['user_role'] = 'tenant';
+            $_SESSION['mobile_verified'] = false;
             $_SESSION['success'] = "User created successfully! Please verify your phone number.";
             header("Location: ../account_verify"); // Redirect to the tenant's dashboard or homepage
             exit();

@@ -1,5 +1,12 @@
 <?php
 if (isset($_SESSION['user_id'])) {
+    if (!isset($_SESSION['mobile_verified']) || $_SESSION['mobile_verified'] !== true) {
+        // Redirect to account verification page if not verified
+        header("Location: account_verify.php");
+        exit();
+    }
+
+
     if ($_SESSION['user_role'] == 'tenant') {
         header("Location: tenants/index.php");
     } elseif ($_SESSION['user_role'] == 'landlord') {

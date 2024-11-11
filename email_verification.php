@@ -9,8 +9,6 @@ use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-print_r($_SESSION);
-
 $dotenv = Dotenv::createImmutable(__DIR__);
 try {
     $dotenv->load();

@@ -10,8 +10,8 @@ if (isset($_POST['update-profile'])) {
     $db = $database->getConnection();
     $landlordModel = new Landlords($db);
 
-    // Get tenant ID (make sure this is available, for example from the session or a hidden field)
-    $landlordId = $_SESSION['user_id']; // or another method of retrieving the tenant ID
+    // Get Landlord ID (make sure this is available, for example from the session or a hidden field)
+    $landlordId = $_SESSION['user_id']; // or another method of retrieving the Landlord ID
     if (!$landlordId) {
         die('Landlord ID not found.');
     }
@@ -49,6 +49,41 @@ if (isset($_POST['update-profile'])) {
     } else {
         $_SESSION['error_message'] = "An error occurred while updating your profile.";
         header("Location: ../edit-profile.php?error=1");
+        exit();
+    }
+}
+
+if (isset($_POST['save_permit'])) {
+    $database = new Database();
+    $db = $database->getConnection();
+    $landlords = new Landlords($db);
+
+    $landlordId = $_SESSION['user_id']; // or another method of retrieving the Landlord ID
+    if (!$landlordId) {
+        die('Landlord ID not found.');
+    }
+
+    $photoPath = null;
+    if (isset($_FILES['permit']) && $_FILES['permit']['error'] == UPLOAD_ERR_OK) {
+        $uploadDir = 'uploads/'; // Set your upload directory
+        $photoPath = basename($_FILES['permit']['name']);
+
+        // Move the uploaded file
+        if (!move_uploaded_file($_FILES['permit']['tmp_name'], $photoPath)) {
+            $_SESSION['error_message'] = "Failed to upload photo.";
+            header("Location: edit-profile.php?error=1");
+            exit();
+        }
+    }
+
+    if ($landlords->savePermit($landlordId, $photoPath)) {
+        // Redirect or inform user of success
+        $_SESSION['success_message'] = 'Profile updated successfully.';
+        header('Location: ../index?success=1');
+        exit();
+    } else {
+        $_SESSION['error_message'] = "An error occurred while updating your profile.";
+        header("Location: ../permit?error=1");
         exit();
     }
 }

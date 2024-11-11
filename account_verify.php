@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($tenant['verification_code'] === $code && $expires_at > $current_time) {
             // Code is valid, mark the phone number as verified
             $tenants->verifyPhoneNumber($user_id);
-
+            $_SESSION['mobile_verified'] = true;
             $_SESSION['success'] = "Phone number verified successfully!";
             header("Location: email_verification.php"); // Redirect to email verification page
             exit();

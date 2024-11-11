@@ -22,7 +22,32 @@ class Tenants
         $this->conn = $db;
     }
 
-    // Create a new tenant
+    public function getAllTenants()
+    {
+        $query = "SELECT id, CONCAT(first_name, ' ', middle_name, ' ', last_name) AS tenant_name, first_name, address, account_status, validid, phone_number  FROM " . $this->table;
+        $stmt  = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function verifyTenant($tenantId)
+    {
+        $query = "UPDATE tenants SET account_status = 'verified' WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $tenantId);
+        return $stmt->execute();
+    }
+
+    public function searchTenants($searchTerm)
+    {
+        $query = "SELECT * FROM tenants WHERE first_name LIKE :search OR last_name LIKE :search OR address LIKE :search OR account_status LIKE :search";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':search', '%' . $searchTerm . '%', PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
 
     public function checkEmailExists($email)
     {
@@ -43,7 +68,7 @@ class Tenants
         return $stmt->rowCount() > 0; // Returns true if email exists
     }
 
-
+    // Create a new tenant
     public function create()
     {
         $query = "INSERT INTO " . $this->table . " 

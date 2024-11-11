@@ -131,6 +131,21 @@ class Landlords
             return false;
         }
     }
+    public function savePermit($landlordId, $photoPath = null)
+    {
+        $query = 'UPDATE landlords 
+        SET permit = :permit WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':permit', $photoPath, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $landlordId, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            print_r($stmt->errorInfo());
+            return false;
+        }
+    }
 
     public function verifyPassword($password, $hash)
     {
@@ -139,8 +154,25 @@ class Landlords
 
     public function getAllLandlords()
     {
-        $query = "SELECT id, first_name, middle_name, last_name, email, address, property_name, phone_number, profile_picture FROM " . $this->table;
+        $query = "SELECT id, first_name, middle_name, last_name, email, address, property_name, phone_number, profile_picture, permit, account_status FROM " . $this->table;
         $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function verifyLandlord($landlordId)
+    {
+        $query = "UPDATE landlords SET account_status = 'verified' WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $landlordId);
+        return $stmt->execute();
+    }
+
+    public function searchLandlords($searchTerm)
+    {
+        $query = "SELECT * FROM landlords WHERE first_name LIKE :search OR last_name LIKE :search OR address LIKE :search OR account_status LIKE :search";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':search', '%' . $searchTerm . '%', PDO::PARAM_STR);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
