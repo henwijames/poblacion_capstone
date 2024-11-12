@@ -9,6 +9,9 @@ $landlords = new Landlords($db);
 $landlordsList = $landlords->getAllLandlords();
 ?>
 <main class="main-content main">
+    <div id="loader" class="hidden fixed inset-0 flex items-center justify-center bg-background bg-opacity-75 z-50">
+        <span class="loading loading-dots loading-lg"></span>
+    </div>
     <?php include "includes/topbar.php"; ?>
     <div class="p-6">
         <div class="flex items-center justify-between">
@@ -21,7 +24,6 @@ $landlordsList = $landlords->getAllLandlords();
                 <thead class="bg-gray-50">
                     <tr class="bg-slate-100">
                         <th class="py-2 px-4 border-r border-gray-200">Name</th>
-                        <th class="py-2 px-4 border-r border-gray-200">Address</th>
                         <th class="py-2 px-4 border-r border-gray-200">Status</th>
                         <th class="py-2 px-4 border-r border-gray-200">Valid ID</th>
                         <th class="py-2 px-4 border-r border-gray-200">Phone Number</th>
@@ -33,12 +35,11 @@ $landlordsList = $landlords->getAllLandlords();
                     <?php foreach ($landlordsList as $landlord): ?>
                         <tr class="border-b">
                             <td class="py-2 px-4 border-r border-gray-200"><?= htmlspecialchars($landlord['first_name'] . " " . $landlord['middle_name'] . " " . $landlord['last_name']); ?></td>
-                            <td class="py-2 px-4 border-r border-gray-200 capitalize"><?= htmlspecialchars($landlord['address']); ?></td>
                             <td class="py-2 px-4 border-r border-gray-200">
                                 <span class="badge text-sm inline-flex items-center capitalize text-white
                                     <?= ($landlord['account_status'] == 'pending') ? 'badge-warning' : ''; ?>
                                     <?= ($landlord['account_status'] == 'verified') ? 'badge-success' : ''; ?>
-                                    <?= ($landlord['account_status'] == 'not verified') ? 'badge-error' : ''; ?>">
+                                    <?= ($landlord['account_status'] == 'declined') ? 'badge-error' : ''; ?>">
                                     <?= htmlspecialchars($landlord['account_status']); ?>
                                 </span>
                             </td>
@@ -67,7 +68,7 @@ $landlordsList = $landlords->getAllLandlords();
                                 <?php
                                 if ($landlord['account_status'] !== 'verified') {
                                     echo '<button id="verifyButton_' . $landlord['id'] . '" onclick="verifyLandlord(' . $landlord['id'] . ')" class="btn btn-sm bg-primary text-white">Verify</button>';
-                                    echo '<a href="view-listings.php?id=' . $landlord['id'] . '" class="btn btn-sm btn-error text-white">Decline</a>';
+                                    echo '<button id="declineButton_' . $landlord['id'] . '" onclick="declineLandlord(' . $landlord['id'] . ')" class="btn btn-sm btn-error text-white">Decline</button>';
                                 } else {
                                     echo '<button onclick="blockLandlord(' . $landlord['id'] . ')" class="btn btn-sm btn-warning text-white">Block</button>';
                                 }
@@ -93,7 +94,7 @@ $landlordsList = $landlords->getAllLandlords();
 
         function fetchLandlords(searchTerm) {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'search_landlords.php?search=' + searchTerm, true);
+            xhr.open('GET', 'Controllers/search_landlords.php?search=' + searchTerm, true);
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     document.getElementById('landlordsList').innerHTML = xhr.responseText;
@@ -109,6 +110,7 @@ $landlordsList = $landlords->getAllLandlords();
         // Get the button element using its unique ID
         const verifyButton = document.querySelector(`#verifyButton_${landlordId}`);
 
+
         // Disable the button immediately after clicking
         verifyButton.disabled = true;
         Swal.fire({
@@ -121,10 +123,12 @@ $landlordsList = $landlords->getAllLandlords();
             confirmButtonText: "Yes, verify it!"
         }).then((result) => {
             if (result.isConfirmed) {
+                document.getElementById('loader').classList.remove('hidden');
                 // Send AJAX request to verify account
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", "verifyLandlords.php?id=" + landlordId, true);
+                xhr.open("GET", "Controllers/verifyLandlords.php?id=" + landlordId, true);
                 xhr.onload = function() {
+                    document.getElementById('loader').classList.add('hidden');
                     if (xhr.status === 200) {
                         try {
                             var response = JSON.parse(xhr.responseText);
@@ -154,6 +158,56 @@ $landlordsList = $landlords->getAllLandlords();
                 verifyButton.disabled = false;
             }
         });
+    }
+
+    function declineLandlord(landlordId) {
+        const declineButton = document.querySelector(`#declineButton_${landlordId}`);
+
+        declineButton.disabled = true;
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to decline the application of this account?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#C1C549",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Decline"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('loader').classList.remove('hidden');
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "Controllers/declineLandlords.php?id=" + landlordId, true);
+                xhr.onload = function() {
+                    document.getElementById('loader').classList.add('hidden');
+                    if (xhr.status === 200) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                Swal.fire(
+                                    "Verified!",
+                                    response.message,
+                                    "success"
+                                ).then(() => {
+                                    window.location.href = "landlords.php"; // Adjust the URL if needed
+                                });
+                            } else {
+                                Swal.fire("Error", response.message, "error");
+                            }
+                        } catch (e) {
+                            console.error("Error parsing JSON:", e);
+                            console.log("Server Response:", xhr.responseText); // Log the invalid response for debugging
+                            Swal.fire("Error", "Failed to parse the response from the server.", "error");
+                        }
+                    } else {
+                        console.error("Request failed with status", xhr.status);
+                        Swal.fire("Error", "Failed to send verification request.", "error");
+                    }
+                };
+                xhr.send();
+            } else {
+                declineButton.disabled = false;
+            }
+        })
     }
 </script>
 <?php include 'includes/footer.php'; ?>

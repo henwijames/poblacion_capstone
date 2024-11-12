@@ -1,5 +1,6 @@
 <?php
-include 'includes/header.php';
+include '../../Controllers/Database.php';
+require_once '../../Models/Landlords.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -16,12 +17,11 @@ if (count($landlordsList) > 0):
 ?>
         <tr class="border-b">
             <td class="py-2 px-4 border-r border-gray-200"><?= htmlspecialchars($landlord['first_name'] . " " . $landlord['middle_name'] . " " . $landlord['last_name']); ?></td>
-            <td class="py-2 px-4 border-r border-gray-200 capitalize"><?= htmlspecialchars($landlord['address']); ?></td>
             <td class="py-2 px-4 border-r border-gray-200">
                 <span class="badge text-sm inline-flex items-center capitalize text-white
                     <?= ($landlord['account_status'] == 'pending') ? 'badge-warning' : ''; ?>
                     <?= ($landlord['account_status'] == 'verified') ? 'badge-success' : ''; ?>
-                    <?= ($landlord['account_status'] == 'not verified') ? 'badge-error' : ''; ?>">
+                    <?= ($landlord['account_status'] == 'declined') ? 'badge-error' : ''; ?>">
                     <?= htmlspecialchars($landlord['account_status']); ?>
                 </span>
             </td>
@@ -44,6 +44,7 @@ if (count($landlordsList) > 0):
                 </dialog>
             </td>
             <td class="py-2 px-4 border-r border-gray-200 capitalize text-center"><?= htmlspecialchars($landlord['phone_number']); ?></td>
+            <td class="py-2 px-4 border-r border-gray-200 text-center"><?= htmlspecialchars($landlord['email']); ?></td>
             <td class="py-2 px-4 border-r border-gray-200 text-center">
                 <a href="edit-listings.php?id=<?= $landlord['id'] ?>" class="btn btn-sm bg-primary text-white">Verify</a>
                 <a href="view-tenant.php?id=<?= $landlord['id'] ?>" class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">View</a>

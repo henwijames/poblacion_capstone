@@ -24,7 +24,7 @@ class Tenants
 
     public function getAllTenants()
     {
-        $query = "SELECT id, CONCAT(first_name, ' ', middle_name, ' ', last_name) AS tenant_name, first_name, address, account_status, validid, phone_number  FROM " . $this->table;
+        $query = "SELECT id, CONCAT(first_name, ' ', middle_name, ' ', last_name) AS tenant_name, first_name, address, account_status, validid, phone_number, email  FROM " . $this->table;
         $stmt  = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -32,6 +32,13 @@ class Tenants
     public function verifyTenant($tenantId)
     {
         $query = "UPDATE tenants SET account_status = 'verified' WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $tenantId);
+        return $stmt->execute();
+    }
+    public function declineTenant($tenantId)
+    {
+        $query = "UPDATE tenants SET account_status = 'declined' WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $tenantId);
         return $stmt->execute();

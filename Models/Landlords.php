@@ -167,6 +167,13 @@ class Landlords
         $stmt->bindParam(':id', $landlordId);
         return $stmt->execute();
     }
+    public function declineLandlord($landlordId)
+    {
+        $query = "UPDATE landlords SET account_status = 'declined' WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $landlordId);
+        return $stmt->execute();
+    }
 
     public function searchLandlords($searchTerm)
     {
