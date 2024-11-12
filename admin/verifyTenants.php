@@ -21,8 +21,6 @@ $tenants = new Tenants($db);
 
 if (isset($_GET['id'])) {
     $tenantId = $_GET['id'];
-
-    // Assuming verifyLandlord is a function that verifies a landlord account
     $result = $tenants->verifyTenant($tenantId);
 
     if ($result) {
@@ -41,14 +39,14 @@ if (isset($_GET['id'])) {
 
             // Sender and recipient
             $mail->setFrom('poblacionease@gmail.com', 'PoblacionEase');
-            $mail->addAddress($email); // Landlord's email
+            $mail->addAddress($email); // Tenant's email
 
             // Email content
             $mail->isHTML(true);
             $mail->Subject = 'Account Verification Success';
             $mail->Body = '
             <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd;">
-                <h2 style="color: #333;">' . 'Dear ' .  htmlspecialchars($landlord['first_name']) . ',</h2>
+                <h2 style="color: #333;">' . 'Dear ' .  htmlspecialchars($tenant['first_name']) . ',</h2>
                 <p style="color: #555; line-height: 1.5;">Based on your Valid ID submission, your account has been successfully verified.</p>
                 <p style="color: #555; line-height: 1.5;">Thank you for being part of PoblacionEase!</p>
                 
@@ -74,7 +72,7 @@ if (isset($_GET['id'])) {
     }
 } else {
     // If no ID is passed, return an error response
-    echo json_encode(['status' => 'error', 'message' => 'Landlord ID not provided.']);
+    echo json_encode(['status' => 'error', 'message' => 'Tenant ID not provided.']);
 }
 
 ?>
