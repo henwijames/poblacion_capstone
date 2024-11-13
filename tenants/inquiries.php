@@ -37,7 +37,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
 
 // Query to get the listings the tenant inquired about (booked)
 $query = "
-    SELECT b.id as booking_id, l.address, l.rent, b.check_in, b.total_amount, l.status, ln.property_name
+    SELECT b.id as booking_id, b.booking_status, l.address, l.rent, b.check_in, b.total_amount, l.status, ln.property_name
     FROM bookings b
     LEFT JOIN listings l ON b.listing_id = l.id
     LEFT JOIN landlords ln ON l.user_id = ln.id
@@ -109,10 +109,16 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($listing['check_in']); ?></td>
                                     <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($listing['total_amount']); ?></td>
                                     <td class="px-6 py-3 border-b">
-                                        <?php echo ucfirst($listing['status']); ?>
+                                        <?php echo ucfirst($listing['booking_status']); ?>
                                     </td>
                                     <td class="px-6 py-3 border-b">
-                                        <button class="btn btn-sm btn-error text-white">Cancel</button>
+                                        <?php
+                                        if ($listing['booking_status'] == 'verified') {
+                                            echo '<button id="payButton_' . $listing['booking_id'] . '" onclick="payRent(' . $listing['booking_id'] . ')" class="btn btn-sm bg-primary text-white">Pay Rent</button>';
+                                        } else {
+                                            echo '<button onclick="cancelBooking(' . $listing['user_id'] . ')" class="btn btn-sm btn-warning text-white">Cancel</button>';
+                                        }
+                                        ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -126,5 +132,43 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </main>
+    <script>
+        function payRent(bookingId) {
+            // Set up the AJAX request
+            $.ajax({
+                url: 'Controller/PaymentController.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    booking_id: bookingId
+                },
+                success: function(response) {
+                    // Check if the response contains a redirect URL
+                    if (response.redirect_url) {
+                        // Redirect the user to the BUX payment page
+                        window.location.href = response.redirect_url;
+                    } else {
+                        // Display an error message if payment initialization failed
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Payment Error',
+                            text: response.error || 'Could not initiate payment. Please try again.'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error: ' + error);
+                    console.log('Status: ' + status);
+                    console.log('Response: ' + xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Request Failed',
+                        text: 'There was an error processing your request.'
+                    });
+                }
+
+            });
+        }
+    </script>
 
     <?php require 'includes/footer.php'; ?>

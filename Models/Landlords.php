@@ -146,6 +146,21 @@ class Landlords
             return false;
         }
     }
+    public function saveQR($landlordId, $photoPath = null)
+    {
+        $query = 'UPDATE landlords 
+        SET qr_payment = :qr_payment WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':qr_payment', $photoPath, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $landlordId, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            print_r($stmt->errorInfo());
+            return false;
+        }
+    }
 
     public function verifyPassword($password, $hash)
     {

@@ -22,6 +22,9 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <main class="main-content main">
+    <div id="loader" class="hidden fixed inset-0 flex items-center justify-center bg-background bg-opacity-75 z-50">
+        <span class="loading loading-dots loading-lg"></span>
+    </div>
     <?php include 'includes/topbar.php'; ?>
     <div class="p-6">
         <div class="flex items-center justify-between">
@@ -32,7 +35,7 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <table class="table table-zebra">
                 <thead class="bg-gray-50">
                     <tr class="text-left">
-                        <th class="px-6 py-3 border-b">Name</th>
+                        <th class="px-6 py-3 border-b">Tenant Name</th>
                         <th class="px-6 py-3 border-b">Check-In</th>
                         <th class="px-6 py-3 border-b">Total Amount</th>
                         <th class="px-6 py-3 border-b">Status</th>
@@ -46,11 +49,17 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($inquiry['tenant_name']); ?></td>
                                 <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($inquiry['check_in']); ?></td>
                                 <td class="px-6 py-3 border-b"><?php echo htmlspecialchars(number_format($inquiry['total_amount'], 2)); ?></td>
-                                <td class="px-6 py-3 border-b">Pending</td>
+                                <td class="px-6 py-3 border-b capitalize"><?php echo htmlspecialchars($inquiry['booking_status']) ?></td>
                                 <td class="px-6 py-3 border-b">
                                     <a href="tenants-profile?id=<?php echo $inquiry['user_id']; ?>" class="btn btn-info btn-sm text-sm text-white">Profile</a>
-                                    <a href="approve.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm bg-primary text-white">Approve</a>
-                                    <a href="reject.php?id=<?php echo $inquiry['id']; ?>" class="btn btn-sm text-sm btn-error text-white">Reject</a>
+                                    <?php
+                                    if ($inquiry['booking_status'] !== 'verified') {
+                                        echo '<button id="verifyButton_' . $inquiry['id'] . '" onclick="verifyInquiry(' . $inquiry['id'] . ')" class="btn btn-sm bg-primary text-white">Verify</button>';
+                                        echo '<button id="declineButton_' . $inquiry['id'] . '" onclick="declineInquiry(' . $inquiry['id'] . ')" class="btn btn-sm btn-error text-white">Decline</button>';
+                                    } else {
+                                        echo '<button onclick="blockTenant(' . $inquiry['user_id'] . ')" class="btn btn-sm btn-warning text-white">Block</button>';
+                                    }
+                                    ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -67,4 +76,55 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
 </main>
+<script>
+    function verifyInquiry(inquiryId) {
+        const verifyButton = document.querySelector(`#verifyButton_${inquiryId}`);
+        verifyButton.disabled = true;
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to verify this inquiry?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#C1C549",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, verify it!"
+        }).then((result => {
+            if (result.isConfirmed) {
+                document.getElementById('loader').classList.remove('hidden');
+                // Send AJAX request to verify account
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "Controllers/verifyInquiry.php?id=" + inquiryId, true);
+                xhr.onload = function() {
+                    document.getElementById('loader').classList.add('hidden');
+                    if (xhr.status === 200) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                Swal.fire(
+                                    "Verified!",
+                                    response.message,
+                                    "success"
+                                ).then(() => {
+                                    window.location.href = "inquiries.php"; // Adjust the URL if needed
+                                });
+                            } else {
+                                Swal.fire("Error", response.message, "error");
+                            }
+                        } catch (e) {
+                            console.error("Error parsing JSON:", e);
+                            console.log("Server Response:", xhr.responseText); // Log the invalid response for debugging
+                            Swal.fire("Error", "Failed to parse the response from the server.", "error");
+                        }
+                    } else {
+                        console.error("Request failed with status", xhr.status);
+                        Swal.fire("Error", "Failed to send verification request.", "error");
+                    }
+                };
+                xhr.send();
+            } else {
+                verifyButton.disabled = false;
+            }
+        }))
+    }
+</script>
 <?php include 'includes/footer.php'; ?>

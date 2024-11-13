@@ -97,6 +97,17 @@ class Listing
         return $listingUpdated;
     }
 
+    public function updateQrPayment($landlordId, $qrPayment)
+    {
+        $query = "UPDATE landlords SET mode_of_payment = :qr_payment WHERE id = :landlord_id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':qr_payment', $qrPayment);
+        $stmt->bindParam(':landlord_id', $landlordId);
+
+        return $stmt->execute();
+    }
+
 
 
 
