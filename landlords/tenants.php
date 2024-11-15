@@ -1,4 +1,19 @@
-<?php include 'includes/header.php'; ?>
+<?php
+include 'includes/header.php';
+require_once '../Models/Tenants.php';
+require_once '../Models/Landlords.php';
+
+// Get the landlord ID from session or URL (if the landlord is logged in)
+$landlord_id = $_SESSION['user_id'];  // Assuming the landlord is logged in and their user ID is stored in session
+
+$database = new Database();
+$db = $database->getConnection();
+
+// Fetch tenants for this landlord
+$landlords = new Landlords($db);
+$tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom method to fetch tenants based on landlord ID
+?>
+
 <main class="main-content main">
     <?php include 'includes/topbar.php'; ?>
     <div class="p-6">
@@ -18,23 +33,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-b">
-                        <td class="py-2 px-4 border-r border-gray-200">Henry James Ribano</td>
-                        <td class="py-2 px-4 border-r border-gray-200">La Zanti</td>
-                        <td class="py-2 px-4 border-r border-gray-200">Poblacion, Taal, Batangas</td>
-                        <td class="py-2 px-4 border-r border-gray-200">09691756860</td>
-                        <td class="py-2 px-4 border-r border-gray-200 text-center">
-                            <a href="edit-listings" class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
-                                Edit
-                            </a>
-                            <a href="#" class="inline-block px-4 py-1 rounded-md text-sm bg-red-400 text-white">
-                                Delete
-                            </a>
-                        </td>
-                    </tr>
+                    <?php if (!empty($tenantList)) : ?>
+                        <?php foreach ($tenantList as $tenant) : ?>
+                            <tr class="border-b">
+                                <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['tenants_name']); ?></td>
+                                <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['listing_name']); ?></td>
+                                <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['address']); ?></td>
+                                <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['phone_number']); ?></td>
+                                <td class="py-2 px-4 border-r border-gray-200 text-center">
+                                    <a href="tenant-transaction.php?id=<?php echo $tenant['id']; ?>" class="btn bg-primary btn-sm text-white">View Transactions</a>
+                                    <a href="delete-tenant.php?id=<?php echo $tenant['id']; ?>" class="btn btn-error btn-sm text-white">Delete</a>
+                                    <a href="delete-tenant.php?id=<?php echo $tenant['id']; ?>" class="btn btn-warning btn-sm text-white">Block</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="5" class="text-center py-2 px-4">No tenants found for this landlord.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </main>
+
 <?php include 'includes/footer.php'; ?>

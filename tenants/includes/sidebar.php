@@ -31,7 +31,7 @@
             </a>
             <ul class="pl-7 mt-2 hidden group-[.selected]:block">
                 <li class="mb-4">
-                    <a href="#" class="text-sm flex items-center dot hover:text-primary">Pay Rent</a>
+                    <a href="pay-rent" class="text-sm flex items-center dot hover:text-primary">Pay Rent</a>
                 </li>
                 <li class="mb-4">
                     <a href="#" class="text-sm flex items-center dot hover:text-primary">Transactions</a>

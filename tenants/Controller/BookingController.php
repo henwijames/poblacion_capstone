@@ -4,6 +4,7 @@ require_once '../../Controllers/Database.php';
 require_once '../../Models/Landlords.php';
 require_once '../../Models/Tenants.php';
 require_once '../../Models/Listing.php';
+
 $database = new Database();
 $db = $database->getConnection();
 
@@ -19,17 +20,20 @@ $landlord = $landlords->findById($listingDetails['user_id']);
 
 $landlord_id = $listingDetails['user_id'];
 
+// Decode the payment options (if any) and check if it's an array
 $paymentOptions = json_decode($listingDetails['payment_options'], true);
+if (!is_array($paymentOptions)) {
+    $paymentOptions = [];  // Ensure it's an empty array if it's not valid
+}
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
     $errors = [];
 
     $check_in = $_POST['check_in'];
 
-
     if (empty($check_in)) {
         $errors['check_in'] = "Check-in date is required.";
-        $SESSION['error_message'] = "Check-in date is required.";
+        $_SESSION['error_message'] = "Check-in date is required.";
         header("Location: ../booking.php?id=$listing_id");
         exit();
     }
@@ -37,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
     $monthly_rent = $listingDetails['rent'];
     $total_amount = $monthly_rent;
 
+    // Check if the payment options are available and if so, apply them
     if (in_array("one month advance", $paymentOptions)) {
         $total_amount += $monthly_rent;
     }
@@ -44,8 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
     if (in_array("one month deposit", $paymentOptions)) {
         $total_amount += $monthly_rent;
     }
-
-
 
     $db->beginTransaction();
 
@@ -71,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
         $db->commit();
 
         echo "Booking successful! Listing status updated to pending.";
-        header("Location: ../profile.php");
+        header("Location: ../inquiries.php");
     } catch (Exception $e) {
         // Rollback the transaction if something goes wrong
         $db->rollBack();
