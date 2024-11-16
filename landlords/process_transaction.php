@@ -38,7 +38,7 @@ if ($action && $transaction_id) {
         // Only update rent's due_month if action is 'verify'
         if ($action === 'verify') {
             // Fetch the listing_id and user_id from the transaction
-            $transactionQuery = "SELECT listing_id, user_id FROM transactions WHERE transaction_id = :transaction_id";
+            $transactionQuery = "SELECT listing_id, user_id, amount FROM transactions WHERE transaction_id = :transaction_id";
             $transactionStmt = $db->prepare($transactionQuery);
             $transactionStmt->bindParam(':transaction_id', $transaction_id);
             $transactionStmt->execute();
@@ -47,6 +47,21 @@ if ($action && $transaction_id) {
             if ($transaction) {
                 $listing_id = $transaction['listing_id'];
                 $tenant_id = $transaction['user_id'];
+                $amount = $transaction['amount'];  // Amount for the payment
+
+                // Fetch the tenant's email address
+                $tenantQuery = "SELECT email FROM tenants WHERE id = :tenant_id";
+                $tenantStmt = $db->prepare($tenantQuery);
+                $tenantStmt->bindParam(':tenant_id', $tenant_id);
+                $tenantStmt->execute();
+                $tenant = $tenantStmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($tenant) {
+                    $tenantEmail = $tenant['email'];
+
+                    // Send an email notification to the tenant
+                    sendEmailNotification($tenantEmail, $amount);
+                }
 
                 // Fetch the rent details based on listing_id and tenant_id
                 $rentQuery = "SELECT rent_date, due_month FROM rent WHERE listing_id = :listing_id AND user_id = :tenant_id";
@@ -77,6 +92,12 @@ if ($action && $transaction_id) {
                     $updateRentStmt->execute();
                 }
             }
+
+            // Update the listing status to 'occupied'
+            $updateListingQuery = "UPDATE listings SET status = 'occupied' WHERE id = :listing_id";
+            $updateListingStmt = $db->prepare($updateListingQuery);
+            $updateListingStmt->bindParam(':listing_id', $listing_id);
+            $updateListingStmt->execute();
         }
 
         // Commit transaction
@@ -91,3 +112,73 @@ if ($action && $transaction_id) {
 
 header('Location: tenants');
 exit();
+
+/**
+ * Function to send an email notification to the tenant
+ *
+ * @param string $tenantEmail - The tenant's email address
+ * @param float $amount - The amount of the payment
+ */
+function sendEmailNotification($tenantEmail, $amount)
+{
+    $mail = new PHPMailer(true);
+    try {
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host = $_ENV['SMTP_HOST']; // Set the SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = $_ENV['SMTP_USER']; // SMTP username
+        $mail->Password = $_ENV['SMTP_PASS']; // SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = $_ENV['SMTP_PORT'];
+
+        // Recipients
+        $mail->setFrom('poblacionease@gmail.com', 'PoblacionEase');
+        $mail->addAddress($tenantEmail); // Tenant's email address
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Payment Approved';
+        $mail->Body    = '<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+            <head>
+                <meta charset="UTF-8">
+                <meta content="width=device-width, initial-scale=1" name="viewport">
+                <title> Inquiry Verification Success</title>
+            </head>
+            <body class="body">
+                <div dir="ltr" class="es-wrapper-color">
+                    <table width="100%" cellspacing="0" cellpadding="0" class="es-wrapper">
+                        <tbody>
+                            <tr>
+                                <td valign="top" class="esd-email-paddings">
+                                    <table width="600" cellspacing="0" cellpadding="0" align="center" class="es-content-body" style="background-color:transparent">
+                                        <tbody>
+                                            <tr>
+                                                <td align="center" class="esd-block-image" style="font-size:0">
+                                                    <img src="https://fptpbfq.stripocdn.email/content/guids/CABINET_905d63f3814e55730c693afd59e4c30260908b814c9950bcfeb18e2a36b9dd7a/images/poblacionease_Tdn.png" alt="PoblacionEase" width="197">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <p>Your payment of <strong>₱' . number_format($amount, 2) . '</strong> has been approved and processed successfully.</p>
+                                                    <p>If you did not request this email, please ignore it.</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </body>
+            </html>';
+
+
+        // Send email
+        $mail->send();
+    } catch (Exception $e) {
+        // Handle error
+        error_log('Mailer Error: ' . $mail->ErrorInfo);
+    }
+}

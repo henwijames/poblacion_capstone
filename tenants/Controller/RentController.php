@@ -1,5 +1,15 @@
 <?php
 include '../../Controllers/Database.php';
+require '../../vendor/autoload.php'; // Ensure this path is correct
+
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable('D:\xampp\htdocs\Poblacion');
+try {
+    $dotenv->load();
+} catch (Exception $e) {
+    die('Failed to load .env file: ' . $e->getMessage());
+}
 
 class RentController
 {
@@ -42,9 +52,28 @@ class RentController
             $stmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
 
             if ($stmt->execute()) {
+                // Get landlord phone number and apartment name
+                $landlordQuery = "
+                    SELECT l.phone_number, l.property_name AS apartment_name 
+                    FROM landlords l
+                    JOIN listings li ON l.id = li.user_id
+                    WHERE li.id = (SELECT listing_id FROM rent WHERE id = :booking_id)
+                ";
+                $stmt = $this->db->prepare($landlordQuery);
+                $stmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
+                $stmt->execute();
+                $landlord = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $landlordPhone = $landlord['phone_number'];
+                $apartmentName = $landlord['apartment_name'];
+
+                // Send SMS to the landlord
+                $message = "Payment of PHP $rentAmount for the apartment $apartmentName has been made for the month of $dueMonth. Reference Number: $referenceNumber.";
+                $this->sendSMS($landlordPhone, $message);
+
                 return [
                     'status' => 'success',
-                    'message' => 'Payment recorded successfully.',
+                    'message' => 'Payment recorded successfully and SMS notification sent to landlord.',
                     'redirect_url' => 'rent.php'
                 ];
             } else {
@@ -59,6 +88,39 @@ class RentController
                 'message' => 'Database error: ' . $e->getMessage()
             ];
         }
+    }
+
+    /**
+     * Send an SMS using Semaphore
+     *
+     * @param string $phone
+     * @param string $message
+     */
+    public function sendSMS($phone, $message)
+    {
+        $ch = curl_init();
+        $apiKey = $_ENV['SMS_API'];
+        $senderName = 'SNIHS'; // Update as needed
+
+        $data = [
+            'apikey' => $apiKey,
+            'number' => $phone,
+            'message' => $message,
+            'sendername' => $senderName,
+        ];
+
+        curl_setopt($ch, CURLOPT_URL, "https://api.semaphore.co/api/v4/messages");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $output = curl_exec($ch);
+
+        if (!$output) {
+            error_log('Error sending SMS: ' . curl_error($ch));
+        }
+
+        curl_close($ch);
     }
 }
 

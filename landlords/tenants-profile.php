@@ -33,7 +33,7 @@ if (isset($_GET['id'])) {
     <div class="p-6">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">Tenant's Profile</h1>
-            <a href="inquiries" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Back</a>
+            <a href="index" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Back</a>
         </div>
         <section class="w-full overflow-hidden bg-background">
             <div class="flex flex-col">

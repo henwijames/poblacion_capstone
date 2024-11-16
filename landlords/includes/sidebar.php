@@ -32,6 +32,9 @@
             </a>
             <ul class="pl-7 mt-2 hidden group-[.selected]:block">
                 <li class="mb-4">
+                    <a href="rents" class="text-sm flex items-center dot hover:text-primary">Rents</a>
+                </li>
+                <li class="mb-4">
                     <a href="inquiries" class="text-sm flex items-center dot hover:text-primary">Inquiries</a>
                 </li>
                 <li class="mb-4">

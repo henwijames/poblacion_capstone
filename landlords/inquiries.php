@@ -126,5 +126,55 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         }))
     }
+
+    function declineInquiry(inquiryId) {
+        const declineButton = document.querySelector(`#declineButton_${inquiryId}`);
+
+        declineButton.disabled = true;
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to decline the inquiry of this account?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#C1C549",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Decline"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('loader').classList.remove('hidden');
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "Controllers/declineInquiry.php?id=" + inquiryId, true);
+                xhr.onload = function() {
+                    document.getElementById('loader').classList.add('hidden');
+                    if (xhr.status === 200) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                Swal.fire(
+                                    "Declined!",
+                                    response.message,
+                                    "success"
+                                ).then(() => {
+                                    window.location.href = "inquiries.php"; // Adjust the URL if needed
+                                });
+                            } else {
+                                Swal.fire("Error", response.message, "error");
+                            }
+                        } catch (e) {
+                            console.error("Error parsing JSON:", e);
+                            console.log("Server Response:", xhr.responseText); // Log the invalid response for debugging
+                            Swal.fire("Error", "Failed to parse the response from the server.", "error");
+                        }
+                    } else {
+                        console.error("Request failed with status", xhr.status);
+                        Swal.fire("Error", "Failed to send verification request.", "error");
+                    }
+                };
+                xhr.send();
+            } else {
+                declineButton.disabled = false;
+            }
+        })
+    }
 </script>
 <?php include 'includes/footer.php'; ?>

@@ -4,6 +4,18 @@ require_once '../../Controllers/Database.php';
 require_once '../../Models/Landlords.php';
 require_once '../../Models/Tenants.php';
 require_once '../../Models/Listing.php';
+require_once '../../vendor/autoload.php'; // Include PHPMailer via Composer
+
+use Dotenv\Dotenv;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$dotenv = Dotenv::createImmutable('D:\xampp\htdocs\Poblacion');
+try {
+    $dotenv->load();
+} catch (Exception $e) {
+    die('Failed to load .env file: ' . $e->getMessage());
+}
 
 $database = new Database();
 $db = $database->getConnection();
@@ -12,12 +24,10 @@ $listing = new Listing($db);
 $landlords = new Landlords($db);
 
 $listing_id =  $_GET['id'] ?? null;
-
 $user_id = $_SESSION['user_id'];
 
 $listingDetails = $listing->getListingById($listing_id);
 $landlord = $landlords->findById($listingDetails['user_id']);
-
 $landlord_id = $listingDetails['user_id'];
 
 // Decode the payment options (if any) and check if it's an array
@@ -64,20 +74,93 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
         $stmt->bindParam(':landlord_id', $landlord_id, PDO::PARAM_INT);
         $stmt->execute();
 
-        // Update the status of the listing to 'pending'
-        $updateListingQuery = "UPDATE listings SET status = 'pending' WHERE id = :listing_id";
-        $updateStmt = $db->prepare($updateListingQuery);
-        $updateStmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
-        $updateStmt->execute();
-
         // Commit the transaction
         $db->commit();
 
-        echo "Booking successful! Listing status updated to pending.";
+        // Notify landlord via email
+        sendEmailNotificationToLandlord($landlord['email'], $listingDetails, $total_amount, $check_in);
+
+        echo "Booking successful! Landlord notified.";
         header("Location: ../inquiries.php");
     } catch (Exception $e) {
         // Rollback the transaction if something goes wrong
         $db->rollBack();
         echo "Failed to book. Error: " . $e->getMessage();
+    }
+}
+
+/**
+ * Function to send an email notification to the landlord
+ *
+ * @param string $landlordEmail
+ * @param array $listingDetails
+ * @param string $checkInDate
+ */
+function sendEmailNotificationToLandlord($landlordEmail, $listingDetails, $totalAmount, $checkInDate)
+{
+    $mail = new PHPMailer(true);
+    $emailBody = '
+    <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+            <head>
+                <meta charset="UTF-8">
+                <meta content="width=device-width, initial-scale=1" name="viewport">
+                <title>Rent Payment Reminder</title>
+            </head>
+            <body class="body">
+                <div dir="ltr" class="es-wrapper-color">
+                    <table width="100%" cellspacing="0" cellpadding="0" class="es-wrapper">
+                        <tbody>
+                            <tr>
+                                <td valign="top" class="esd-email-paddings">
+                                    <table width="600" cellspacing="0" cellpadding="0" align="center" class="es-content-body" style="background-color:transparent">
+                                        <tbody>
+                                            <tr>
+                                                <td align="center" class="esd-block-image" style="font-size:0">
+                                                    <img src="https://fptpbfq.stripocdn.email/content/guids/CABINET_905d63f3814e55730c693afd59e4c30260908b814c9950bcfeb18e2a36b9dd7a/images/poblacionease_Tdn.png" alt="PoblacionEase" width="197">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <h2>Hello, ' . $listingDetails['property_name'] . 'Landlord!</h2>
+                                                    <p>You have received a new inquiry for your listing <b>' . $listingDetails['listing_name'] . '</b>.</p>
+                                                    <p><b>Check-in Date:</b>' . $checkInDate . '</p>
+                                                    <p><b>Total Amount:</b> ' . htmlspecialchars(number_format($totalAmount, 2)) . '</p>
+                                                    <p>Kindly review the details in your dashboard.</p>
+                                                    <p>Thank you!</p>
+                                                    <p>Best regards,<br>PoblacionEase</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </body>
+            </html>';
+
+    try {
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host = $_ENV['SMTP_HOST']; // Replace with your SMTP host
+        $mail->SMTPAuth = true;
+        $mail->Username = $_ENV['SMTP_USER']; // Replace with your email
+        $mail->Password = $_ENV['SMTP_PASS']; // Replace with your email password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = $_ENV['SMTP_PORT'];
+
+        // Email setup
+        $mail->setFrom('poblacionease@gmail.com', 'PoblacionEase'); // Replace with sender info
+        $mail->addAddress($landlordEmail); // Send to the landlord
+
+        $mail->isHTML(true);
+        $mail->Subject = 'New Inquiry for Your Listing';
+        $mail->Body = $emailBody;
+
+        // Send email
+        $mail->send();
+    } catch (Exception $e) {
+        echo "Notification email could not be sent. Error: {$mail->ErrorInfo}";
     }
 }

@@ -41,6 +41,7 @@ $tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom metho
                                 <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['address']); ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['phone_number']); ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200 text-center">
+                                    <a href="tenants-profile?id=<?php echo $tenant['id']; ?>" class="btn btn-info btn-sm text-sm text-white">Profile</a>
                                     <a href="tenant-transaction.php?id=<?php echo $tenant['id']; ?>" class="btn bg-primary btn-sm text-white">View Transactions</a>
                                     <a href="delete-tenant.php?id=<?php echo $tenant['id']; ?>" class="btn btn-error btn-sm text-white">Delete</a>
                                     <a href="delete-tenant.php?id=<?php echo $tenant['id']; ?>" class="btn btn-warning btn-sm text-white">Block</a>
