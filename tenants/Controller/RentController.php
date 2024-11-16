@@ -52,6 +52,16 @@ class RentController
             $stmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
 
             if ($stmt->execute()) {
+
+                $updateRentStatusQuery = "
+                UPDATE rent
+                SET rent_status = 'pending'
+                WHERE id = :booking_id
+            ";
+                $stmt = $this->db->prepare($updateRentStatusQuery);
+                $stmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
+                $stmt->execute();
+
                 // Get landlord phone number and apartment name
                 $landlordQuery = "
                     SELECT l.phone_number, l.property_name AS apartment_name 

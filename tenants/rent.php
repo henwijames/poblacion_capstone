@@ -125,6 +125,28 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </td>
                                     <td class="px-6 py-3 border-b">
                                         <a href="rent-listing?id=<?php echo $rent['listing_id'] ?>" class="btn bg-primary text-white">View Rent</a>
+                                        <button class="btn btn-warning text-white" onclick="document.getElementById('modal_<?= $rent['listing_id']; ?>').showModal()">Complain</button>
+                                        <dialog id="modal_<?= $rent['listing_id']; ?>" class="modal modal-bottom sm:modal-middle">
+                                            <div class="modal-box">
+                                                <form method="dialog">
+                                                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                </form>
+                                                <h3 class="font-bold text-lg">Submit a Complaint</h3>
+                                                <form id="complain-form-<?= $rent['listing_id']; ?>">
+                                                    <input type="hidden" name="listing_id" value="<?= $rent['listing_id']; ?>">
+                                                    <label class="form-control">
+                                                        <div class="label">
+                                                            <span class="label-text">Your Complaint</span>
+                                                        </div>
+                                                        <textarea name="complain_message" class="textarea textarea-bordered h-24" placeholder="Enter your complaint here..."></textarea>
+                                                    </label>
+                                                    <div class="modal-action">
+                                                        <button type="submit" class="btn btn-sm bg-primary text-white">Submit</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </dialog>
 
                                     </td>
                                 </tr>
@@ -140,62 +162,65 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </main>
     <script>
-        function payRent(bookingId, totalAmount, referenceNumber) {
-            const modal = document.getElementById(`modal_${bookingId}`);
-            // Setup AJAX request for payment initiation
-            if (!referenceNumber) {
-                modal.close();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Reference Number Required',
-                    text: 'Please enter a reference number to proceed with the payment.'
-                }).then(() => {
-                    modal.showModal();
-                });
-                return;
-            }
+        document.querySelectorAll('form[id^="complain-form-"]').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
 
-            modal.close();
-            $.ajax({
-                url: 'Controller/RentController.php',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    booking_id: bookingId,
-                    reference_number: referenceNumber,
-                    total_amount: totalAmount
-                },
-                success: function(response) {
-                    if (response.status === 'success') {
-                        // Show success message
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Transaction Completed',
-                            text: response.message
-                        }).then(() => {
-                            // Redirect to the inquiries page
-                            window.location.href = response.redirect_url;
-                        });
-                    } else {
-                        // Show error message if transaction failed
+
+                const formData = new FormData(this);
+                const listingId = formData.get('listing_id');
+                const complaintMessage = formData.get('complain_message').trim();
+                const modal = document.getElementById(`modal_${listingId}`);
+                modal.close()
+
+                // Validate if the textarea is empty
+                if (!complaintMessage) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Empty Complaint',
+                        text: 'Please enter your complaint before submitting.',
+                    }).then(() => {
+                        modal.show();
+                    })
+                    modal.close()
+                    return; // Do not proceed if validation fails
+                }
+
+                // AJAX Request to submit the complaint
+                $.ajax({
+                    url: '../Controllers/ComplaintController.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        response = JSON.parse(response);
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Complaint Submitted',
+                                text: response.message,
+                            }).then(() => {
+                                modal.close(); // Close the modal
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function() {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
-                            text: response.message
+                            title: 'Request Failed',
+                            text: 'There was an error submitting your complaint.',
                         });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', error);
-                    console.log('Response:', xhr.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Request Failed',
-                        text: 'There was an error processing your request.'
-                    });
-                }
+                    },
+                });
             });
-        }
+        });
     </script>
 
     <?php require 'includes/footer.php'; ?>

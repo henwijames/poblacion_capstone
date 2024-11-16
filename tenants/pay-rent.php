@@ -128,7 +128,7 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
 
                             <div class="flex justify-between items-center mt-4">
-                                <?php if ($rent['rent_status'] !== 'verified') : ?>
+                                <?php if ($rent['rent_status'] == 'paid') : ?>
                                     <button class="btn bg-primary text-white w-full" onclick="document.getElementById('modal_<?php echo $rent['id']; ?>').showModal()">
                                         Pay Rent
                                     </button>
@@ -172,10 +172,7 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     </dialog>
                                 <?php else : ?>
-                                    <button onclick="cancelBooking(<?php echo htmlspecialchars($rent['user_id']); ?>)"
-                                        class="btn bg-warning text-white w-full">
-                                        Cancel
-                                    </button>
+                                    <h2 class="font-bold text-red-500">Wait for the landlord's approval</h2>
                                 <?php endif; ?>
                             </div>
 

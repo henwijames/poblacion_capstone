@@ -84,7 +84,11 @@ if ($action && $transaction_id) {
                     }
 
                     // Update rent table with the new due_month
-                    $updateRentQuery = "UPDATE rent SET due_month = :new_due_month WHERE listing_id = :listing_id AND user_id = :tenant_id";
+                    $updateRentQuery = "
+                        UPDATE rent 
+                        SET due_month = :new_due_month, rent_status = 'paid' 
+                        WHERE listing_id = :listing_id AND user_id = :tenant_id
+                    ";
                     $updateRentStmt = $db->prepare($updateRentQuery);
                     $updateRentStmt->bindParam(':new_due_month', $new_due_month);
                     $updateRentStmt->bindParam(':listing_id', $listing_id);

@@ -21,7 +21,7 @@ $tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom metho
             <h1 class="text-2xl font-bold">Tenants</h1>
             <a href="rents.php" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Rents</a>
         </div>
-        <div class="mt-4">
+        <div class="mt-4 overflow-x-auto">
             <table class="w-full border border-gray-200 rounded-md">
                 <thead class="bg-gray-50">
                     <tr class="bg-slate-100">
@@ -42,8 +42,8 @@ $tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom metho
                                 <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['phone_number']); ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200 text-center">
                                     <a href="tenants-profile?id=<?php echo $tenant['id']; ?>" class="btn btn-info btn-sm text-sm text-white">Profile</a>
+                                    <a href="tenants-complaint?id=<?php echo $tenant['id']; ?>" class="btn btn-info btn-sm text-sm text-white">Complaints</a>
                                     <a href="tenant-transaction.php?id=<?php echo $tenant['id']; ?>" class="btn bg-primary btn-sm text-white">View Transactions</a>
-                                    <a href="delete-tenant.php?id=<?php echo $tenant['id']; ?>" class="btn btn-error btn-sm text-white">Delete</a>
                                     <a href="delete-tenant.php?id=<?php echo $tenant['id']; ?>" class="btn btn-warning btn-sm text-white">Block</a>
                                 </td>
                             </tr>

@@ -12,11 +12,11 @@ unset($_SESSION['form_data']);
 <main class="home  flex flex-col items-center justify-center min-h-screen">
     <div class="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
         <div class="flex flex-col justify-center p-8 md:p-14">
-            <span class="mb-3 text-5xl font-bold text-[#C1C549] uppercase">log<span class="text-secondary">in</span></span>
+            <span class="mb-2 text-2xl font-bold text-[#C1C549] uppercase">Forgot <span class="text-secondary">Password?</span></span>
             <span class="font-light text-gray-400 mb-4">
-                Welcome back to <a href="index" class="font-bold">Poblacion<span class="text-primary">Ease</span></a>. Please login to your account.
+                Enter your email and we'll send you a link to reset your password.
             </span>
-            <form action="Controllers/LoginController.php" method="POST">
+            <form action="Controllers/ForgotLandlordController.php" method="POST">
                 <?php if (isset($errors['login'])): ?>
                     <p class="text-red-500 text-sm mb-4"><?php echo htmlspecialchars($errors['login']); ?></p>
                 <?php endif; ?>
@@ -28,27 +28,15 @@ unset($_SESSION['form_data']);
                         <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['email']); ?></p>
                     <?php endif; ?>
                 </div>
-                <div class="py-4">
-                    <span class="mb-2 text-md">Password</span>
-                    <input type="password" class="w-full p-2 border border-gray-300 rounded-md
-                placeholder:font-light placeholder:text-gray-500" name="password" id="password" placeholder="Enter your password">
-                    <?php if (isset($errors['password'])): ?>
-                        <p class=" text-red-500 text-sm"><?php echo htmlspecialchars($errors['password']); ?></p>
-                    <?php endif; ?>
-                </div>
-                <div class="flex justify-between w-full py-4">
-                    <a href="chooseforgot" class="font-bold text-md hover:text-gray-400 transition-colors ease">Forgot Password?</a>
-                </div>
-                <button id="login-button" class="w-full bg-[#C1C549] text-white p-2 rounded-lg mb-6 flex items-center justify-center
-                    hover:bg-accent border-[#C1C549] hover:border 
-                    hover:border-gray-300 transition-all ease-in uppercase shadow"
+                <button id="login-button" class="btn bg-primary w-full mb-3 text-white"
                     type="submit">
-                    <span id="login-text">Login</span>
+                    <span id="login-text">Submit</span>
                     <img id="login-loader" src="assets/loader2.gif" style="display: none; width: 20px; height: 20px; vertical-align: middle; margin-left: 10px;">
                 </button>
             </form>
             <div class="text-center text-gray-400">
-                Don't have an account? <a href="choose" class="text-black font-bold hover:text-[#C1C549]">Sign Up</a>
+
+                Go back to <a href="choose" class="text-black font-bold hover:text-[#C1C549]">Login</a>
             </div>
         </div>
         <div class="relative">

@@ -1270,6 +1270,11 @@ html{
   }
 }
 
+.form-control{
+  display: flex;
+  flex-direction: column;
+}
+
 .label{
   display: flex;
   -webkit-user-select: none;
@@ -2182,6 +2187,20 @@ input.tab:checked + .tab-content,
   --tw-bg-opacity: 0.2;
   color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
   --tw-text-opacity: 0.2;
+}
+
+.label-text{
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
+}
+
+.label-text-alt{
+  font-size: 0.75rem;
+  line-height: 1rem;
+  --tw-text-opacity: 1;
+  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
 }
 
 .input input{
@@ -3496,10 +3515,6 @@ input.tab:checked + .tab-content,
   margin-right: 0.5rem;
 }
 
-.mr-24{
-  margin-right: 6rem;
-}
-
 .mr-3{
   margin-right: 0.75rem;
 }
@@ -3526,6 +3541,10 @@ input.tab:checked + .tab-content,
 
 .mt-\[60px\]{
   margin-top: 60px;
+}
+
+.mr-4{
+  margin-right: 1rem;
 }
 
 .block{
@@ -3634,6 +3653,10 @@ input.tab:checked + .tab-content,
 
 .h-full{
   height: 100%;
+}
+
+.h-24{
+  height: 6rem;
 }
 
 .max-h-\[10rem\]{
