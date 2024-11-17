@@ -26,17 +26,38 @@ $landlords = new Landlords($db);
 $listing_id =  $_GET['id'] ?? null;
 $user_id = $_SESSION['user_id'];
 
-$listingDetails = $listing->getListingById($listing_id);
-$landlord = $landlords->findById($listingDetails['user_id']);
-$landlord_id = $listingDetails['user_id'];
+
 
 // Decode the payment options (if any) and check if it's an array
-$paymentOptions = json_decode($listingDetails['payment_options'], true);
-if (!is_array($paymentOptions)) {
-    $paymentOptions = [];  // Ensure it's an empty array if it's not valid
-}
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
+
+    $listingDetails = $listing->getListingById($listing_id);
+    if (!$listingDetails) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Listing not found or no longer available.'
+        ]);
+        exit;
+    }
+
+    $landlord = $landlords->findById($listingDetails['user_id']);
+    if (!$landlord) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Landlord information not found.'
+        ]);
+        exit;
+    }
+    $landlord_id = $listingDetails['user_id'];
+
+    $paymentOptions = json_decode($listingDetails['payment_options'], true);
+
+
+    if (!is_array($paymentOptions)) {
+        $paymentOptions = [];  // Ensure it's an empty array if it's not valid
+    }
+
     $errors = [];
 
     $check_in = $_POST['check_in'];
@@ -81,13 +102,47 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
         sendEmailNotificationToLandlord($landlord['email'], $listingDetails, $total_amount, $check_in);
 
         echo "Booking successful! Landlord notified.";
-        header("Location: ../inquiries.php");
+        header("Location: ../inquiries.php?id=");
     } catch (Exception $e) {
         // Rollback the transaction if something goes wrong
         $db->rollBack();
         echo "Failed to book. Error: " . $e->getMessage();
     }
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'cancel') {
+    $bookingId = $_POST['booking_id'];
+
+    try {
+        $database = new Database();
+        $db = $database->getConnection();
+        $booking = new Tenants($db);
+
+        // Attempt to delete booking
+        if ($booking->deleteBooking($bookingId)) {
+            // Ensure no other output is sent before this response
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Booking has been successfully deleted.'
+            ]);
+            exit; // Stop script execution
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to delete booking. It may not exist or has already been deleted.'
+            ]);
+            exit;
+        }
+    } catch (Exception $e) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'An unexpected error occurred: ' . $e->getMessage()
+        ]);
+        exit;
+    }
+}
+
+
 
 /**
  * Function to send an email notification to the landlord

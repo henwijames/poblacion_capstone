@@ -56,8 +56,6 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     if ($inquiry['booking_status'] !== 'verified') {
                                         echo '<button id="verifyButton_' . $inquiry['id'] . '" onclick="verifyInquiry(' . $inquiry['id'] . ')" class="btn btn-sm bg-primary text-white">Verify</button>';
                                         echo '<button id="declineButton_' . $inquiry['id'] . '" onclick="declineInquiry(' . $inquiry['id'] . ')" class="btn btn-sm btn-error text-white">Decline</button>';
-                                    } else {
-                                        echo '<button onclick="blockTenant(' . $inquiry['user_id'] . ')" class="btn btn-sm btn-warning text-white">Block</button>';
                                     }
                                     ?>
                                 </td>

@@ -147,6 +147,53 @@ unset($_SESSION['same_email']);
                         <p class="text-red-500 text-sm"><?php echo htmlspecialchars($errors['confirm']); ?></p>
                     <?php endif; ?>
                 </div>
+                <p class="text-sm">By clicking "Sign Up" I agree that I have read and accepted the <span class="font-bold text-primary"><a href="#my_modal_8">Terms and Condition</a></span></p>
+                <div class="modal" role="dialog" id="my_modal_8">
+                    <div class="modal-box">
+                        <h3 class="text-lg font-bold">Terms and Conditions</h3>
+                        <div class="py-4 overflow-y-auto max-h-96">
+                            <p>
+                                <b>1. General Terms</b><br>
+                                1.1 These terms and conditions govern the use of the platform by both landlords and tenants.<br>
+                                1.2 By using this platform, all users agree to abide by the following terms and conditions.<br>
+                                1.3 The platform operates under the jurisdiction of the Taal Government and adheres to all applicable laws and regulations.
+                            </p>
+                            <p class="mt-4">
+                                <b>2. For Landlords</b><br>
+                                2.1 <b>Business Permit Requirement:</b> All landlords are required to possess a valid business permit to list their properties on the platform.<br>
+                                2.2 <b>Property Verification:</b> Each listed property will be verified by the Taal Government before it becomes available on the platform to ensure compliance with local laws.
+                            </p>
+                            <p class="mt-4">
+                                <b>3. For Tenants</b><br>
+                                3.1 <b>Valid ID Requirement:</b> All tenants must provide a valid government-issued ID when making a booking or inquiry.<br>
+                                3.2 <b>Verification Process:</b> Tenant IDs will be verified by the Taal Government administration to ensure authenticity.
+                            </p>
+                            <p class="mt-4">
+                                <b>4. Confidentiality and Access to Credentials</b><br>
+                                4.1 <b>Data Security:</b> The platform ensures the confidentiality of all user credentials (business permits and valid IDs).<br>
+                                4.2 <b>Exclusive Access:</b> Only the Taal Government administration has access to user credentials for verification purposes. The platform does not store or share sensitive information with unauthorized third parties.<br>
+                                4.3 <b>Compliance with Laws:</b> The platform operates in full compliance with data privacy laws to ensure the safety of user information.
+                            </p>
+                            <p class="mt-4">
+                                <b>5. Liability</b><br>
+                                5.1 The platform is not responsible for delays in permit processing, property verification, or ID authentication caused by user non-compliance or external factors beyond the platform's control.<br>
+                                5.2 Users are responsible for ensuring the accuracy and authenticity of the information provided.
+                            </p>
+                            <p class="mt-4">
+                                <b>6. Acceptance of Terms</b><br>
+                                By using this platform, all users confirm that they have read, understood, and agreed to these terms and conditions.
+                            </p>
+                        </div>
+                        <div class="modal-action">
+
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" id="accept_terms" class="checkbox">
+                                <span class="text-sm">I agree to the Terms and Conditions</span>
+                            </label>
+                            <a href="#" id="agree_button" class="btn bg-primary text-white" disabled>Agree</a>
+                        </div>
+                    </div>
+                </div>
                 <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 h-10 px-4 py-2 w-full border border-[#C1C549] bg-primary hover:bg-accent" type="submit">
                     Sign Up
                 </button>
@@ -158,6 +205,17 @@ unset($_SESSION['same_email']);
     </main>
 </div>
 <script>
+    const checkbox = document.getElementById('accept_terms');
+    const button = document.getElementById('agree_button');
+
+    checkbox.addEventListener('change', function() {
+        if (checkbox.checked) {
+            button.removeAttribute('disabled'); // Enable the button
+        } else {
+            button.setAttribute('disabled', 'true'); // Disable the button
+        }
+    });
+
     $(document).ready(function() {
 
         $('#password, #confirm').on('input', function() {

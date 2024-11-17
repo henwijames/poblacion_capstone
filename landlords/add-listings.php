@@ -18,7 +18,41 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'landlord') {
             <script>
                 Swal.fire({
                     title: 'Verification Required',
-                    text: 'You must verify your account to proceed.',
+                    text: 'You must verify your account to add listings.',
+                    allowOutsideClick: false,
+                    icon: 'warning',
+                    confirmButtonColor: '#C1C549',
+                    confirmButtonText: 'OK',
+                    showClass: {
+                    popup: `
+      animate__animated
+      animate__fadeInUp
+      animate__faster
+    `,
+                },
+                hideClass: {
+                    popup: `
+      animate__animated
+      animate__fadeOutDown
+      animate__faster
+    `,
+                },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'index';
+                    }
+                });
+            </script>
+        ";
+        exit;
+    }
+
+    if ($landlordDetails['account_status'] === 'banned') {
+        echo "
+            <script>
+                Swal.fire({
+                    title: 'Your Account is Banned',
+                    text: 'You must have not any access in the system',
                     allowOutsideClick: false,
                     icon: 'warning',
                     confirmButtonColor: '#C1C549',
@@ -159,10 +193,35 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'landlord') {
                         </div>
                     </div>
                     <div>
-                        <h3 class="text-lg font-medium text-gray-700">Amenities</h3>
+                        <h3 class="text-lg font-medium text-gray-700">Utilities</h3>
                         <div class="grid grid-cols-2 gap-4 mt-2">
 
 
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="utilities[]" value="electric bill" class="checkbox">
+                                    <span class="ml-2 text-sm text-gray-700">Electric Bill</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="utilities[]" value="water" class="checkbox">
+                                    <span class="ml-2 text-sm text-gray-700">Water</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="utilities[]" value="wifi" class="checkbox">
+                                    <span class="ml-2 text-sm text-gray-700">Wifi</span>
+                                </label>
+                            </div>
+
+                            <!-- Add more checkboxes for additional amenities as needed -->
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-700">Amenities</h3>
+                        <div class="grid grid-cols-2 gap-4 mt-2">
                             <div>
                                 <label class="inline-flex items-center">
                                     <input type="checkbox" name="amenities[]" value="gym" class="checkbox">
@@ -314,65 +373,6 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'landlord') {
                         </button>
                     </div>
                 </form>
-            </div>
-            <div>
-                <h2 class="text-2xl font-bold mb-4">Your Listings</h2>
-                <div class="space-y-4">
-                    <div class="bg-white rounded-lg shadow-md p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-medium">123 Main St, Anytown USA</h3>
-                            <div class="flex gap-2">
-                                <button class="text-primary hover:text-primary-dark">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                </button>
-                                <button class="text-red-500 hover:text-red-700">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <p class="text-gray-500 mb-2">2 bedrooms, 1 bathroom</p>
-                        <p class="text-gray-500 mb-2">1200 sq ft</p>
-                        <p class="text-gray-500 mb-2">$1500/month</p>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-md p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-medium">456 Oak St, Anytown USA</h3>
-                            <div class="flex gap-2">
-                                <button class="text-primary hover:text-primary-dark">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                </button>
-                                <button class="text-red-500 hover:text-red-700">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <p class="text-gray-500 mb-2">3 bedrooms, 2 bathrooms</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

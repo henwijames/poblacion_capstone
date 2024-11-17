@@ -5,6 +5,7 @@ include 'session.php';
 include '../Controllers/Database.php';
 include '../Models/Listing.php';
 include '../Models/Landlords.php';
+include '../Models/Tenants.php';
 
 $userName = "Guest";
 $defaultProfilePicture = "../assets/img/me.jpg"; //Default profile picture
@@ -62,11 +63,15 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
 
+
 <body class="font-custom">
+
     <?php require 'includes/sidebar.php'; ?>
 
 
+
     <main class="main-content main">
+
         <?php require 'includes/topbar.php'; ?>
         <div class="flex flex-col">
             <!-- Cover Image -->
@@ -136,4 +141,47 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
             </div>
         </div>
     </main>
+    <?php
+    if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'tenant') {
+        $database = new Database();
+        $db = $database->getConnection();
+        $tenantId = $_SESSION['user_id'];
+        $tenant = new Tenants($db);
+        $tenantDetails = $tenant->findById($tenantId);
+
+        if ($tenantDetails['account_status'] === 'banned') {
+            echo "
+            <script>
+                Swal.fire({
+                    title: 'Your Account is Banned',
+                    text: 'You must pay your balance',
+                    allowOutsideClick: false,
+                    icon: 'warning',
+                    confirmButtonColor: '#C1C549',
+                    confirmButtonText: 'OK',
+                    showClass: {
+                    popup: `
+      animate__animated
+      animate__fadeInUp
+      animate__faster
+    `,
+                },
+                hideClass: {
+                    popup: `
+      animate__animated
+      animate__fadeOutDown
+      animate__faster
+    `,
+                },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'pay-rent';
+                    }
+                });
+            </script>
+        ";
+            exit;
+        }
+    }
+    ?>
     <?php require 'includes/footer.php'; ?>

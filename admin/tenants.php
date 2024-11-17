@@ -40,7 +40,8 @@ $tenantsList = $tenants->getAllTenants();
                                     <span class=" badge text-sm inline-flex items-center capitalize text-white
                                 <?php echo ($tenant['account_status'] == 'pending') ? 'badge-warning' : ''; ?>
                                 <?php echo ($tenant['account_status'] == 'verified') ? 'badge-success' : ''; ?>
-                                <?php echo ($tenant['account_status'] == 'declined') ? 'badge-error' : ''; ?>">
+                                <?php echo ($tenant['account_status'] == 'declined') ? 'badge-error' : ''; ?>
+                                <?php echo ($tenant['account_status'] == 'banned') ? 'badge-error' : ''; ?>">
                                         <?php echo htmlspecialchars($tenant['account_status']); ?>
                                     </span>
                                 </td>
@@ -72,7 +73,7 @@ $tenantsList = $tenants->getAllTenants();
                                         echo '<button onclick="verifyTenant(' . $tenant['id'] . ')" class="btn btn-sm bg-primary text-white">Verify</button>';
                                         echo '<button id="declineButton_' . $tenant['id'] . '" onclick="declineTenant(' . $tenant['id'] . ')" class="btn btn-sm btn-error text-white">Decline</button>';
                                     } else {
-                                        echo '<button onclick="blockTenant(' . $tenant['id'] . ')" class="btn btn-sm btn-warning text-white">Block</button>';
+                                        echo '<button id="blockButton_' . $tenant['id'] . '" onclick="blockTenant(' . $tenant['id'] . ')" class="btn btn-sm btn-warning text-white">Block</button>';
                                     }
                                     ?>
                                 </td>
@@ -201,6 +202,58 @@ $tenantsList = $tenants->getAllTenants();
                 xhr.send();
             } else {
                 declineButton.disabled = false;
+            }
+        })
+    }
+
+    function blockTenant(tenantId) {
+        const blockButton = document.querySelector(`#blockButton_${tenantId}`);
+
+        blockButton.disabled = true;
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to block this account?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#C1C549",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Block"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                document.getElementById('loader').classList.remove('hidden');
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "Controllers/blockTenants.php?id=" + tenantId, true);
+                xhr.onload = function() {
+                    document.getElementById('loader').classList.add('hidden');
+                    if (xhr.status === 200) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status === "success") {
+                                Swal.fire(
+                                    "Banned!",
+                                    response.message,
+                                    "success"
+                                ).then(() => {
+                                    window.location.href = "tenants.php"; // Adjust the URL if needed
+                                });
+                            } else {
+                                Swal.fire("Error", response.message, "error");
+                            }
+                        } catch (e) {
+                            console.error("Error parsing JSON:", e);
+                            console.log("Server Response:", xhr.responseText); // Log the invalid response for debugging
+                            Swal.fire("Error", "Failed to parse the response from the server.", "error");
+                        }
+                    } else {
+                        console.error("Request failed with status", xhr.status);
+                        Swal.fire("Error", "Failed to send verification request.", "error");
+                    }
+                };
+                xhr.send();
+            } else {
+                blockButton.disabled = false;
             }
         })
     }

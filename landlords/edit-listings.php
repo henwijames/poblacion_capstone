@@ -102,6 +102,36 @@ unset($_SESSION['form_data']);
                         </div>
                     </div>
                     <div>
+                        <h3 class="text-lg font-medium text-gray-700">Utilities</h3>
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+
+                            <?php
+                            // Decode the amenities from JSON if it's in string format
+                            $utilitiesArray = json_decode($listingDetails['utilities'], true) ?? [];
+                            ?>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="utilities[]" value="electric bill" class="checkbox" <?php echo in_array("electric bill", $utilitiesArray) ? 'checked' : ''; ?>>
+                                    <span class="ml-2 text-sm text-gray-700">Electric Bill</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="utilities[]" value="water" class="checkbox" <?php echo in_array("water", $utilitiesArray) ? 'checked' : ''; ?>>
+                                    <span class="ml-2 text-sm text-gray-700">Water</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="utilities[]" value="wifi" class="checkbox" <?php echo in_array("wifi", $utilitiesArray) ? 'checked' : ''; ?>>
+                                    <span class="ml-2 text-sm text-gray-700">Wifi</span>
+                                </label>
+                            </div>
+
+                            <!-- Add more checkboxes for additional amenities as needed -->
+                        </div>
+                    </div>
+                    <div>
                         <h3 class="text-lg font-medium text-gray-700">Amenities</h3>
                         <div class="grid grid-cols-2 gap-4 mt-2">
                             <?php
@@ -145,10 +175,6 @@ unset($_SESSION['form_data']);
                     <div>
                         <label for="sqft" class="block text-sm font-medium text-gray-700">Square Meters</label>
                         <input id="sqft" type="number" name="sqft" class="input input-bordered w-full" placeholder="1200" value="<?= htmlspecialchars($listingDetails['sqft']); ?>" />
-                    </div>
-                    <div>
-                        <label for="rent" class="block text-sm font-medium text-gray-700">Rent Price</label>
-                        <input id="rent" type="number" class="input input-bordered w-full" placeholder="1500" name="rent" value="<?= htmlspecialchars($listingDetails['rent']); ?>" />
                     </div>
                     <div>
                         <label for="description" class="block text-sm font-medium text-gray-700">Description</label>

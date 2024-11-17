@@ -1,9 +1,11 @@
 <?php
+
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'tenant') {
     $_SESSION['errors'] = ['login' => 'Please login as a tenant to view that page.'];
     header("Location: ../login");
     exit();
 }
+
 
 // Disable caching of the login page
 header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.

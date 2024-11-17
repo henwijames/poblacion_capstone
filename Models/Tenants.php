@@ -44,6 +44,36 @@ class Tenants
         return $stmt->execute();
     }
 
+    public function blockTenant($tenantId)
+    {
+        $query = "UPDATE tenants SET account_status = 'banned' WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $tenantId);
+        return $stmt->execute();
+    }
+
+    public function deleteBooking($bookingId)
+    {
+        $query = "DELETE FROM bookings WHERE id = :booking_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
+
+        // Execute the query and check results
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() > 0) {
+                return true; // Successfully deleted
+            } else {
+                return false; // No rows affected, possibly invalid booking ID
+            }
+        } else {
+            // Log detailed error information
+            error_log("Delete query failed: " . json_encode($stmt->errorInfo()));
+            return false;
+        }
+    }
+
+
+
     public function searchTenants($searchTerm)
     {
         $query = "SELECT * FROM tenants WHERE first_name LIKE :search OR last_name LIKE :search OR address LIKE :search OR account_status LIKE :search";

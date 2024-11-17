@@ -42,7 +42,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Profile Image and Name -->
                 <div class="sm:w-[80%] xs:w-[90%] mx-auto flex flex-col items-center -mt-16">
-                    <img src="<?= htmlspecialchars("../tenants/Controller/uploads/" . $profilePicture); ?>" alt="User Profile" class="rounded-full w-28 h-28 sm:w-32 sm:h-32 lg:w-48 lg:h-48 relative object-cover" />
+                    <img src="<?php echo !empty($tenant['profile_picture']) ? '../tenants/Controller/uploads/' . htmlspecialchars($tenant['profile_picture']) : '../assets/img/me.jpg'; ?>" alt="User Profile" class="rounded-full w-28 h-28 sm:w-32 sm:h-32 lg:w-48 lg:h-48 relative object-cover" />
 
                     <h1 class="w-full text-center md:my-2 my-6 text-primary font-bold text-2xl sm:text-3xl lg:text-4xl">
                         <?php echo htmlspecialchars($fullName); ?>

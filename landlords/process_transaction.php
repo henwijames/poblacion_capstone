@@ -102,6 +102,53 @@ if ($action && $transaction_id) {
             $updateListingStmt = $db->prepare($updateListingQuery);
             $updateListingStmt->bindParam(':listing_id', $listing_id);
             $updateListingStmt->execute();
+
+            header('Location: tenants');
+            exit();
+        }
+
+        if ($action === 'declined') {
+            try {
+
+                $transactionQuery = "SELECT listing_id, user_id, amount FROM transactions WHERE transaction_id = :transaction_id";
+                $transactionStmt = $db->prepare($transactionQuery);
+                $transactionStmt->bindParam(':transaction_id', $transaction_id);
+                $transactionStmt->execute();
+                $transaction = $transactionStmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($transaction) {
+                    $listing_id = $transaction['listing_id'];
+                    $tenant_id = $transaction['user_id'];
+                    $amount = $transaction['amount'];  // Amount for the payment
+
+                    $tenantQuery = "SELECT email FROM tenants WHERE id = :tenant_id";
+                    $tenantStmt = $db->prepare($tenantQuery);
+                    $tenantStmt->bindParam(':tenant_id', $tenant_id, PDO::PARAM_INT); // Ensure $tenant_id is set earlier in the code
+                    $tenantStmt->execute();
+                    $tenant = $tenantStmt->fetch(PDO::FETCH_ASSOC);
+
+                    if ($tenant) {
+                        $tenantEmail = $tenant['email'];
+
+                        // Send declined email notification
+                        sendDeclinedEmailNotification($tenantEmail);
+                    } else {
+                        // Log an error if the tenant was not found
+                        error_log("Tenant not found for tenant_id: " . $tenant_id);
+                        header('Location: index');
+                        exit();
+                    }
+                }
+                // Redirect to tenants page
+                header('Location: tenants');
+                exit();
+            } catch (Exception $e) {
+                // Log the error
+                error_log('Error during decline process: ' . $e->getMessage());
+                $_SESSION['error_message'] = "Failed to send declined notification: " . $e->getMessage();
+                header('Location: index');
+                exit();
+            }
         }
 
         // Commit transaction
@@ -114,8 +161,7 @@ if ($action && $transaction_id) {
     }
 }
 
-header('Location: tenants');
-exit();
+
 
 /**
  * Function to send an email notification to the tenant
@@ -184,5 +230,72 @@ function sendEmailNotification($tenantEmail, $amount)
     } catch (Exception $e) {
         // Handle error
         error_log('Mailer Error: ' . $mail->ErrorInfo);
+    }
+}
+
+function sendDeclinedEmailNotification($tenantEmail)
+{
+    $mail = new PHPMailer(true);
+    try {
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host = $_ENV['SMTP_HOST']; // SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = $_ENV['SMTP_USER']; // SMTP username
+        $mail->Password = $_ENV['SMTP_PASS']; // SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = $_ENV['SMTP_PORT'];
+        $mail->SMTPDebug = 2; // or PHPMailer::DEBUG_SERVER
+        $mail->Debugoutput = 'error_log'; // Log output
+
+        // Recipients
+        $mail->setFrom('poblacionease@gmail.com', 'PoblacionEase');
+        $mail->addAddress($tenantEmail); // Tenant's email address
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Payment Declined';
+        $mail->Body    =
+            '<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+            <head>
+                <meta charset="UTF-8">
+                <meta content="width=device-width, initial-scale=1" name="viewport">
+                <title> Payment Declined</title>
+            </head>
+            <body class="body">
+                <div dir="ltr" class="es-wrapper-color">
+                    <table width="100%" cellspacing="0" cellpadding="0" class="es-wrapper">
+                        <tbody>
+                            <tr>
+                                <td valign="top" class="esd-email-paddings">
+                                    <table width="600" cellspacing="0" cellpadding="0" align="center" class="es-content-body" style="background-color:transparent">
+                                        <tbody>
+                                            <tr>
+                                                <td align="center" class="esd-block-image" style="font-size:0">
+                                                    <img src="https://fptpbfq.stripocdn.email/content/guids/CABINET_905d63f3814e55730c693afd59e4c30260908b814c9950bcfeb18e2a36b9dd7a/images/poblacionease_Tdn.png" alt="PoblacionEase" width="197">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <p>We regret to inform you that your payment request has been <strong>declined</strong> because of invalid reference number.</p>
+                                                    <p>If you have any questions, please contact us for assistance.</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </body>
+            </html>';
+
+        // Send email
+        $mail->send();
+    } catch (Exception $e) {
+        // Log detailed error messages
+        error_log('Mailer Error: ' . $mail->ErrorInfo);
+        error_log('Exception: ' . $e->getMessage());
     }
 }

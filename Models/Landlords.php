@@ -169,6 +169,7 @@ class Landlords
             CONCAT(tenants.first_name, ' ', tenants.middle_name, ' ', tenants.last_name) AS tenants_name, 
             tenants.phone_number, 
             tenants.address, 
+            tenants.email,
             listings.listing_name
         FROM 
             rent
@@ -238,6 +239,13 @@ class Landlords
     public function declineLandlord($landlordId)
     {
         $query = "UPDATE landlords SET account_status = 'declined' WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $landlordId);
+        return $stmt->execute();
+    }
+    public function blockLandlord($landlordId)
+    {
+        $query = "UPDATE landlords SET account_status = 'banned' WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $landlordId);
         return $stmt->execute();

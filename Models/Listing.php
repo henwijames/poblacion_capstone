@@ -8,6 +8,7 @@ class Listing
     public $bedrooms;
     public $bathrooms;
     public $amenities;
+    public $utilities;
     public $sqft;
     public $rent;
     public $description;
@@ -24,12 +25,13 @@ class Listing
     public function create()
     {
         // SQL query to insert listing data
-        $query = "INSERT INTO listings (address, bedrooms, bathrooms, sqft, rent, description, amenities, property_type, user_id, payment_options) VALUES (:address, :bedrooms, :bathrooms, :sqft, :rent, :description, :amenities, :property_type, :user_id, :payment_options)";
+        $query = "INSERT INTO listings (listing_name, address, bedrooms, bathrooms, sqft, rent, description, amenities, utilities, property_type, user_id, payment_options) VALUES (:listing_name, :address, :bedrooms, :bathrooms, :sqft, :rent, :description, :amenities, :utilities, :property_type, :user_id, :payment_options)";
 
         // Prepare statement
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
+        $stmt->bindParam(':listing_name', $this->listing_name);
         $stmt->bindParam(':address', $this->address);
         $stmt->bindParam(':bedrooms', $this->bedrooms);
         $stmt->bindParam(':bathrooms', $this->bathrooms);
@@ -37,6 +39,7 @@ class Listing
         $stmt->bindParam(':rent', $this->rent);
         $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':amenities', json_encode($this->amenities)); // Convert array to JSON
+        $stmt->bindParam(':utilities', json_encode($this->utilities)); // Convert array to JSON
         $stmt->bindParam(':property_type', $this->property_type);
         $stmt->bindParam(':user_id', $this->user_id);
         $stmt->bindParam(':payment_options', json_encode($this->payment_options));
@@ -58,8 +61,8 @@ class Listing
             bedrooms = :bedrooms,
             bathrooms = :bathrooms,
             amenities = :amenities,
+            utilities = :utilities,
             sqft = :sqft,
-            rent = :rent,
             payment_options = :payment_options,
             description = :description
           WHERE id = :id';
@@ -75,13 +78,14 @@ class Listing
 
         // Fix for passing by reference: Assign to variables first
         $amenities = json_encode($data['amenities']);
+        $utilities = json_encode($data['utilities']);
         $payment_options = json_encode($data['payment_options']);
 
         $stmt->bindParam(':amenities', $amenities);
+        $stmt->bindParam(':utilities', $utilities);
         $stmt->bindParam(':payment_options', $payment_options);
 
         $stmt->bindParam(':sqft', $data['sqft'], PDO::PARAM_INT);
-        $stmt->bindParam(':rent', $data['rent'], PDO::PARAM_INT);
         $stmt->bindParam(':description', $data['description']);
         $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
 

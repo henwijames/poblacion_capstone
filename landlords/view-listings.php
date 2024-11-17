@@ -76,6 +76,38 @@ if (isset($_SESSION['error_message'])) {
 
                 </div>
                 <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-2">Utilities</h2>
+                    <ul class="grid grid-cols-2 gap-4 capitalize">
+                        <?php
+                        // Decode the amenities and handle null cases
+                        $utilities = json_decode($listingDetails['utilities'], true);
+                        if (is_array($utilities) && !empty($utilities)): ?>
+                            <?php foreach ($utilities as $utility): ?>
+                                <li class="flex items-center gap-2">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="w-5 h-5 text-primary">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="m9 12 2 2 4-4"></path>
+                                    </svg>
+                                    <span><?= htmlspecialchars($utility) ?></span>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li>No amenities available.</li>
+                        <?php endif; ?>
+                    </ul>
+
+                </div>
+                <div class="mb-6">
                     <h2 class="text-xl font-bold mb-2">Amenities</h2>
                     <ul class="grid grid-cols-2 gap-4 capitalize">
                         <?php

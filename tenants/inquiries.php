@@ -214,6 +214,56 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             });
         }
+
+        function cancelBooking(bookingId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to cancel this booking? This action cannot be undone.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#C1C549',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'Controller/BookingController.php',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'cancel',
+                            booking_id: bookingId
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Booking Deleted',
+                                    text: response.message
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error:', error);
+                            console.log('Response Text:', xhr.responseText);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Request Failed',
+                                text: 'There was an error processing your request.'
+                            });
+                        }
+                    });
+                }
+            });
+        }
     </script>
 
     <?php require 'includes/footer.php'; ?>

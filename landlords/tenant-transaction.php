@@ -25,8 +25,9 @@ $tenantTransactions = $landlords->getTransactionsByTenantId($tenant_id, $landlor
     <div class="p-6">
         <div class="flex items-center justify-between">
             <h1 class="text-2xl font-bold">Tenant Transactions</h1>
+            <a href="tenants" class="btn btn-sm bg-primary text-white">Back</a>
         </div>
-        <div class="mt-4">
+        <div class="mt-4 overflow-x-auto">
             <table class="w-full border border-gray-200 rounded-md">
                 <thead class="bg-gray-50">
                     <tr class="bg-slate-100">
@@ -60,7 +61,7 @@ $tenantTransactions = $landlords->getTransactionsByTenantId($tenant_id, $landlor
                                         </button>
                                         <button
                                             class="btn btn-error btn-sm text-white"
-                                            onclick="confirmAction('decline', <?php echo $transaction['transaction_id']; ?>)">
+                                            onclick="confirmAction('declined', <?php echo $transaction['transaction_id']; ?>)">
                                             Decline
                                         </button>
                                     <?php else: ?>
@@ -77,7 +78,7 @@ $tenantTransactions = $landlords->getTransactionsByTenantId($tenant_id, $landlor
 </main>
 <script>
     function confirmAction(action, transactionId) {
-        const actionText = action === 'verify' ? 'Verify' : 'Decline';
+        const actionText = action === 'verify' ? 'completed' : 'declined';
         const actionColor = action === 'verify' ? '#4CAF50' : '#F44336'; // Green for Verify, Red for Decline
 
         Swal.fire({

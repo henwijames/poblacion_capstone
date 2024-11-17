@@ -1,12 +1,14 @@
 <?php
 include 'includes/header.php';
 
+$landlord_id = $_SESSION['user_id'];
+
 function getCounts($db, $user_id)
 {
     $counts = [
         'activeListings' => 0,
         'tenants' => 0,
-        'rents' => 0
+        'inquiries' => 0
     ];
 
     // Fetch active listings for this user
@@ -17,9 +19,34 @@ function getCounts($db, $user_id)
     $counts['activeListings'] = $stmt->fetch(PDO::FETCH_ASSOC)['activeListings'];
 
 
+    $inqQuery = "SELECT COUNT(*) as inquiries FROM bookings JOIN tenants ON bookings.user_id = tenants.id 
+                      WHERE bookings.landlord_id = :landlord_id";
+    $inqStmt = $db->prepare($inqQuery);
+    $inqStmt->bindParam(':landlord_id', $user_id);
+    $inqStmt->execute();
+    $counts['inquiries'] = $inqStmt->fetch(PDO::FETCH_ASSOC)['inquiries'];
+
+    $tenantQuery = "SELECT COUNT(*) as tenants FROM rent JOIN 
+            tenants 
+        ON 
+            rent.user_id = tenants.id 
+        JOIN 
+            listings 
+        ON 
+            rent.listing_id = listings.id  
+        WHERE 
+            rent.landlord_id = :landlord_id
+        GROUP BY 
+            tenants.id";
+    $tenantStmt = $db->prepare($tenantQuery);
+    $tenantStmt->bindParam(':landlord_id', $user_id);
+    $tenantStmt->execute();
+    $counts['tenants'] = $tenantStmt->fetch(PDO::FETCH_ASSOC)['tenants'];
 
     return $counts;
 }
+
+
 
 // Initialize DB connection
 $database = new Database();
@@ -53,7 +80,7 @@ $userListings = $listing->getListingsByUser($user_id) ?? [];
             <div class=" rounded-md shadow-md border border-gray-100 p-6">
                 <div class="flex justify-between">
                     <div>
-                        <div class="text-2xl font-semibold mb-1">0</div>
+                        <div class="text-2xl font-semibold mb-1"><?php echo htmlspecialchars($counts['tenants']); ?></div>
                         <div class="text-sm font-medium text-gray-400">Tenants</div>
                     </div>
                     <div class="text-[40px]">
@@ -65,11 +92,11 @@ $userListings = $listing->getListingsByUser($user_id) ?? [];
             <div class=" rounded-md shadow-md border border-gray-100 p-6">
                 <div class="flex justify-between">
                     <div>
-                        <div class="text-2xl font-semibold mb-1">0</div>
-                        <div class="text-sm font-medium text-gray-400">Rents</div>
+                        <div class="text-2xl font-semibold mb-1"><?php echo htmlspecialchars($counts['inquiries']); ?></div>
+                        <div class="text-sm font-medium text-gray-400">Inquiries</div>
                     </div>
                     <div class="text-[40px]">
-                        <i class="fa-solid fa-key"></i>
+                        <i class="fa-solid fa-paper-plane"></i>
                     </div>
                 </div>
 

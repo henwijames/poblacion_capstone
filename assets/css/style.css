@@ -757,6 +757,11 @@ html{
 }
 
 @media (hover:hover){
+  .checkbox-primary:hover{
+    --tw-border-opacity: 1;
+    border-color: var(--fallback-p,oklch(var(--p)/var(--tw-border-opacity)));
+  }
+
   .label a:hover{
     --tw-text-opacity: 1;
     color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
@@ -1798,6 +1803,10 @@ input.tab:checked + .tab-content,
     border-color: var(--btn-color, var(--fallback-b2));
   }
 
+  .btn-primary{
+    --btn-color: var(--fallback-p);
+  }
+
   .btn-info{
     --btn-color: var(--fallback-in);
   }
@@ -1854,7 +1863,17 @@ input.tab:checked + .tab-content,
   outline-offset: 2px;
 }
 
+.btn-primary{
+  --tw-text-opacity: 1;
+  color: var(--fallback-pc,oklch(var(--pc)/var(--tw-text-opacity)));
+  outline-color: var(--fallback-p,oklch(var(--p)/1));
+}
+
 @supports (color: oklch(0% 0 0)){
+  .btn-primary{
+    --btn-color: var(--p);
+  }
+
   .btn-info{
     --btn-color: var(--in);
   }
@@ -2127,6 +2146,27 @@ input.tab:checked + .tab-content,
       linear-gradient(0deg, var(--chkbg) 43%, var(--chkfg) 43%, var(--chkfg) 57%, var(--chkbg) 57%);
 }
 
+.checkbox-primary{
+  --chkbg: var(--fallback-p,oklch(var(--p)/1));
+  --chkfg: var(--fallback-pc,oklch(var(--pc)/1));
+  --tw-border-opacity: 1;
+  border-color: var(--fallback-p,oklch(var(--p)/var(--tw-border-opacity)));
+}
+
+.checkbox-primary:focus-visible{
+  outline-color: var(--fallback-p,oklch(var(--p)/1));
+}
+
+.checkbox-primary:checked,
+    .checkbox-primary[aria-checked="true"]{
+  --tw-border-opacity: 1;
+  border-color: var(--fallback-p,oklch(var(--p)/var(--tw-border-opacity)));
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity)));
+  --tw-text-opacity: 1;
+  color: var(--fallback-pc,oklch(var(--pc)/var(--tw-text-opacity)));
+}
+
 @keyframes checkmark{
   0%{
     background-position-y: 5px;
@@ -2192,13 +2232,6 @@ input.tab:checked + .tab-content,
 .label-text{
   font-size: 0.875rem;
   line-height: 1.25rem;
-  --tw-text-opacity: 1;
-  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
-}
-
-.label-text-alt{
-  font-size: 0.75rem;
-  line-height: 1rem;
   --tw-text-opacity: 1;
   color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
 }
@@ -3519,6 +3552,10 @@ input.tab:checked + .tab-content,
   margin-right: 0.75rem;
 }
 
+.mr-4{
+  margin-right: 1rem;
+}
+
 .mt-2{
   margin-top: 0.5rem;
 }
@@ -3541,10 +3578,6 @@ input.tab:checked + .tab-content,
 
 .mt-\[60px\]{
   margin-top: 60px;
-}
-
-.mr-4{
-  margin-right: 1rem;
 }
 
 .block{
@@ -3593,6 +3626,10 @@ input.tab:checked + .tab-content,
 
 .h-16{
   height: 4rem;
+}
+
+.h-24{
+  height: 6rem;
 }
 
 .h-28{
@@ -3655,16 +3692,16 @@ input.tab:checked + .tab-content,
   height: 100%;
 }
 
-.h-24{
-  height: 6rem;
-}
-
 .max-h-\[10rem\]{
   max-height: 10rem;
 }
 
 .max-h-\[20rem\]{
   max-height: 20rem;
+}
+
+.max-h-96{
+  max-height: 24rem;
 }
 
 .min-h-screen{
@@ -3967,6 +4004,12 @@ input.tab:checked + .tab-content,
   margin-bottom: calc(2rem * var(--tw-space-y-reverse));
 }
 
+.space-x-2 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
 .divide-y > :not([hidden]) ~ :not([hidden]){
   --tw-divide-y-reverse: 0;
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -3984,6 +4027,10 @@ input.tab:checked + .tab-content,
 
 .overflow-x-auto{
   overflow-x: auto;
+}
+
+.overflow-y-auto{
+  overflow-y: auto;
 }
 
 .scroll-smooth{
@@ -4038,6 +4085,10 @@ input.tab:checked + .tab-content,
 
 .border-2{
   border-width: 2px;
+}
+
+.border-0{
+  border-width: 0px;
 }
 
 .border-b{
@@ -4171,11 +4222,6 @@ input.tab:checked + .tab-content,
 
 .bg-transparent{
   background-color: transparent;
-}
-
-.bg-warning{
-  --tw-bg-opacity: 1;
-  background-color: var(--fallback-wa,oklch(var(--wa)/var(--tw-bg-opacity)));
 }
 
 .bg-white{
@@ -4579,6 +4625,15 @@ input.tab:checked + .tab-content,
   color: rgb(250 204 21 / var(--tw-text-opacity));
 }
 
+.text-blue-500{
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
+}
+
+.underline{
+  text-decoration-line: underline;
+}
+
 .opacity-0{
   opacity: 0;
 }
@@ -4920,11 +4975,6 @@ input.tab:checked + .tab-content,
 .hover\:text-primary:hover{
   --tw-text-opacity: 1;
   color: rgb(193 197 73 / var(--tw-text-opacity));
-}
-
-.hover\:text-red-700:hover{
-  --tw-text-opacity: 1;
-  color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 
 .hover\:text-white:hover{

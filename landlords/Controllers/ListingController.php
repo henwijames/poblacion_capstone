@@ -22,6 +22,7 @@ if (isset($_POST['add_listing'])) {
     $listing->description = trim($_POST['description']);
     $listing->property_type = isset($_POST['property_type']) ? trim($_POST['property_type']) : null;
     $listing->amenities = isset($_POST['amenities']) ? $_POST['amenities'] : [];
+    $listing->utilities = isset($_POST['utilities']) ? $_POST['utilities'] : [];
     $listing->user_id = $_SESSION['user_id'];
     $listing->payment_options = isset($_POST['payment_options']) ? $_POST['payment_options'] : [];
 
@@ -153,8 +154,8 @@ if (isset($_POST['update_listing'])) {
             'bedrooms' => $_POST['bedrooms'] ?? '',
             'bathrooms' => $_POST['bathrooms'] ?? '',
             'amenities' => isset($_POST['amenities']) ? $_POST['amenities'] : [],
+            'utilities' => isset($_POST['utilities']) ? $_POST['utilities'] : [],
             'sqft' => $_POST['sqft'] ?? '',
-            'rent' => $_POST['rent'] ?? '',
             'description' => $_POST['description'] ?? '',
             'payment_options' => isset($_POST['payment_options']) ? $_POST['payment_options'] : [],
             'id' => $listing_id
