@@ -6,9 +6,11 @@ use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$dotenv = Dotenv::createImmutable('D:\xampp\htdocs\Poblacion');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+
 try {
     $dotenv->load();
+    echo 'Connected to .env';
 } catch (Exception $e) {
     die('Failed to load .env file: ' . $e->getMessage());
 }

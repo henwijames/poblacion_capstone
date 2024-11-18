@@ -18,7 +18,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'landlord') {
             <script>
                 Swal.fire({
                     title: 'Verification Required',
-                    text: 'You must verify your account to add listings.',
+                    text: 'You must upload Business Permit to verify your account in order to add listings.',
                     allowOutsideClick: false,
                     icon: 'warning',
                     confirmButtonColor: '#C1C549',
@@ -39,7 +39,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'landlord') {
                 },
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = 'index';
+                        window.location.href = 'permit';
                     }
                 });
             </script>

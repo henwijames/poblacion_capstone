@@ -136,7 +136,20 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
                     </div>
                 </div>
                 <div class="flex justify-center gap-2 py-2">
-                    <a href="edit-profile" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Edit Profile</a>
+                    <a href="edit-profile" class="bg-primary text-white btn">Edit Profile</a>
+                    <button class="bg-primary text-white btn" onclick="my_modal_1.showModal()">Valid ID</button>
+                    <dialog id="my_modal_1" class="modal">
+                        <div class="modal-box">
+                            <h3 class="text-lg font-bold">Valid ID</h3>
+                            <img src="<?php echo ($tenant['validid']) ? 'Controller/uploads/' . htmlspecialchars($tenant['validid']) : ''; ?>"
+                                alt="<?php echo ($tenant['validid']) ? 'Valid ID' : 'No Valid ID Uploaded'; ?>">
+                            <div class="modal-action">
+                                <form method="dialog">
+                                    <button class="btn">Close</button>
+                                </form>
+                            </div>
+                        </div>
+                    </dialog>
                 </div>
             </div>
         </div>

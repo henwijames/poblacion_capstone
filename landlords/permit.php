@@ -28,6 +28,41 @@
     </div>
 </main>
 <script>
+    // Get the URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Check if success=1 is present
+    if (urlParams.get('success') === '1') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Permit uploaded successfully.',
+            confirmButtonColor: '#C1C549',
+            confirmButtonText: 'OK',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'index';
+            }
+        })
+    }
+
+    // Check if error=1 is present
+    if (urlParams.get('error') === '1') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'An error occurred while updating your profile.',
+            confirmButtonColor: '#C1C549',
+            confirmButtonText: 'OK',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'permit';
+            }
+        })
+        // Remove the parameter from the URL (optional)
+        history.replaceState(null, null, window.location.pathname);
+    }
+
     function previewProfilePhoto(event) {
         const reader = new FileReader();
         const fileInput = event.target;

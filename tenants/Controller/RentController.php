@@ -4,7 +4,8 @@ require '../../vendor/autoload.php'; // Ensure this path is correct
 
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable('D:\xampp\htdocs\Poblacion');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+
 try {
     $dotenv->load();
 } catch (Exception $e) {

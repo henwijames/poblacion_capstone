@@ -69,7 +69,7 @@ $dotenv->load();
             </div>
             <div class="mx-auto w-full max-w-sm space-y-2">
                 <a
-                    class="inline-flex h-10 items-center justify-center rounded-md bg-primary hover:bg-accent px-8 text-sm font-medium text-primary-foreground shadow transition-colors  focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                    class="inline-flex h-10 items-center text-white justify-center rounded-md bg-primary hover:bg-accent px-8 text-sm font-medium text-primary-foreground shadow transition-colors  focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                     href="#"
                     rel="ugc">
                     Learn More

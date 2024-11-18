@@ -56,7 +56,7 @@
                     <a href="#" class="text-sm flex items-center dot hover:text-primary">Verify Email Address</a>
                 </li>
                 <li class="mb-4">
-                    <a href="#" class="text-sm flex items-center dot hover:text-primary">Add Valid ID</a>
+                    <a href="valid_id" class="text-sm flex items-center dot hover:text-primary">Add Valid ID</a>
                 </li>
             </ul>
         </li>

@@ -41,7 +41,15 @@ function getCounts($db, $user_id)
     $tenantStmt = $db->prepare($tenantQuery);
     $tenantStmt->bindParam(':landlord_id', $user_id);
     $tenantStmt->execute();
-    $counts['tenants'] = $tenantStmt->fetch(PDO::FETCH_ASSOC)['tenants'];
+    if ($tenantStmt->execute()) {
+        $result = $tenantStmt->fetch(PDO::FETCH_ASSOC);
+        $counts['tenants'] = $result ? $result['tenants'] : 0; // Default to 0 if no rows
+    } else {
+        // Handle execution failure
+        $counts['tenants'] = 0;
+        error_log("Query failed: " . implode(", ", $tenantStmt->errorInfo()));
+    }
+
 
     return $counts;
 }

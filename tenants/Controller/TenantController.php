@@ -6,7 +6,8 @@ require '../../vendor/autoload.php'; // Ensure this path is correct
 use Dotenv\Dotenv;
 
 // Specify the path to your .env file
-$dotenv = Dotenv::createImmutable('D:\xampp\htdocs\Poblacion'); // Change __DIR__ if your .env is in another directory
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+// Change __DIR__ if your .env is in another directory
 
 // Load the .env file and check for success
 try {
@@ -144,6 +145,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['verify_mobile'])) {
     } else {
         $_SESSION['errors']['phone'] = "Phone number not found.";
         header('Location: ../verifymobile.php?error=phone_not_found');
+        exit();
+    }
+}
+
+if (isset($_POST['save_valid'])) {
+    $database = new Database();
+    $db = $database->getConnection();
+    $tenants = new Tenants($db);
+
+    $tenantId = $_SESSION['user_id']; // or another method of retrieving the Tenant ID
+    if (!$tenantId) {
+        die('Tenant ID not found.');
+    }
+
+    $photoPath = null;
+    if (isset($_FILES['validid']) && $_FILES['validid']['error'] == UPLOAD_ERR_OK) {
+        $uploadDir = 'uploads/'; // Set your upload directory
+        $file_name = $_FILES['validid']['name'];
+        $photoPath = $uploadDir . ($_FILES['validid']['name']);
+
+
+        // Move the uploaded file
+        if (!move_uploaded_file($_FILES['validid']['tmp_name'], $photoPath)) {
+            $_SESSION['error_message'] = "Failed to upload photo.";
+            header("Location: valid_id.php?error=1");
+            exit();
+        }
+    }
+
+    if ($tenants->savePermit($tenantId, $file_name)) {
+        // Redirect or inform user of success
+        $_SESSION['success_message'] = 'Permit uploaded successfully.';
+        header('Location: ../index?success=1');
+        exit();
+    } else {
+        $_SESSION['error_message'] = "An error occurred while updating your profile.";
+        header("Location: ../valid_id?error=1");
         exit();
     }
 }

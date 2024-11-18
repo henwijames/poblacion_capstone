@@ -44,6 +44,22 @@ class Tenants
         return $stmt->execute();
     }
 
+    public function savePermit($tenantId, $photoPath = null)
+    {
+        $query = 'UPDATE tenants 
+        SET validid = :validid WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':validid', $photoPath, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $tenantId, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            print_r($stmt->errorInfo());
+            return false;
+        }
+    }
+
     public function blockTenant($tenantId)
     {
         $query = "UPDATE tenants SET account_status = 'banned' WHERE id = :id";

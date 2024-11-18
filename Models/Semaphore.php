@@ -3,7 +3,7 @@ require '../vendor/autoload.php'; // Ensure this path is correct
 use Dotenv\Dotenv;
 
 // Specify the path to your .env file
-$dotenv = Dotenv::createImmutable('D:\xampp\htdocs\Poblacion'); // Change __DIR__ if your .env is in another directory
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../'); // Change __DIR__ if your .env is in another directory
 
 // Load the .env file and check for success
 try {

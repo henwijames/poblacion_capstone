@@ -80,7 +80,7 @@ if (isset($_POST['save_permit'])) {
     if ($landlords->savePermit($landlordId, $photoPath)) {
         // Redirect or inform user of success
         $_SESSION['success_message'] = 'Permit uploaded successfully.';
-        header('Location: ../index?success=1');
+        header('Location: ../permit?success=1');
         exit();
     } else {
         $_SESSION['error_message'] = "An error occurred while updating your profile.";

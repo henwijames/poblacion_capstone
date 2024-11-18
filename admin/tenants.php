@@ -180,7 +180,7 @@ $tenantsList = $tenants->getAllTenants();
                             var response = JSON.parse(xhr.responseText);
                             if (response.status === "success") {
                                 Swal.fire(
-                                    "Verified!",
+                                    "Declined!",
                                     response.message,
                                     "success"
                                 ).then(() => {

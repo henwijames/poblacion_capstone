@@ -83,7 +83,7 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
             </div>
         </div>
         <hr>
-        <div class="grid grid-cols-2 lg:grid-cols-4 sm gap-4 mt-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4  gap-4 mt-6">
             <div class="mb-6">
                 <h2 class="text-xl font-bold mb-2">Landlord</h2>
                 <p class="text-muted-foreground"><?= htmlspecialchars($fullName); ?></p>
@@ -159,6 +159,37 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
                     <?php endif; ?>
                 </ul>
             </div>
+            <div class="mb-6">
+                <h2 class="text-xl font-bold mb-2">Utilities</h2>
+                <ul class="grid grid-cols-1 gap-4 capitalize">
+                    <?php
+                    // Decode the utilities and handle null cases
+                    $utilities = json_decode($listingDetails['utilities'], true);
+                    if (is_array($utilities) && !empty($utilities)): ?>
+                        <?php foreach ($utilities as $utility): ?>
+                            <li class="flex items-center gap-2">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="w-5 h-5 text-primary">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                                <span><?= htmlspecialchars($utility); ?></span>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li>No amenities available.</li>
+                    <?php endif; ?>
+                </ul>
+            </div>
 
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -209,23 +240,8 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
                     </div>
                 </div>
             </div>
-
-
-
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8"></div>
-        <div class="max-w-6xl mx-auto flex flex-col justify-center py-12 sm:py-16 lg:py-20">
-            <hr>
-            <div class="my-10">
-                <div class="flex items-center mb-6">
-                    <svg class="w-6 h-6 text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.307c.15.459.59.77 1.086.77h3.469c.966 0 1.361 1.24.588 1.81l-2.801 2.025c-.386.281-.563.786-.454 1.262l1.07 3.308c.3.921-.755 1.688-1.54 1.161l-2.801-2.025c-.386-.281-.895-.281-1.282 0l-2.801 2.025c-.785.527-1.84-.24-1.54-1.161l1.07-3.308c.109-.476-.068-.981-.454-1.262l-2.801-2.025c-.773-.57-.377-1.81.588-1.81h3.469c.497 0 .936-.311 1.086-.77l1.07-3.307z" />
-                    </svg>
-                    <h2 class="text-2xl font-semibold">Reviews</h2>
-                </div>
-                <p class="text-muted-foreground">There are no reviews yet.</p>
-            </div>
-        </div>
+
     </main>
 </section>
 

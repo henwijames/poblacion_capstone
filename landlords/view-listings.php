@@ -61,7 +61,7 @@ if (isset($_SESSION['error_message'])) {
                 </div>
                 <div class="mb-6">
                     <h2 class="text-xl font-bold mb-2">Property Name</h2>
-                    <p class="text-muted-foreground">Phone : <?= htmlspecialchars($listingDetails['listing_name']) ?></p>
+                    <p class="text-muted-foreground"><?= htmlspecialchars($listingDetails['listing_name']) ?></p>
                 </div>
                 <div class="mb-6">
                     <h2 class="text-xl font-bold mb-2">Landlord</h2>
@@ -153,7 +153,7 @@ if (isset($_SESSION['error_message'])) {
                             width="300"
                             height="200"
                             class="rounded-lg object-cover shadow-lg"
-                            style="aspect-ratio: 300 / 200; object-fit: cover;" />
+                            style="aspect-ratio: 300 / 300; object-fit: cover;" />
                         <?php $count++; ?>
                     <?php endforeach; ?>
                 <?php else: ?>

@@ -7,7 +7,7 @@ use Dotenv\Dotenv;
 
 require '../vendor/autoload.php'; // Include PHPMailer's autoloader
 
-$dotenv = Dotenv::createImmutable('D:\xampp\htdocs\Poblacion');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 try {
     $dotenv->load();
 } catch (Exception $e) {

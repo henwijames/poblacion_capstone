@@ -7,7 +7,7 @@ use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$dotenv = Dotenv::createImmutable('D:\xampp\htdocs\Poblacion');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 try {
     $dotenv->load();
 } catch (Exception $e) {
