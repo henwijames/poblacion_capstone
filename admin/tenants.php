@@ -162,7 +162,7 @@ $tenantsList = $tenants->getAllTenants();
         declineButton.disabled = true;
         Swal.fire({
             title: "Are you sure?",
-            text: "Do you want to decline the application of this account?",
+            text: "The provided documents are unclear and not authentic. Do you want to decline the application of this account? ",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#C1C549",

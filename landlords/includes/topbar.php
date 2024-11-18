@@ -16,9 +16,6 @@
                     <a href="profile" class="flex items-center text-[13px] py-1.5 px-4 hover:bg-gray-100">Profile</a>
                 </li>
                 <li>
-                    <a href="settings" class="flex items-center text-[13px] py-1.5 px-4 hover:bg-gray-100">Settings</a>
-                </li>
-                <li>
                     <a href="logout" id="logout-btn" class="flex items-center text-[13px] py-1.5 px-4 hover:bg-gray-100">Logout</a>
                 </li>
             </ul>

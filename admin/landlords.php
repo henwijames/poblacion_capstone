@@ -53,7 +53,7 @@ $landlordsList = $landlords->getAllLandlords();
                                         <h3 class="text-lg font-bold mb-4"><?= htmlspecialchars($landlord['first_name'] . "'s Business Permit") ?></h3>
                                         <?php
                                         if ($landlord['permit']) {
-                                            echo "<img src='../landlords/Controllers/uploads/" . htmlspecialchars($landlord['permit']) . "' alt='permit' class='object-cover rounded-lg shadow-lg'>";
+                                            echo "<img src='../landlords/Controllers/" . htmlspecialchars($landlord['permit']) . "' alt='permit' class='object-cover rounded-lg shadow-lg'>";
                                         } else {
                                             echo "<h1 class='text-4xl text-center p-6 text-red-500 uppercase font-bold'>No Business permit uploaded</h1>";
                                         }
@@ -166,7 +166,7 @@ $landlordsList = $landlords->getAllLandlords();
         declineButton.disabled = true;
         Swal.fire({
             title: "Are you sure?",
-            text: "Do you want to decline the application of this account?",
+            text: "The provided documents are unclear and not authentic. Do you want to decline the application of this account? ",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#C1C549",
