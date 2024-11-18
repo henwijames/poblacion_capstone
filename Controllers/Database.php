@@ -10,7 +10,6 @@ $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 // Load the .env file and check for success
 try {
     $dotenv->load();
-    echo 'Connected to .env';
 } catch (Exception $e) {
     die('Failed to load .env file: ' . $e->getMessage());
 }
