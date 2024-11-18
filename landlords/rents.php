@@ -17,7 +17,8 @@ $query = "
         CONCAT(tenants.first_name, ' ', tenants.middle_name, ' ', tenants.last_name) AS tenant_name,
         tenants.email AS tenant_email,
         listings.listing_name, 
-        listings.address
+        listings.address,
+        listings.rent
     FROM rent
     JOIN listings ON rent.listing_id = listings.id
     JOIN tenants ON rent.user_id = tenants.id
@@ -44,7 +45,7 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <h3 class="text-lg font-semibold"><?php echo htmlspecialchars($rent['listing_name']); ?></h3>
                         <p class="text-gray-500"><?php echo htmlspecialchars($rent['address']); ?></p>
                         <p class="text-gray-600">Tenant: <span class="font-bold"><?php echo htmlspecialchars($rent['tenant_name']); ?></span></p>
-                        <p class="text-gray-600">Rent Amount: <span class="font-bold"><?php echo htmlspecialchars($rent['amount']); ?></span></p>
+                        <p class="text-gray-600">Rent Amount: <span class="font-bold"><?php echo htmlspecialchars($rent['rent']); ?></span></p>
                         <p class="text-gray-600">Due Date: <span class="font-bold"><?php echo date('F j, Y', strtotime($rent['due_month'])); ?></span></p>
                         <p class="text-gray-600">Days to Due Date: <span class="font-bold"><?php echo $daysToDue; ?></span></p>
                         <p class="text-gray-600">Status:

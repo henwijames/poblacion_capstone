@@ -5,7 +5,7 @@ include 'includes/header.php';
     <?php include 'includes/topbar.php'; ?>
     <div class="p-6">
         <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-bold mb-6">Upload Payment QR Code</h1>
+            <h1 class="text-2xl font-bold mb-6">Upload/Update Payment QR Code</h1>
         </div>
         <form action="Controllers/LandlordsController.php" method="POST" enctype="multipart/form-data">
             <div class="flex flex-col md:items-start items-end justify-center">
@@ -70,6 +70,8 @@ include 'includes/header.php';
             showConfirmButton: false,
             timer: 2000
         });
+        history.replaceState(null, null, window.location.pathname);
+
     } else if (error == '1') {
         Swal.fire({
             icon: 'error',
@@ -78,6 +80,7 @@ include 'includes/header.php';
             showConfirmButton: false,
             timer: 2000
         });
+        history.replaceState(null, null, window.location.pathname);
     }
 </script>
 <?php include 'includes/footer.php'; ?>

@@ -86,7 +86,10 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'landlord') {
 <main class="main-content main">
     <?php include 'includes/topbar.php'; ?>
     <div class="container mx-auto px-4 sm:px-6 md:px-8 py-12">
-        <h1 class="text-3xl font-bold mb-8">Add New Listing</h1>
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold">Add Listing</h1>
+            <a href="listings" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Active Listings</a>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
                 <form class="space-y-6" action="Controllers/ListingController.php" method="POST" enctype="multipart/form-data">

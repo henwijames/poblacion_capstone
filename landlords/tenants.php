@@ -29,7 +29,6 @@ $tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom metho
                         <th class="py-2 px-4 border-r border-gray-200">House Name</th>
                         <th class="py-2 px-4 border-r border-gray-200">Address</th>
                         <th class="py-2 px-4 border-r border-gray-200">Phone Number</th>
-                        <th class="py-2 px-4 border-r border-gray-200">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,7 +43,6 @@ $tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom metho
                                     <a href="tenants-profile?id=<?php echo $tenant['id']; ?>" class="btn btn-info btn-sm text-sm text-white">Profile</a>
                                     <a href="tenants-complaint?id=<?php echo $tenant['id']; ?>" class="btn btn-info btn-sm text-sm text-white">Complaints</a>
                                     <a href="tenant-transaction.php?id=<?php echo $tenant['id']; ?>" class="btn bg-primary btn-sm text-white">View Transactions</a>
-                                    <a href="delete-tenant.php?id=<?php echo $tenant['id']; ?>" class="btn btn-warning btn-sm text-white">Block</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

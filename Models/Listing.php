@@ -185,6 +185,16 @@ class Listing
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getListingsByLandlord($user_id)
+    {
+        $query = "SELECT * FROM listings WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getListingByID($id)
     {
         $query = "SELECT * FROM listings WHERE id = :id";

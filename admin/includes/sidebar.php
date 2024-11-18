@@ -24,12 +24,6 @@
                 </li>
             </ul>
         </li>
-        <li class="mb-1 group">
-            <a href="settings" class="flex items-center py-2 px-3 rounded-md hover:text-white hover:bg-primary group-[.active]:bg-primary group-[.active]:text-white group-[.selected]:bg-primary group-[.selected]:text-white">
-                <i class="fa-solid fa-gears mr-3 text-lg"></i>
-                <span>Settings</span>
-            </a>
-        </li>
     </ul>
 </div>
 

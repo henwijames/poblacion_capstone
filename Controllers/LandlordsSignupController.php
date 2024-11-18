@@ -95,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $_SESSION['user_id']  = $landlords->id;
             $_SESSION['email']  =  $landlords->email;
             $_SESSION['user_role'] = 'landlord';
+            $_SESSION['mobile_verified']  = false;
             $_SESSION['success'] = "User created successfully! Please verify your phone number.";
             header("Location:  ../account_verify");
             exit();

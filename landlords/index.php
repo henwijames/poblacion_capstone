@@ -65,7 +65,9 @@ $user_id = $_SESSION['user_id']; // Ensure this session variable is set correctl
 $counts = getCounts($db, $user_id);
 
 $listing = new Listing($db);
-$userListings = $listing->getListingsByUser($user_id) ?? [];
+$landlords = new Landlords($db);
+$tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom method to fetch tenants based on landlord ID
+$userListings = $listing->getListingsByLandlord($user_id) ?? [];
 ?>
 
 <main class="main-content main">
@@ -116,70 +118,72 @@ $userListings = $listing->getListingsByUser($user_id) ?? [];
                     <div class="font-medium">Tenant</div>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full min-w-[540px] table-auto border-collapse shadow-lg">
+                    <table class="table table-zebra bg-white">
                         <thead class="bg-slate-100">
                             <tr>
-                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">Name</th>
-                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">House Rented</th>
-                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">Monthly Rate</th>
-                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700 rounded-tr-md">Status</th>
+                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">Full Name</th>
+                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">House Name</th>
+                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">Address</th>
+                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">Phone Number</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium">Henry James Ribano</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">House 5</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P2,500</td>
-                                <td class="py-3 px-4">
-                                    <span class="inline-block px-4 py-1 rounded-full text-sm bg-yellow-400 text-white">Pending</span>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium">Juan Lorenzo Aguilar</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">House 2</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P2,800</td>
-                                <td class="py-3 px-4">
-                                    <span class="inline-block px-4 py-1 rounded-full text-sm bg-green-400 text-white">Verified</span>
-                                </td>
-                            </tr>
-                            <tr class="bg-white hover:bg-slate-50 transition-colors">
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium">John Michael Castor</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">House 1</td>
-                                <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">P2,100</td>
-                                <td class="py-3 px-4">
-                                    <span class="inline-block w-24 px-4 py-1 rounded-full text-xs bg-red-400 text-white">Not Paid</span>
-                                </td>
-                            </tr>
+                            <?php if (!empty($tenantList)) : ?>
+                                <?php
+                                // Limit tenant list to 5
+                                $tenantListLimited = array_slice($tenantList, 0, 5);
+                                ?>
+                                <?php foreach ($tenantListLimited as $tenant) : ?>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['tenants_name']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['listing_name']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['address']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['phone_number']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <tr>
+                                    <td colspan="5" class="text-center py-2 px-4">No tenants found for this landlord.</td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
-
                 </div>
             </div>
+
+            <!-- Listings Table -->
             <div class="bg-background border border-gray-100 shadow-md shadow-black/10 p-6 rounded-md">
                 <div class="mb-4 flex justify-between items-start">
                     <div class="font-medium">Listings</div>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full min-w-[540px] table-auto border-collapse shadow-lg">
+                    <table class="table table-zebra bg-white">
                         <thead class="bg-slate-100">
                             <tr>
                                 <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">House</th>
                                 <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">Monthly Rent</th>
                                 <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">House Type</th>
-                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700 rounded-tr-md">Action</th>
+                                <th class="text-[12px] uppercase tracking-wide font-semibold py-3 px-4 text-left text-slate-700">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (!empty($userListings)): ?>
-                                <?php foreach ($userListings as $userListing): ?>
+                                <?php
+                                // Limit listings to 5
+                                $userListingsLimited = array_slice($userListings, 0, 5);
+                                ?>
+                                <?php foreach ($userListingsLimited as $userListing): ?>
                                     <tr class="bg-white border-b hover:bg-slate-50 transition-colors">
-                                        <td class="py-3 px-4 text-[13px] text-slate-600 font-medium"><?= htmlspecialchars($landlord['property_name']) ?></td>
-                                        <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center">₱<?= number_format($userListing['rent']) ?></td>
-                                        <td class="py-3 px-4 text-[13px] text-slate-600 font-medium text-center capitalize"><?= htmlspecialchars($userListing['property_type']) ?></td>
-                                        <td class="py-3 px-4 flex gap-2">
-                                            <button class="inline-block px-4 py-1 rounded-md text-sm bg-blue-400 text-white">
-                                                Edit
-                                            </button>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?= htmlspecialchars($userListing['listing_name']) ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 text-center">₱<?= number_format($userListing['rent']) ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 text-center capitalize"><?= htmlspecialchars($userListing['property_type']) ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 text-center capitalize">
+                                            <!-- Add DaisyUI badge based on status -->
+                                            <?php if ($userListing['status'] === 'occupied'): ?>
+                                                <span class="badge badge-success ml-2 text-white">Occupied</span>
+                                            <?php elseif ($userListing['status'] === 'not occupied'): ?>
+                                                <span class="badge badge-error ml-2">Not Occupied</span>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -190,10 +194,10 @@ $userListings = $listing->getListingsByUser($user_id) ?? [];
                             <?php endif; ?>
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
+
     </div>
 </main>
 

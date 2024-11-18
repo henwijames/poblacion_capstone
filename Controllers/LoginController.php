@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 // Successful tenant login
                 $_SESSION['user_id'] = $foundTenant['id'];
                 $_SESSION['user_role'] = 'tenant';
+                $_SESSION['mobile_verified']  = true;
                 $_SESSION['success'] = "Logged in successfully as a tenant!";
                 header("Location: ../tenants/index");
                 exit();
@@ -82,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 // Successful landlord login
                 $_SESSION['user_id'] = $foundLandlord['id'];
                 $_SESSION['user_role'] = 'landlord';
+                $_SESSION['mobile_verified']  = true;
                 $_SESSION['success'] = "Logged in successfully as a landlord!";
                 header("Location: ../landlords/index");
                 exit();

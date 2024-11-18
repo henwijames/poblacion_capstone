@@ -67,10 +67,11 @@ if (isset($_POST['save_permit'])) {
     $photoPath = null;
     if (isset($_FILES['permit']) && $_FILES['permit']['error'] == UPLOAD_ERR_OK) {
         $uploadDir = 'uploads/'; // Set your upload directory
+        $file_name = $_FILES['permit']['name'];
         $photoPath = $uploadDir . ($_FILES['permit']['name']);
 
         // Move the uploaded file
-        if (!move_uploaded_file($_FILES['permit']['tmp_name'], $photoPath)) {
+        if (!move_uploaded_file($_FILES['permit']['tmp_name'], $file_name)) {
             $_SESSION['error_message'] = "Failed to upload photo.";
             header("Location: permit.php?error=1");
             exit();
@@ -103,6 +104,7 @@ if (isset($_POST['save_qr'])) {
     $qrPayment = isset($_POST['qr_payment']) ? $_POST['qr_payment'] : null;
     if (isset($_FILES['qrcode']) && $_FILES['qrcode']['error'] == UPLOAD_ERR_OK) {
         $uploadDir = 'uploads/'; // Set your upload directory
+        $file_name = $_FILES['qrcode']['name'];
         $photoPath = $uploadDir . basename($_FILES['qrcode']['name']);
 
         // Move the uploaded file
@@ -115,7 +117,7 @@ if (isset($_POST['save_qr'])) {
 
     if ($qrPayment && $photoPath) {
         // Save the QR code and payment method for the landlord
-        if ($landlords->saveQR($landlordId, $photoPath)) {
+        if ($landlords->saveQR($landlordId, $file_name)) {
             // Save also to the listings if necessary (linking landlord_id with user_id)
             $listings = new Listing($db);
             if ($listings->updateQrPayment($landlordId, $qrPayment)) {

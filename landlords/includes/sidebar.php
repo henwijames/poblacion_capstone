@@ -53,7 +53,7 @@
                     <a href="permit" class="text-sm flex items-center dot hover:text-primary">Upload Business Permit</a>
                 </li>
                 <li class="mb-4">
-                    <a href="qrcode" class="text-sm flex items-center dot hover:text-primary">Upload Payment QR Code</a>
+                    <a href="qrcode" class="text-sm flex items-center dot hover:text-primary">Upload/Update Payment QR Code</a>
                 </li>
             </ul>
         </li>

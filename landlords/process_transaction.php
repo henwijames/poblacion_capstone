@@ -33,7 +33,9 @@ if ($action && $transaction_id) {
         $stmt = $db->prepare($query);
         $stmt->bindParam(':status', $status);
         $stmt->bindParam(':transaction_id', $transaction_id);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            throw new Exception("Failed to update transaction status.");
+        }
 
         // Only update rent's due_month if action is 'verify'
         if ($action === 'verify') {
@@ -41,25 +43,29 @@ if ($action && $transaction_id) {
             $transactionQuery = "SELECT listing_id, user_id, amount FROM transactions WHERE transaction_id = :transaction_id";
             $transactionStmt = $db->prepare($transactionQuery);
             $transactionStmt->bindParam(':transaction_id', $transaction_id);
-            $transactionStmt->execute();
+            if (!$transactionStmt->execute()) {
+                throw new Exception("Failed to fetch transaction details.");
+            }
             $transaction = $transactionStmt->fetch(PDO::FETCH_ASSOC);
 
             if ($transaction) {
                 $listing_id = $transaction['listing_id'];
                 $tenant_id = $transaction['user_id'];
-                $amount = $transaction['amount'];  // Amount for the payment
+                $amount = $transaction['amount'];
 
                 // Fetch the tenant's email address
                 $tenantQuery = "SELECT email FROM tenants WHERE id = :tenant_id";
                 $tenantStmt = $db->prepare($tenantQuery);
                 $tenantStmt->bindParam(':tenant_id', $tenant_id);
-                $tenantStmt->execute();
+                if (!$tenantStmt->execute()) {
+                    throw new Exception("Failed to fetch tenant details.");
+                }
                 $tenant = $tenantStmt->fetch(PDO::FETCH_ASSOC);
 
                 if ($tenant) {
                     $tenantEmail = $tenant['email'];
 
-                    // Send an email notification to the tenant
+                    // Send payment approval email notification
                     sendEmailNotification($tenantEmail, $amount);
                 }
 
@@ -68,7 +74,9 @@ if ($action && $transaction_id) {
                 $rentStmt = $db->prepare($rentQuery);
                 $rentStmt->bindParam(':listing_id', $listing_id);
                 $rentStmt->bindParam(':tenant_id', $tenant_id);
-                $rentStmt->execute();
+                if (!$rentStmt->execute()) {
+                    throw new Exception("Failed to fetch rent details.");
+                }
                 $rent = $rentStmt->fetch(PDO::FETCH_ASSOC);
 
                 if ($rent) {
@@ -76,12 +84,8 @@ if ($action && $transaction_id) {
                     $due_month = $rent['due_month'];
 
                     // If due_month is NULL, set it to rent_date + 1 month
-                    if ($due_month === null) {
-                        $new_due_month = date('Y-m-d', strtotime("+1 month", strtotime($rent_date)));
-                    } else {
-                        // If due_month is not NULL, add 1 month to it
-                        $new_due_month = date('Y-m-d', strtotime("+1 month", strtotime($due_month)));
-                    }
+                    $new_due_month = ($due_month === null) ? date('Y-m-d', strtotime("+1 month", strtotime($rent_date))) :
+                        date('Y-m-d', strtotime("+1 month", strtotime($due_month)));
 
                     // Update rent table with the new due_month
                     $updateRentQuery = "
@@ -93,7 +97,9 @@ if ($action && $transaction_id) {
                     $updateRentStmt->bindParam(':new_due_month', $new_due_month);
                     $updateRentStmt->bindParam(':listing_id', $listing_id);
                     $updateRentStmt->bindParam(':tenant_id', $tenant_id);
-                    $updateRentStmt->execute();
+                    if (!$updateRentStmt->execute()) {
+                        throw new Exception("Failed to update rent details.");
+                    }
                 }
             }
 
@@ -101,30 +107,35 @@ if ($action && $transaction_id) {
             $updateListingQuery = "UPDATE listings SET status = 'occupied' WHERE id = :listing_id";
             $updateListingStmt = $db->prepare($updateListingQuery);
             $updateListingStmt->bindParam(':listing_id', $listing_id);
-            $updateListingStmt->execute();
+            if (!$updateListingStmt->execute()) {
+                throw new Exception("Failed to update listing status.");
+            }
 
             header('Location: tenants');
             exit();
         }
 
+        // Handle declined transaction
         if ($action === 'declined') {
             try {
-
                 $transactionQuery = "SELECT listing_id, user_id, amount FROM transactions WHERE transaction_id = :transaction_id";
                 $transactionStmt = $db->prepare($transactionQuery);
                 $transactionStmt->bindParam(':transaction_id', $transaction_id);
-                $transactionStmt->execute();
+                if (!$transactionStmt->execute()) {
+                    throw new Exception("Failed to fetch transaction details.");
+                }
                 $transaction = $transactionStmt->fetch(PDO::FETCH_ASSOC);
 
                 if ($transaction) {
                     $listing_id = $transaction['listing_id'];
                     $tenant_id = $transaction['user_id'];
-                    $amount = $transaction['amount'];  // Amount for the payment
 
                     $tenantQuery = "SELECT email FROM tenants WHERE id = :tenant_id";
                     $tenantStmt = $db->prepare($tenantQuery);
-                    $tenantStmt->bindParam(':tenant_id', $tenant_id, PDO::PARAM_INT); // Ensure $tenant_id is set earlier in the code
-                    $tenantStmt->execute();
+                    $tenantStmt->bindParam(':tenant_id', $tenant_id);
+                    if (!$tenantStmt->execute()) {
+                        throw new Exception("Failed to fetch tenant details.");
+                    }
                     $tenant = $tenantStmt->fetch(PDO::FETCH_ASSOC);
 
                     if ($tenant) {
@@ -133,13 +144,12 @@ if ($action && $transaction_id) {
                         // Send declined email notification
                         sendDeclinedEmailNotification($tenantEmail);
                     } else {
-                        // Log an error if the tenant was not found
                         error_log("Tenant not found for tenant_id: " . $tenant_id);
                         header('Location: index');
                         exit();
                     }
                 }
-                // Redirect to tenants page
+
                 header('Location: tenants');
                 exit();
             } catch (Exception $e) {
@@ -158,8 +168,10 @@ if ($action && $transaction_id) {
         // Rollback transaction in case of error
         $db->rollBack();
         $_SESSION['error_message'] = "Failed to update transaction: " . $e->getMessage();
+        error_log("Transaction failed: " . $e->getMessage());
     }
 }
+
 
 
 

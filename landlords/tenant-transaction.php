@@ -78,7 +78,7 @@ $tenantTransactions = $landlords->getTransactionsByTenantId($tenant_id, $landlor
 </main>
 <script>
     function confirmAction(action, transactionId) {
-        const actionText = action === 'verify' ? 'completed' : 'declined';
+        const actionText = action === 'verify' ? 'verify' : 'declined';
         const actionColor = action === 'verify' ? '#4CAF50' : '#F44336'; // Green for Verify, Red for Decline
 
         Swal.fire({

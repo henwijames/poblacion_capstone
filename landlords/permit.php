@@ -9,7 +9,7 @@
             <div class="flex flex-col md:items-start items-end justify-center">
                 <div class="mb-4">
                     <img id="profilePhoto" class="h-[400px] w-[400px] object-contain mb-6" src="../assets/img/permit.svg" alt="Current profile photo" />
-                    <input type="file" name="permit" class="file-input file-input-bordered w-full max-w-xs" onchange="previewProfilePhoto(event)" />
+                    <input type="file" name="permit" class="file-input file-input-bordered w-full max-w-xs" onchange="previewProfilePhoto(event)" accept="image/png, image/jpg, image/jpeg, application/pdf" />
                 </div>
             </div>
             <div>
