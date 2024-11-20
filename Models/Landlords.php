@@ -194,7 +194,7 @@ class Landlords
     }
 
 
-    public function getTransactionsByTenantId($tenantId, $landlordId)
+    public function getPendingTransactionsByTenantId($tenantId, $landlordId)
     {
         $query = "
     SELECT t.amount, t.reference_number, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
@@ -203,6 +203,48 @@ class Landlords
     WHERE t.user_id = :tenant_id
     AND l.user_id = :landlord_id
     AND t.transaction_status = 'pending'  -- Added condition to filter by 'pending' status
+    ORDER BY t.transaction_date DESC
+";
+
+
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':tenant_id', $tenantId, PDO::PARAM_INT);
+        $stmt->bindParam(':landlord_id', $landlordId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Return results as an associative array
+    }
+    public function getCompletedTransactionsByTenantId($tenantId, $landlordId)
+    {
+        $query = "
+    SELECT t.amount, t.reference_number, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
+    FROM transactions t
+    JOIN listings l ON t.listing_id = l.id
+    WHERE t.user_id = :tenant_id
+    AND l.user_id = :landlord_id
+    AND t.transaction_status = 'completed'  -- Added condition to filter by 'pending' status
+    ORDER BY t.transaction_date DESC
+";
+
+
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':tenant_id', $tenantId, PDO::PARAM_INT);
+        $stmt->bindParam(':landlord_id', $landlordId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Return results as an associative array
+    }
+    public function getDeclinedTransactionsByTenantId($tenantId, $landlordId)
+    {
+        $query = "
+    SELECT t.amount, t.reference_number, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
+    FROM transactions t
+    JOIN listings l ON t.listing_id = l.id
+    WHERE t.user_id = :tenant_id
+    AND l.user_id = :landlord_id
+    AND t.transaction_status = 'declined'  -- Added condition to filter by 'pending' status
     ORDER BY t.transaction_date DESC
 ";
 

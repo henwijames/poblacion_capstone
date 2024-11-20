@@ -29,6 +29,7 @@ $tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom metho
                         <th class="py-2 px-4 border-r border-gray-200">House Name</th>
                         <th class="py-2 px-4 border-r border-gray-200">Address</th>
                         <th class="py-2 px-4 border-r border-gray-200">Phone Number</th>
+                        <th class="py-2 px-4 border-r border-gray-200">Actions</th>
                     </tr>
                 </thead>
                 <tbody>

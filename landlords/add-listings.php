@@ -88,7 +88,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'landlord') {
     <div class="container mx-auto px-4 sm:px-6 md:px-8 py-12">
         <div class="flex items-center justify-between">
             <h1 class="text-2xl font-bold">Add Listing</h1>
-            <a href="listings" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Active Listings</a>
+            <a href="listings" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Back</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>

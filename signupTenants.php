@@ -45,6 +45,11 @@ unset($_SESSION['same_email']);
 
             <h1 class="text-4xl font-bold text-center mb-6">Sign up as a <span class="text-primary">Tenant</span></h1>
             <form class="space-y-4 flex flex-col w-full gap-4" method="POST" action="Controllers/TenantSignupController.php" enctype="multipart/form-data">
+                <?php if (isset($_SESSION['errors']['database'])): ?>
+                    <p class="text-red-500 text-sm">
+                        <?php echo htmlspecialchars($_SESSION['errors']['database']); ?>
+                    </p>
+                <?php endif; ?>
                 <div class="flex flex-col md:flex-row w-full justify-center items-center gap-4">
                     <div class="flex flex-col gap-2 w-full">
                         <label for="fname" class="text-md">First Name</label>
@@ -102,6 +107,7 @@ unset($_SESSION['same_email']);
                             file:bg-violet-50 file:text-primary
                             hover:file:bg-accent
                             "
+                            accept="image/png, image/jpg, image/jpeg"
                             onchange="previewProfilePhoto(event)" />
                     </label>
                     <?php if (isset($errors['validid'])): ?>

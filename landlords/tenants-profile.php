@@ -8,7 +8,7 @@ if (isset($_GET['id'])) {
     $db = $database->getConnection();
 
     // Fetch tenant details
-    $stmt = $db->prepare("SELECT first_name, middle_name, last_name, address, phone_number, email, profile_picture 
+    $stmt = $db->prepare("SELECT first_name, middle_name, last_name, address, phone_number, email, profile_picture, validid
                           FROM tenants
                           WHERE id = :user_id");
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -33,7 +33,7 @@ if (isset($_GET['id'])) {
     <div class="p-6">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">Tenant's Profile</h1>
-            <a href="index" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Back</a>
+            <a href="tenants" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-accent transition-all">Back</a>
         </div>
         <section class="w-full overflow-hidden bg-background">
             <div class="flex flex-col">
@@ -85,10 +85,32 @@ if (isset($_GET['id'])) {
                                 </div>
                             </dl>
                         </div>
+
                     </div>
                 </div>
             </div>
+            <div class="flex justify-center gap-2 py-2">
+                <button class="btn bg-primary text-white" onclick="modal_1.showModal()">View Valid ID</button>
+                <dialog id="modal_1" class="modal">
+                    <div class="modal-box">
+                        <form method="dialog">
+                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        </form>
+                        <h3 class="text-lg font-bold"><?= htmlspecialchars($tenant['first_name'] . "'s Valid ID") ?></h3>
+                        <?php
+                        if ($tenant['validid']) {
+                            echo "<img src='../tenants/Controller/uploads/" . htmlspecialchars($tenant['validid']) . "' alt='Valid ID' class='object-cover rounded-lg shadow-lg'>";
+                        } else {
+                            echo "<h1 class='text-4xl text-center p-6 text-red-500 uppercase font-bold'>No Valid ID uploaded</h1>";
+                        }
+                        ?>
+
+                    </div>
+                </dialog>
+            </div>
         </section>
+
+
     </div>
 </main>
 <?php include 'includes/footer.php'; ?>

@@ -5,7 +5,7 @@
     <ul class="ml-auto flex items-center ">
         <li class="mr-1 dropdown relative flex items-center gap-4">
 
-            <span class="hidden md:flex text-gray-400"><?php echo htmlspecialchars($userName); ?></span>
+            <span class="flex text-gray-400"><?php echo htmlspecialchars($userName); ?></span>
             <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
 
                 <i class="fa-solid fa-user mr-2"></i>

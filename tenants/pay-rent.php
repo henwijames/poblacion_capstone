@@ -143,7 +143,7 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             </h3>
 
                                             <?php if ($rent['qr_payment']) : ?>
-                                                <img src="../landlords/Controllers/<?php echo htmlspecialchars($rent['qr_payment']); ?>"
+                                                <img src="../landlords/Controllers/uploads/<?php echo htmlspecialchars($rent['qr_payment']); ?>"
                                                     alt="QR Code"
                                                     class="h-96 object-cover rounded-lg shadow-lg mb-4">
                                             <?php else : ?>

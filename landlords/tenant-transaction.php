@@ -16,7 +16,9 @@ if (!$tenant_id) {
 $landlords = new Landlords($db);
 
 // Fetch tenant transactions based on tenant_id from GET
-$tenantTransactions = $landlords->getTransactionsByTenantId($tenant_id, $landlord_id);
+$tenantPendingTransactions = $landlords->getPendingTransactionsByTenantId($tenant_id, $landlord_id);
+$tenantCompletedTransactions = $landlords->getCompletedTransactionsByTenantId($tenant_id, $landlord_id);
+$tenantDeclinedTransactions = $landlords->getDeclinedTransactionsByTenantId($tenant_id, $landlord_id);
 
 ?>
 
@@ -27,54 +29,146 @@ $tenantTransactions = $landlords->getTransactionsByTenantId($tenant_id, $landlor
             <h1 class="text-2xl font-bold">Tenant Transactions</h1>
             <a href="tenants" class="btn btn-sm bg-primary text-white">Back</a>
         </div>
-        <div class="mt-4 overflow-x-auto">
-            <table class="w-full border border-gray-200 rounded-md">
-                <thead class="bg-gray-50">
-                    <tr class="bg-slate-100">
-                        <th class="py-2 px-4 border-r border-gray-200">House Name</th>
-                        <th class="py-2 px-4 border-r border-gray-200">Amount</th>
-                        <th class="py-2 px-4 border-r border-gray-200">Reference Number</th>
-                        <th class="py-2 px-4 border-r border-gray-200">Transaction Date</th>
-                        <th class="py-2 px-4 border-r border-gray-200">Status</th>
-                        <th class="py-2 px-4 border-r border-gray-200">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (empty($tenantTransactions)): ?>
-                        <tr class="border-b">
-                            <td colspan="5" class="py-2 px-4 text-center">No transactions found</td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($tenantTransactions as $transaction): ?>
-                            <tr class="border-b">
-                                <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['listing_name']); ?></td>
-                                <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['amount']); ?></td>
-                                <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['reference_number']); ?></td>
-                                <td class="py-2 px-4 border-r border-gray-200"><?php echo date('F j, Y', strtotime($transaction['transaction_date'])); ?></td>
-                                <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['transaction_status']); ?></td>
-                                <td class="py-2 px-4 border-r border-gray-200 text-center">
-                                    <?php if ($transaction['transaction_status'] === 'pending'): ?>
-                                        <button
-                                            class="btn bg-primary btn-sm text-white"
-                                            onclick="confirmAction('verify', <?php echo $transaction['transaction_id']; ?>)">
-                                            Verify
-                                        </button>
-                                        <button
-                                            class="btn btn-error btn-sm text-white"
-                                            onclick="confirmAction('declined', <?php echo $transaction['transaction_id']; ?>)">
-                                            Decline
-                                        </button>
-                                    <?php else: ?>
-                                        <span class="text-gray-500">No actions available</span>
-                                    <?php endif; ?>
-                                </td>
+
+        <div role="tablist" class="tabs tabs-lifted mt-4 overflow-x-auto">
+            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="Pending" checked="checked" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                <div class="mt-4 overflow-x-auto">
+                    <table class="w-full border border-gray-200 rounded-md">
+                        <thead class="bg-gray-50">
+                            <tr class="bg-slate-100">
+                                <th class="py-2 px-4 border-r border-gray-200">House Name</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Amount</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Reference Number</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Transaction Date</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Status</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Actions</th>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($tenantPendingTransactions)): ?>
+                                <tr class="border-b">
+                                    <td colspan="5" class="py-2 px-4 text-center">No transactions found</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($tenantPendingTransactions as $transaction): ?>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['listing_name']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['amount']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['reference_number']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo date('F j, Y', strtotime($transaction['transaction_date'])); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 capitalize"><?php echo htmlspecialchars($transaction['transaction_status']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 text-center">
+                                            <?php if ($transaction['transaction_status'] === 'pending'): ?>
+                                                <button
+                                                    class="btn bg-primary btn-sm text-white"
+                                                    onclick="confirmAction('verify', <?php echo $transaction['transaction_id']; ?>)">
+                                                    Verify
+                                                </button>
+                                                <button
+                                                    class="btn btn-error btn-sm text-white"
+                                                    onclick="confirmAction('declined', <?php echo $transaction['transaction_id']; ?>)">
+                                                    Decline
+                                                </button>
+                                            <?php else: ?>
+                                                <span class="text-gray-500">No actions available</span>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <input
+                type="radio"
+                name="my_tabs_2"
+                role="tab"
+                class="tab "
+                aria-label="Completed" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                <div class="mt-4 overflow-x-auto">
+                    <table class="w-full border border-gray-200 rounded-md">
+                        <thead class="bg-gray-50">
+                            <tr class="bg-slate-100">
+                                <th class="py-2 px-4 border-r border-gray-200">House Name</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Amount</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Reference Number</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Transaction Date</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($tenantCompletedTransactions)): ?>
+                                <tr class="border-b">
+                                    <td colspan="5" class="py-2 px-4 text-center">No transactions found</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($tenantCompletedTransactions as $transaction): ?>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['listing_name']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['amount']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['reference_number']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo date('F j, Y', strtotime($transaction['transaction_date'])); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 capitalize">
+                                            <!-- Add DaisyUI badge based on status -->
+                                            <?php if ($transaction['transaction_status'] === 'completed'): ?>
+                                                <span class="badge badge-success ml-2 text-white">Completed</span>
+                                            <?php endif; ?>
+                                        </td>
+
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <input type="radio" name="my_tabs_2" role="tab " class="tab" aria-label="Declined" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                <div class="mt-4 overflow-x-auto">
+                    <table class="w-full border border-gray-200 rounded-md">
+                        <thead class="bg-gray-50">
+                            <tr class="bg-slate-100">
+                                <th class="py-2 px-4 border-r border-gray-200">House Name</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Amount</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Reference Number</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Transaction Date</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($tenantDeclinedTransactions)): ?>
+                                <tr class="border-b">
+                                    <td colspan="5" class="py-2 px-4 text-center">No transactions found</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($tenantDeclinedTransactions as $transaction): ?>
+                                    <tr class="border-b">
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['listing_name']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['amount']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['reference_number']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo date('F j, Y', strtotime($transaction['transaction_date'])); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 capitalize">
+                                            <!-- Add DaisyUI badge based on status -->
+                                            <?php if ($transaction['transaction_status'] === 'declined'): ?>
+                                                <span class="badge badge-error ml-2 text-white">Declined</span>
+                                            <?php endif; ?>
+                                        </td>
+
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
 </main>
 <script>
     function confirmAction(action, transactionId) {

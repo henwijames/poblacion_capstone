@@ -24,7 +24,7 @@ include 'includes/header.php';
 
                 </div>
                 <div class="mb-4">
-                    <img id="qrCode" class="h-[400px] w-[400px] mb-6 object-scale-down" src="<?php echo ($landlord['qr_payment']) ? 'Controllers/' . $landlord['qr_payment'] : '../assets/img/permit.svg'; ?>" alt="Current profile photo" />
+                    <img id="qrCode" class="h-[400px] w-[400px] mb-6 object-scale-down" src="<?php echo ($landlord['qr_payment']) ? 'Controllers/uploads/' . $landlord['qr_payment'] : '../assets/img/permit.svg'; ?>" alt="Current profile photo" />
                     <input type="file" name="qrcode" class="file-input file-input-bordered w-full max-w-xs" onchange="previewQrCode(event)" accept="image/png, image/gif, image/jpeg" />
                 </div>
             </div>

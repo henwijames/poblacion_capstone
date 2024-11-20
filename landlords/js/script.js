@@ -62,29 +62,3 @@ document.addEventListener("click", (e) => {
 });
 
 //End Sidebar
-
-document.addEventListener("DOMContentLoaded", function () {
-  const breadCrumb = document.getElementById("breadcrumb");
-  const pageLinks = document.querySelectorAll("a[href]");
-
-  pageLinks.forEach((link) => {
-    link.addEventListener("click", function (event) {
-      const pageName = this.textContent.trim();
-
-      // Prevent duplicate "Dashboard / Dashboard" entries
-
-      breadCrumb.textContent = `${pageName}`;
-
-      // Store the breadcrumb in localStorage
-      localStorage.setItem("breadcrumb", breadCrumb.textContent);
-    });
-  });
-
-  // On page load, restore the breadcrumb from localStorage
-  const savedBreadcrumb = localStorage.getItem("breadcrumb");
-  if (savedBreadcrumb) {
-    breadCrumb.textContent = savedBreadcrumb;
-  } else {
-    breadCrumb.textContent = "Dashboard";
-  }
-});

@@ -1636,6 +1636,21 @@ html{
   grid-column-start: span 9999;
 }
 
+.tab-content{
+  grid-column-start: 1;
+  grid-column-end: span 9999;
+  grid-row-start: 2;
+  margin-top: calc(var(--tab-border) * -1);
+  display: none;
+  border-color: transparent;
+  border-width: var(--tab-border, 0);
+}
+
+:checked + .tab-content:nth-child(2),
+  :is(.tab-active, [aria-selected="true"]) + .tab-content:nth-child(2){
+  border-start-start-radius: 0px;
+}
+
 input.tab:checked + .tab-content,
 :is(.tab-active, [aria-selected="true"]) + .tab-content{
   display: block;
@@ -3647,8 +3662,8 @@ input.tab:checked + .tab-content,
   height: 100%;
 }
 
-.max-h-10{
-  max-height: 2.5rem;
+.h-screen{
+  height: 100vh;
 }
 
 .max-h-96{
@@ -3681,10 +3696,6 @@ input.tab:checked + .tab-content,
 
 .w-16{
   width: 4rem;
-}
-
-.w-24{
-  width: 6rem;
 }
 
 .w-28{
@@ -3755,10 +3766,6 @@ input.tab:checked + .tab-content,
   width: 100%;
 }
 
-.min-w-\[540px\]{
-  min-width: 540px;
-}
-
 .max-w-5xl{
   max-width: 64rem;
 }
@@ -3801,14 +3808,6 @@ input.tab:checked + .tab-content,
 
 .shrink-0{
   flex-shrink: 0;
-}
-
-.table-auto{
-  table-layout: auto;
-}
-
-.border-collapse{
-  border-collapse: collapse;
 }
 
 .origin-top-right{
@@ -4012,6 +4011,10 @@ input.tab:checked + .tab-content,
   border-radius: 5px;
 }
 
+.rounded-box{
+  border-radius: var(--rounded-box, 1rem);
+}
+
 .rounded-full{
   border-radius: 9999px;
 }
@@ -4067,6 +4070,11 @@ input.tab:checked + .tab-content,
   border-color: rgb(193 197 73 / var(--tw-border-opacity));
 }
 
+.border-base-300{
+  --tw-border-opacity: 1;
+  border-color: var(--fallback-b3,oklch(var(--b3)/var(--tw-border-opacity)));
+}
+
 .border-gray-100{
   --tw-border-opacity: 1;
   border-color: rgb(243 244 246 / var(--tw-border-opacity));
@@ -4096,6 +4104,11 @@ input.tab:checked + .tab-content,
   border-color: transparent;
 }
 
+.border-white{
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity));
+}
+
 .border-b-black{
   --tw-border-opacity: 1;
   border-bottom-color: rgb(0 0 0 / var(--tw-border-opacity));
@@ -4114,6 +4127,11 @@ input.tab:checked + .tab-content,
 .bg-background{
   --tw-bg-opacity: 1;
   background-color: rgb(251 251 243 / var(--tw-bg-opacity));
+}
+
+.bg-base-100{
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
 }
 
 .bg-black\/50{
@@ -4145,11 +4163,6 @@ input.tab:checked + .tab-content,
   background-color: rgb(17 24 39 / var(--tw-bg-opacity));
 }
 
-.bg-green-400{
-  --tw-bg-opacity: 1;
-  background-color: rgb(74 222 128 / var(--tw-bg-opacity));
-}
-
 .bg-primary{
   --tw-bg-opacity: 1;
   background-color: rgb(193 197 73 / var(--tw-bg-opacity));
@@ -4160,9 +4173,9 @@ input.tab:checked + .tab-content,
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
 }
 
-.bg-red-400{
+.bg-red-500{
   --tw-bg-opacity: 1;
-  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 
 .bg-secondary{
@@ -4182,11 +4195,6 @@ input.tab:checked + .tab-content,
 .bg-white{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.bg-yellow-400{
-  --tw-bg-opacity: 1;
-  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-75{
@@ -4386,6 +4394,10 @@ input.tab:checked + .tab-content,
   font-size: 18px;
 }
 
+.text-\[200px\]{
+  font-size: 200px;
+}
+
 .text-\[20px\]{
   font-size: 20px;
 }
@@ -4416,11 +4428,6 @@ input.tab:checked + .tab-content,
 .text-xl{
   font-size: 1.25rem;
   line-height: 1.75rem;
-}
-
-.text-xs{
-  font-size: 0.75rem;
-  line-height: 1rem;
 }
 
 .font-bold{
@@ -4558,11 +4565,6 @@ input.tab:checked + .tab-content,
 .text-slate-500{
   --tw-text-opacity: 1;
   color: rgb(100 116 139 / var(--tw-text-opacity));
-}
-
-.text-slate-600{
-  --tw-text-opacity: 1;
-  color: rgb(71 85 105 / var(--tw-text-opacity));
 }
 
 .text-slate-700{
@@ -4706,6 +4708,14 @@ input.tab:checked + .tab-content,
 
 .ease-out{
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+.\[--tab-bg\:primary\]{
+  --tab-bg: primary;
+}
+
+.\[--tab-border-color\:primary\]{
+  --tab-border-color: primary;
 }
 
 .\[hostname\:port\]{

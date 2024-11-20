@@ -127,7 +127,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             echo '<p class="mb-4 text-red-500">Note: Please pay the exact amount or else your transaction will be cancelled.</p>';
                                             // Display permit image if available, otherwise show message
                                             if (!empty($listing['qr_payment'])) {
-                                                echo "<img src='../landlords/Controllers/" . htmlspecialchars($listing['qr_payment']) . "' alt='permit' class=' h-96 object-cover rounded-lg shadow-lg'>";
+                                                echo "<img src='../landlords/Controllers/uploads/" . htmlspecialchars($listing['qr_payment']) . "' alt='permit' class=' h-96 object-cover rounded-lg shadow-lg'>";
                                             } else {
                                                 echo "<h1 class='text-4xl text-center p-6 text-red-500 uppercase font-bold'>No QR Code Uploaded</h1>";
                                             }
