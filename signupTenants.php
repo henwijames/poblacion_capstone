@@ -8,7 +8,22 @@ include 'partials/header.php';
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
 
-// Check if there is an email error in session and show a Swal popup
+
+// Clear session data
+unset($_SESSION['errors']);
+unset($_SESSION['form_data']);
+
+// Check if there is an email or phone number error in the session and show a Swal popup
+if (isset($_SESSION['same'])) {
+    echo "<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '" . addslashes($_SESSION['same']) . "'
+    });
+    </script>";
+    unset($_SESSION['same_email']); // Clear the session variable
+}
 if (isset($_SESSION['same_email'])) {
     echo "<script>
     Swal.fire({
@@ -17,12 +32,21 @@ if (isset($_SESSION['same_email'])) {
         text: '" . addslashes($_SESSION['same_email']) . "'
     });
     </script>";
+    unset($_SESSION['same_email']); // Clear the session variable
 }
 
-// Clear session data
-unset($_SESSION['errors']);
-unset($_SESSION['form_data']);
-unset($_SESSION['same_email']);
+if (isset($_SESSION['same_number'])) {
+    echo "<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '" . addslashes($_SESSION['same_number']) . "'
+    });
+    </script>";
+    unset($_SESSION['same_number']); // Clear the session variable
+}
+
+
 
 ?>
 
@@ -48,6 +72,11 @@ unset($_SESSION['same_email']);
                 <?php if (isset($_SESSION['errors']['database'])): ?>
                     <p class="text-red-500 text-sm">
                         <?php echo htmlspecialchars($_SESSION['errors']['database']); ?>
+                    </p>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['same_number'])): ?>
+                    <p class="text-red-500 text-sm">
+                        <?php echo htmlspecialchars($_SESSION['same_number']); ?>
                     </p>
                 <?php endif; ?>
                 <div class="flex flex-col md:flex-row w-full justify-center items-center gap-4">

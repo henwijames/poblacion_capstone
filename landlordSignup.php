@@ -2,12 +2,47 @@
 include 'partials/header.php';
 
 
+// Retrieve errors and form data from session
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
+
 
 // Clear session data
 unset($_SESSION['errors']);
 unset($_SESSION['form_data']);
+
+// Check if there is an email or phone number error in the session and show a Swal popup
+if (isset($_SESSION['same'])) {
+    echo "<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '" . addslashes($_SESSION['same']) . "'
+    });
+    </script>";
+    unset($_SESSION['same_email']); // Clear the session variable
+}
+if (isset($_SESSION['same_email'])) {
+    echo "<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '" . addslashes($_SESSION['same_email']) . "'
+    });
+    </script>";
+    unset($_SESSION['same_email']); // Clear the session variable
+}
+
+if (isset($_SESSION['same_number'])) {
+    echo "<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '" . addslashes($_SESSION['same_number']) . "'
+    });
+    </script>";
+    unset($_SESSION['same_number']); // Clear the session variable
+}
 ?>
 <div class="w-full flex flex-col justify-center items-center">
     <div class="container mx-auto md:px-[120px] mb-4 px-6 py-2">
