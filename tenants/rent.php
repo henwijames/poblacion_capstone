@@ -174,7 +174,7 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <form method="dialog">
                                                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                                 </form>
-                                                <h3 class="font-bold text-lg">Submit a Complaint</h3>
+                                                <h3 class="font-bold text-lg">Submit a Maintenance Complaint</h3>
                                                 <form id="complain-form-<?= $rent['listing_id']; ?>">
                                                     <input type="hidden" name="listing_id" value="<?= $rent['listing_id']; ?>">
                                                     <label class="form-control">
@@ -205,31 +205,26 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </main>
     <script>
-        document.querySelectorAll('form[id^="complain-form-"]').forEach(form => {
+        document.querySelectorAll('form[id^="complain-form-"]').forEach((form) => {
             form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent default form submission
-
+                event.preventDefault();
 
                 const formData = new FormData(this);
                 const listingId = formData.get('listing_id');
                 const complaintMessage = formData.get('complain_message').trim();
                 const modal = document.getElementById(`modal_${listingId}`);
-                modal.close()
 
-                // Validate if the textarea is empty
+                // Validate input
                 if (!complaintMessage) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Empty Complaint',
                         text: 'Please enter your complaint before submitting.',
-                    }).then(() => {
-                        modal.show();
-                    })
-                    modal.close()
-                    return; // Do not proceed if validation fails
+                    });
+                    return;
                 }
-
-                // AJAX Request to submit the complaint
+                modal.close();
+                // AJAX request
                 $.ajax({
                     url: '../Controllers/ComplaintController.php',
                     type: 'POST',
@@ -237,14 +232,18 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        response = JSON.parse(response);
+                        console.log('Raw Response:', response); // Log the raw response
+
+                        // No need to parse, response is already an object
                         if (response.status === 'success') {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Complaint Submitted',
                                 text: response.message,
                             }).then(() => {
-                                modal.close(); // Close the modal
+                                // Close the modal after successful submission
+                                const modal = document.getElementById(`modal_${listingId}`);
+                                modal.close();
                             });
                         } else {
                             Swal.fire({
@@ -254,11 +253,19 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             });
                         }
                     },
-                    error: function() {
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX Error:', jqXHR, textStatus, errorThrown);
                         Swal.fire({
                             icon: 'error',
                             title: 'Request Failed',
                             text: 'There was an error submitting your complaint.',
+                        }).then(() => {
+                            // Close the modal after error
+                            const modal = document.getElementById(`modal_${listingId}`);
+                            if (modal) {
+                                console.log(modal); // Check if modal is selected correctly
+                                modal.close(); // Close the modal
+                            }
                         });
                     },
                 });

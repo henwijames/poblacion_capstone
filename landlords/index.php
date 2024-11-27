@@ -68,6 +68,20 @@ $listing = new Listing($db);
 $landlords = new Landlords($db);
 $tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom method to fetch tenants based on landlord ID
 $userListings = $listing->getListingsByLandlord($user_id) ?? [];
+
+if (isset($_SESSION['success_add'])) {
+    echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '{$_SESSION['success_add']}',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    </script>";
+    // Clear the session variable so the message doesn't show again on reload.
+    unset($_SESSION['success_add']);
+}
 ?>
 
 <main class="main-content main">

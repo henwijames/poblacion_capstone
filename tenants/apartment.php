@@ -38,7 +38,7 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
                 <a href="index" class="rounded-full w-10 h-10 hover:bg-primary hover:text-white flex items-center justify-center transition-colors ease-in duration-100  hover:shadow-md">
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
-                <h1 class="text-3xl font-bold"><?= htmlspecialchars($landlord['property_name']); ?></h1>
+                <h1 class="text-xl sm:text-3xl font-bold"><?php echo htmlspecialchars_decode($landlord['property_name'], ENT_QUOTES); ?></h1>
             </div>
         </div>
         <!-- Images -->
@@ -74,7 +74,7 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
                             width="300"
                             height="200"
                             class="rounded-lg object-cover shadow-lg"
-                            style="aspect-ratio: 300 / 210; object-fit: cover; height: 100%;" />
+                            style="aspect-ratio: 300 / 210; object-fit: cover;" />
                         <?php $count++; ?>
                     <?php endforeach; ?>
                 <?php else: ?>

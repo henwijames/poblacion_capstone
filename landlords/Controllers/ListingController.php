@@ -113,7 +113,7 @@ if (isset($_POST['add_listing'])) {
                 // var_dump($uploaded_files); // Check if uploaded files are being populated
                 // die();
                 if ($listing->saveImages($data, $uploaded_files)) {
-                    $_SESSION['success'] = "Listing created successfully!";
+                    $_SESSION['success_add'] = "Listing created successfully!";
                     header("Location: ../index");
                     exit();
                 } else {

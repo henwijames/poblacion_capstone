@@ -101,7 +101,7 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                         <div class="bg-white shadow-md rounded-lg p-6">
                             <div class="mb-4">
-                                <h3 class="text-lg font-semibold"><?php echo htmlspecialchars($rent['property_name']); ?></h3>
+                                <h3 class="text-lg font-semibold"><?php echo htmlspecialchars_decode($rent['property_name'], ENT_QUOTES); ?></h3>
                                 <p class="text-gray-500"><?php echo htmlspecialchars($rent['address']); ?></p>
                             </div>
                             <div class="flex justify-between items-center mb-4">

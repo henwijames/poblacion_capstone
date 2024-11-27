@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["book_now"])) {
         sendEmailNotificationToLandlord($landlord['email'], $listingDetails, $total_amount, $check_in);
 
         echo "Booking successful! Landlord notified.";
-        header("Location: ../inquiries.php?id=");
+        header("Location: ../inquiries.php");
     } catch (Exception $e) {
         // Rollback the transaction if something goes wrong
         $db->rollBack();

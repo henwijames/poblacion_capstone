@@ -103,7 +103,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php if (!empty($listings)) : ?>
                             <?php foreach ($listings as $listing) : ?>
                                 <tr>
-                                    <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($listing['property_name']); ?></td>
+                                    <td class="px-6 py-3 border-b"><?php echo htmlspecialchars_decode($listing['property_name'], ENT_QUOTES); ?></td>
                                     <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($listing['address']); ?></td>
                                     <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($listing['rent']); ?></td>
                                     <td class="px-6 py-3 border-b"><?php echo htmlspecialchars($listing['check_in']); ?></td>

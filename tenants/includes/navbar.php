@@ -61,7 +61,6 @@
                     <div id="user-menu" class="absolute hidden right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transition transform ease-out duration-100 scale-95 opacity-0" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                         <!-- Active: "bg-gray-100", Not Active: "" -->
                         <a href="profile" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 logout-btn" role="menuitem" tabindex="-1" id="user-menu-item-2 ">Log out</a>
                     </div>
                 </div>

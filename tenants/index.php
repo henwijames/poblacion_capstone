@@ -107,7 +107,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'tenant') {
                         class="rounded-t-md object-cover w-full h-60"
                         style="aspect-ratio: 400 / 300; object-fit: cover;" />
                     <div class="p-4">
-                        <h3 class="text-lg font-semibold"><?php echo htmlspecialchars($property_name); ?></h3>
+                        <h3 class="text-lg font-semibold"><?php echo htmlspecialchars_decode($property_name, ENT_QUOTES); ?></h3>
                         <h3 class="text-base text-muted-foreground"><?php echo htmlspecialchars($landlordListing['address']); ?></h3>
                         <p class="mt-2 text-muted-foreground">Hosted by <?php echo htmlspecialchars($fullName); ?></p>
                         <p class="text-muted-foreground mb-2"><?= htmlspecialchars($landlordListing['sqft']); ?> sqft | <?= htmlspecialchars($landlordListing['bedrooms']); ?> Bed | <?= htmlspecialchars($landlordListing['bathrooms']); ?> Bathrooms</p>
@@ -120,11 +120,16 @@ if (isset($_SESSION['user_id']) && $_SESSION['user_role'] === 'tenant') {
                     </div>
                 </div>
             <?php endforeach; ?>
-        <?php else: ?>
-            <p>No listings available.</p>
         <?php endif; ?>
     </main>
 </div>
+
+<?php if (empty($landlordListings)): ?>
+    <div class="flex flex-col justify-center items-center w-full h-full">
+        <img src="../assets/img/nolistings.svg" alt="no listings" class="mx-auto w-80 sm:w-[600px]">
+        <h1 class="text-2xl text-center font-bold mt-6">No listings available</h1>
+    </div>
+<?php endif; ?>
 
 
 
