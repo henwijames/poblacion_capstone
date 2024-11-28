@@ -41,7 +41,7 @@ $complaintList = $complaints->getComplaintsByTenant($tenant_id);
                         <div class="flex items-center mb-4">
                             <div class="mr-4">
                                 <img
-                                    src="../tenants/Controller/uploads/<?php echo htmlspecialchars($tenant['profile_picture'] ?: '../assets/img/me.png'); ?>"
+                                    src="<?php echo htmlspecialchars($tenant['profile_picture'] ? '../tenants/Controller/uploads/' . $tenant['profile_picture'] : '../assets/img/me.jpg'); ?>"
                                     alt="Tenant Avatar"
                                     class="w-12 h-12 rounded-full object-contain">
                             </div>

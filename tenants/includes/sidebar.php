@@ -34,10 +34,7 @@
                     <a href="pay-rent" class="text-sm flex items-center dot hover:text-primary">Pay Rent</a>
                 </li>
                 <li class="mb-4">
-                    <a href="#" class="text-sm flex items-center dot hover:text-primary">Transactions</a>
-                </li>
-                <li class="mb-4">
-                    <a href="#" class="text-sm flex items-center dot hover:text-primary">My Balance</a>
+                    <a href="transactions" class="text-sm flex items-center dot hover:text-primary">Transactions</a>
                 </li>
             </ul>
         </li>

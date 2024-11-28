@@ -36,7 +36,7 @@ unset($_SESSION['form_data']);
             </form>
             <div class="text-center text-gray-400">
 
-                Go back to <a href="choose" class="text-black font-bold hover:text-[#C1C549]">Login</a>
+                Go back to <a href="login" class="text-black font-bold hover:text-[#C1C549]">Login</a>
             </div>
         </div>
         <div class="relative">

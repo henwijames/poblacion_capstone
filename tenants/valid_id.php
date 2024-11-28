@@ -34,35 +34,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
         $profilePicture = $landlord['profile_picture']; // Replace 'profile_picture' with the actual column name
     }
 }
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $database = new Database();
-    $db = $database->getConnection();
-    $tenants = new Tenants($db);
-
-    $user_id = $_SESSION['user_id'];
-    echo $user_id;
-    $code = implode('', $_POST['verification_code']);
-
-    // Retrieve the tenant by ID
-    $tenant = $tenants->findById($user_id);
-
-
-    // Check if the code matches and is not expired
-    if ($tenant['verification_code'] === $code && strtotime($tenant['verification_expires_at']) > time()) {
-        // Code is valid, mark the phone number as verified
-        $tenants->verifyPhoneNumber($user_id);
-
-        $_SESSION['success'] = "Phone number verified successfully!";
-        header("Location: profile.php");
-        exit();
-    } else {
-        // Code is invalid or expired
-        $_SESSION['errors']['verification'] = "Invalid or expired verification code.";
-        header("Location: account_verify.php");
-        exit();
-    }
-}
 ?>
 <html lang="en" class="scroll-smooth">
 
@@ -97,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php include 'includes/topbar.php'; ?>
         <div class="p-6">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-bold mb-6">Upload Valid ID</h1>
+                <h1 class="text-2xl font-bold mb-6">Upload/Update Valid ID</h1>
             </div>
             <form action="Controller/TenantController.php" method="POST" enctype="multipart/form-data">
                 <div class="flex flex-col md:items-start items-end justify-center">

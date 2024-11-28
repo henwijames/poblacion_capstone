@@ -105,7 +105,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
                     <form class="space-y-6" method="POST" action="Controller/TenantController.php" enctype="multipart/form-data">
                         <div class="flex items-center space-x-6">
                             <div class="shrink-0">
-                                <img id="profilePhoto" class="h-16 w-16 object-cover rounded-full" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1361&q=80" alt="Current profile photo" />
+                                <img id="profilePhoto" class="h-16 w-16 object-cover rounded-full" src="<?php echo !empty($tenant['profile_picture']) ? 'Controller/uploads/' . htmlspecialchars($tenant['profile_picture']) : '../assets/img/me.jpg'; ?>" alt="Current profile photo" />
                             </div>
                             <label class="block">
                                 <span class="sr-only">Choose profile photo</span>

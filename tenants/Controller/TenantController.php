@@ -176,12 +176,12 @@ if (isset($_POST['save_valid'])) {
 
     if ($tenants->savePermit($tenantId, $file_name)) {
         // Redirect or inform user of success
-        $_SESSION['success_message'] = 'Permit uploaded successfully.';
-        header('Location: ../index?success=1');
+        $_SESSION['success_valid'] = 'Valid ID uploaded successfully.';
+        header('Location: ../profile');
         exit();
     } else {
-        $_SESSION['error_message'] = "An error occurred while updating your profile.";
-        header("Location: ../valid_id?error=1");
+        $_SESSION['error_valid'] = "An error occurred while updating your Valid ID.";
+        header("Location: ../profile");
         exit();
     }
 }

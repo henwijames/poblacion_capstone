@@ -35,6 +35,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
         $profilePicture = $landlord['profile_picture']; // Replace 'profile_picture' with the actual column name
     }
 }
+
+
 ?>
 <html lang="en" class="scroll-smooth">
 
@@ -65,6 +67,35 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
 
 
 <body class="font-custom">
+
+    <?php
+    if (isset($_SESSION['success_valid'])) {
+        echo "<script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '{$_SESSION['success_valid']}',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    </script>";
+        // Clear the session variable so the message doesn't show again on reload.
+        unset($_SESSION['success_valid']);
+    }
+    if (isset($_SESSION['error_valid'])) {
+        echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '{$_SESSION['error_valid']}',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    </script>";
+        // Clear the session variable so the message doesn't show again on reload.
+        unset($_SESSION['error_valid']);
+    }
+    ?>
 
     <?php require 'includes/sidebar.php'; ?>
 

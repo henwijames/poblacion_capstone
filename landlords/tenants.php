@@ -26,7 +26,6 @@ $tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom metho
                 <thead class="bg-gray-50">
                     <tr class="bg-slate-100">
                         <th class="py-2 px-4 border-r border-gray-200">Full Name</th>
-                        <th class="py-2 px-4 border-r border-gray-200">House Name</th>
                         <th class="py-2 px-4 border-r border-gray-200">Address</th>
                         <th class="py-2 px-4 border-r border-gray-200">Phone Number</th>
                         <th class="py-2 px-4 border-r border-gray-200">Actions</th>
@@ -37,13 +36,13 @@ $tenantList = $landlords->getTenantsByLandlordId($landlord_id);  // Custom metho
                         <?php foreach ($tenantList as $tenant) : ?>
                             <tr class="border-b">
                                 <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['tenants_name']); ?></td>
-                                <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['listing_name']); ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['address']); ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($tenant['phone_number']); ?></td>
                                 <td class="py-2 px-4 border-r border-gray-200 text-center">
                                     <a href="tenants-profile?id=<?php echo $tenant['id']; ?>" class="btn btn-info btn-sm text-sm text-white">Profile</a>
-                                    <a href="tenants-complaint?id=<?php echo $tenant['id']; ?>" class="btn btn-info btn-sm text-sm text-white">Complaints</a>
+                                    <a href="tenants-complaint?id=<?php echo $tenant['id']; ?>" class="btn btn-success btn-sm text-sm text-white">Complaints</a>
                                     <a href="tenant-transaction.php?id=<?php echo $tenant['id']; ?>" class="btn bg-primary btn-sm text-white">View Transactions</a>
+                                    <a href="tenant-rents.php?id=<?php echo $tenant['id']; ?>" class="btn btn-info btn-sm text-white">View Rents</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

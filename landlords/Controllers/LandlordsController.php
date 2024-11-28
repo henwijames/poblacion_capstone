@@ -24,7 +24,6 @@ if (isset($_POST['update-profile'])) {
         'last_name' => $_POST['lastName'] ?? '',
         'address' => $_POST['address'] ?? '',
         'phone_number' => $_POST['phoneNumber'] ?? '',
-        'email' => $_POST['email'] ?? '',
         'property_name' => $_POST['propertyName'] ?? '',
     ];
 

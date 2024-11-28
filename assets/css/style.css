@@ -1817,6 +1817,10 @@ input.tab:checked + .tab-content,
     --btn-color: var(--fallback-in);
   }
 
+  .btn-success{
+    --btn-color: var(--fallback-su);
+  }
+
   .btn-warning{
     --btn-color: var(--fallback-wa);
   }
@@ -1874,6 +1878,10 @@ input.tab:checked + .tab-content,
     --btn-color: var(--in);
   }
 
+  .btn-success{
+    --btn-color: var(--su);
+  }
+
   .btn-warning{
     --btn-color: var(--wa);
   }
@@ -1887,6 +1895,12 @@ input.tab:checked + .tab-content,
   --tw-text-opacity: 1;
   color: var(--fallback-inc,oklch(var(--inc)/var(--tw-text-opacity)));
   outline-color: var(--fallback-in,oklch(var(--in)/1));
+}
+
+.btn-success{
+  --tw-text-opacity: 1;
+  color: var(--fallback-suc,oklch(var(--suc)/var(--tw-text-opacity)));
+  outline-color: var(--fallback-su,oklch(var(--su)/1));
 }
 
 .btn-warning{
@@ -4197,6 +4211,11 @@ input.tab:checked + .tab-content,
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-accent{
+  --tw-bg-opacity: 1;
+  background-color: rgb(208 212 95 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-75{
   --tw-bg-opacity: 0.75;
 }
@@ -4708,14 +4727,6 @@ input.tab:checked + .tab-content,
 
 .ease-out{
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-}
-
-.\[--tab-bg\:primary\]{
-  --tab-bg: primary;
-}
-
-.\[--tab-border-color\:primary\]{
-  --tab-border-color: primary;
 }
 
 .\[hostname\:port\]{
