@@ -71,7 +71,7 @@ class Tenants
     public function getPendingTransactions($tenantId)
     {
         $query = "
-    SELECT t.amount, t.reference_number, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
+    SELECT t.amount, t.screenshot, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
     FROM transactions t
     JOIN listings l ON t.listing_id = l.id
     WHERE t.user_id = :tenant_id
@@ -90,7 +90,7 @@ class Tenants
     public function getDeclinedTransactions($tenantId)
     {
         $query = "
-    SELECT t.amount, t.reference_number, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
+    SELECT t.amount, t.screenshot, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
     FROM transactions t
     JOIN listings l ON t.listing_id = l.id
     WHERE t.user_id = :tenant_id
@@ -109,7 +109,7 @@ class Tenants
     public function getCompletedTransactions($tenantId)
     {
         $query = "
-    SELECT t.amount, t.reference_number, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
+    SELECT t.amount, t.screenshot, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
     FROM transactions t
     JOIN listings l ON t.listing_id = l.id
     WHERE t.user_id = :tenant_id
@@ -282,10 +282,37 @@ class Tenants
             return false;
         }
     }
+    public function updateVerificationCode($user_id, $new_code, $expires_at)
+    {
+        $query = "UPDATE " . $this->table . " 
+                  SET verification_code = :verification_code, verification_expires_at = :verification_expires_at 
+                  WHERE id = :user_id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Bind values
+        $stmt->bindParam(':verification_code', $new_code);
+        $stmt->bindParam(':verification_expires_at', $expires_at);
+        $stmt->bindParam(':user_id', $user_id);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
+    }
 
     public function verifyPhoneNumber($id)
     {
         $query = "UPDATE tenants SET mobile_verified = 1 WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+    public function verifyEmailAddress($id)
+    {
+        $query = "UPDATE tenants SET email_verified = 1 WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();

@@ -50,7 +50,7 @@
                     <a href="verifymobile" class="text-sm flex items-center dot hover:text-primary">Verify Mobile Number</a>
                 </li>
                 <li class="mb-4">
-                    <a href="#" class="text-sm flex items-center dot hover:text-primary">Verify Email Address</a>
+                    <a href="verifyemail" class="text-sm flex items-center dot hover:text-primary">Verify Email Address</a>
                 </li>
                 <li class="mb-4">
                     <a href="valid_id" class="text-sm flex items-center dot hover:text-primary">Add Valid ID</a>

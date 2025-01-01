@@ -196,7 +196,7 @@ if (isset($_SESSION['success_add'])) {
                                             <?php if ($userListing['status'] === 'occupied'): ?>
                                                 <span class="badge badge-success ml-2 text-white">Occupied</span>
                                             <?php elseif ($userListing['status'] === 'not occupied'): ?>
-                                                <span class="badge badge-error ml-2">Not Occupied</span>
+                                                <span class="badge badge-error ml-2 text-white">Not Occupied</span>
                                             <?php endif; ?>
                                         </td>
                                     </tr>

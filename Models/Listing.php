@@ -112,6 +112,15 @@ class Listing
         return $stmt->execute();
     }
 
+    // Update the listing occupancy status (0 = not occupied, 1 = occupied)
+    public function updateOccupancyStatus($listing_id)
+    {
+        $query = "UPDATE listings SET status = 'not occupied' WHERE id = :listing_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':listing_id', $listing_id);
+
+        return $stmt->execute();
+    }
 
 
 
@@ -283,5 +292,18 @@ class Listing
             }
         }
         return $uploadedImages;
+    }
+
+    public function getReviewsByListingId($listing_id)
+    {
+        $query = "SELECT r.rating, r.review_message, r.created_at, t.first_name AS tenant_name
+                  FROM reviews r
+                  JOIN tenants t ON r.user_id = t.id
+                  WHERE r.listing_id = :listing_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':listing_id', $listing_id);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

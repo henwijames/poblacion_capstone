@@ -145,6 +145,11 @@ ob_end_flush(); // End output buffering and send output
 
     </main>
 </section>
-
-
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dateInput = document.getElementById("check-in");
+        const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+        dateInput.setAttribute("min", today); // Set the min attribute
+    });
+</script>
 <?php include 'includes/footer.php'; ?>

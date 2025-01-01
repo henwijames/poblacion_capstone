@@ -21,14 +21,52 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Check if the booking_id and reference number are provided via POST
-if (isset($_POST['booking_id']) && isset($_POST['reference_number'])) {
+if (isset($_POST['booking_id'])) {
     $bookingId = filter_var($_POST['booking_id'], FILTER_SANITIZE_NUMBER_INT); // Sanitize input
-    $referenceNumber = filter_var($_POST['reference_number'], FILTER_SANITIZE_STRING); // Sanitize input
     $userId = $_SESSION['user_id'];
 
     // Validate that required fields are not empty
-    if (empty($bookingId) || empty($referenceNumber)) {
+    if (empty($bookingId)) {
         echo json_encode(['status' => 'error', 'message' => 'Required fields are missing or invalid.']);
+        exit;
+    }
+
+    // Handle file upload (payment screenshot)
+    if (isset($_FILES['screenshot']) && $_FILES['screenshot']['error'] === UPLOAD_ERR_OK) {
+        // Validate file type
+        $allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        $fileType = $_FILES['screenshot']['type'];
+
+        if (!in_array($fileType, $allowedFileTypes)) {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid file type. Only JPG, JPEG, and PNG are allowed.']);
+            exit;
+        }
+
+        // Set the directory where the file will be saved
+        $uploadDirectory = 'uploads/';
+        $fileTmpPath = $_FILES['screenshot']['tmp_name'];
+        $fileName = $_FILES['screenshot']['name'];
+        $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+        // Generate a unique file name
+        $newFileName = uniqid() . '.' . $fileExtension;
+        $uploadPath = $uploadDirectory . $newFileName;
+
+        // Move the uploaded file to the target directory
+        if (move_uploaded_file($fileTmpPath, $uploadPath)) {
+            $screenshotFileName = $newFileName; // Store the file name for the database
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to upload the screenshot.'
+            ]);
+            exit;
+        }
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'No screenshot uploaded or there was an upload error.'
+        ]);
         exit;
     }
 
@@ -65,8 +103,8 @@ if (isset($_POST['booking_id']) && isset($_POST['reference_number'])) {
 
             // Insert into transactions table
             $transactionQuery = "
-                INSERT INTO transactions (user_id, landlord_id, listing_id, apartment_name, amount, reference_number, details)
-                VALUES (:user_id, :landlord_id, :listing_id, :apartment_name, :amount, :reference_number, :details)
+                INSERT INTO transactions (user_id, landlord_id, listing_id, apartment_name, amount, screenshot, details)
+                VALUES (:user_id, :landlord_id, :listing_id, :apartment_name, :amount, :screenshot, :details)
             ";
             $stmt = $db->prepare($transactionQuery);
             $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
@@ -74,7 +112,7 @@ if (isset($_POST['booking_id']) && isset($_POST['reference_number'])) {
             $stmt->bindParam(':listing_id', $listingId, PDO::PARAM_INT);
             $stmt->bindParam(':apartment_name', $apartmentName, PDO::PARAM_STR);
             $stmt->bindParam(':amount', $amount, PDO::PARAM_STR);
-            $stmt->bindParam(':reference_number', $referenceNumber, PDO::PARAM_STR);
+            $stmt->bindParam(':screenshot', $screenshotFileName, PDO::PARAM_STR);
 
             // Details can be a dynamic input or set to a default value
             $details = "Payment for booking #$bookingId"; // Example details

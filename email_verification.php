@@ -113,15 +113,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PoblacionEase</title>
+    <title>PoblacionEase | Email Verification</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/aos.css">
     <script src="https://kit.fontawesome.com/f284e8c7c2.js" crossorigin="anonymous"></script>
     <script src="./assets/js/jquery-3.7.1.min.js"></script>
 </head>
 
-<body class="flex justify-center items-center" style="background-image: url('assets/img/volcano.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center; height: 100vh;">
-    <div class="container mx-auto flex items-center justify-center gap-16 " data-aos="fade-right" data-aos-delay="50" data-aos-duration="1000">
+<body class="flex justify-center items-center" style="background-image: url('assets/img/bg.png'); background-repeat: no-repeat; background-size: cover; background-position: center; height: 100vh;">
+    <div class="container flex items-center justify-center gap-16 " data-aos="fade-right" data-aos-delay="50" data-aos-duration="1000">
         <img src="assets/img/notif.svg" alt="notif" class="relative">
         <div class="container mx-auto md:px-[120px] mb-4 px-6 py-2 absolute top-10">
             <nav class="flex justify-center items-center mb-2">

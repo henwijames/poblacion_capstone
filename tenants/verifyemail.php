@@ -70,19 +70,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
         <?php require 'includes/topbar.php'; ?>
         <div class="p-6">
             <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-gray-900 capitalize">Verify Mobile Number</hjson_encode2>
+                <h2 class="text-lg font-semibold text-gray-900 capitalize">Verify Email Address</hjson_encode2>
             </div>
             <div class="mt-4">
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <form action="Controller/TenantController.php" method="POST">
                         <div class="grid grid-cols-1 gap-6">
                             <div>
-                                <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile Number</label>
-                                <input type="text" name="mobile" id="mobile" autocomplete="mobile" value="<?php echo htmlspecialchars($tenant['phone_number']); ?>"" required
-                                    class=" input input-bordered max-w-xs mt-4">
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                                <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($tenant['email']); ?>" required
+                                    class=" input input-bordered max-w-xl mt-4">
                             </div>
                             <div>
-                                <button type="submit" name="verify_mobile"
+                                <button type="submit" name="verify_email"
                                     class="btn bg-primary text-white">
                                     Verify
                                 </button>

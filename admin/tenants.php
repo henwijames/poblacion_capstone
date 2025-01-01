@@ -124,7 +124,7 @@ $tenantsList = $tenants->getAllTenants();
                 document.getElementById('loader').classList.remove('hidden');
                 // Send AJAX request to verify account
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", "verifyTenants.php?id=" + tenantId, true);
+                xhr.open("GET", "Controllers/verifyTenants.php?id=" + tenantId, true);
                 xhr.onload = function() {
                     document.getElementById('loader').classList.add('hidden');
                     if (xhr.status === 200) {

@@ -47,7 +47,7 @@ if (isset($_SESSION['same_number'])) {
 <div class="w-full flex flex-col justify-center items-center">
     <div class="container mx-auto md:px-[120px] mb-4 px-6 py-2">
         <nav class="flex justify-between items-center mb-2">
-            <a href="../index"><img src="assets/img/poblacionease.png" alt="Poblacionease logo" class="w-[150px] h-[60px]"></a>
+            <a href="index"><img src="assets/img/poblacionease.png" alt="Poblacionease logo" class="w-[150px] h-[60px]"></a>
             <div class="flex gap-4 text-[18px]">
                 <div class=" text-[16px] ">
                     <a href="login" class=" bg-primary hover:bg-accent transition-all py-2 px-3 w-5 rounded-md uppercase shadow-md">Login</a>

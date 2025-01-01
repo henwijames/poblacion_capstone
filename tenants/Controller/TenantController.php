@@ -4,6 +4,8 @@ require_once '../../Controllers/Database.php';
 require_once '../../Models/Tenants.php';
 require '../../vendor/autoload.php'; // Ensure this path is correct
 use Dotenv\Dotenv;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 // Specify the path to your .env file
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
@@ -46,6 +48,59 @@ function sendVerificationSMS($phone, $code)
 
     if (!$output) {
         error_log('Error sending SMS: ' . curl_error($ch));
+    }
+}
+function sendEmailVerification($email, $code)
+{
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = $_ENV['SMTP_HOST'];
+        $mail->SMTPAuth = true;
+        $mail->Username = $_ENV['SMTP_USER'];
+        $mail->Password = $_ENV['SMTP_PASS'];
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = $_ENV['SMTP_PORT'];
+        // Configure SMTP options to skip SSL verification (for debugging)
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
+
+        // Store debug output in a variable instead of displaying it
+        ob_start();
+        $mail->SMTPDebug = 2;
+        $mail->Debugoutput = function ($str, $level) {
+            echo "Debug level $level; message: $str<br>";
+        };
+
+        $mail->setFrom('poblacionease@gmail.com', 'PoblacionEase');
+        $mail->addAddress($email);
+
+        $mail->isHTML(true);
+        $mail->Subject = 'PoblacionEase Email Verification';
+        $mail->Body = '
+            <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd;">
+                <h2 style="color: #333;">PoblacionEase Email Verification</h2>
+                <p style="color: #555; line-height: 1.5;">
+                    Thank you for signing up! Please use this OTP to verify your email address.
+                </p>
+                <p style="text-align: center; margin-top: 30px;">
+                    ' . $code . '
+                </p>
+                <p style="color: #888; font-size: 12px; margin-top: 20px;">
+                    If you did not request this email, please ignore it.
+                </p>
+            </div>';
+
+        if ($mail->send()) {
+            $_SESSION['success'] = "Verification email sent. Please check your email.";
+        }
+    } catch (Exception $e) {
+        $_SESSION['errors']['email'] = "Error sending email: {$mail->ErrorInfo}";
     }
 }
 
@@ -145,6 +200,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['verify_mobile'])) {
     } else {
         $_SESSION['errors']['phone'] = "Phone number not found.";
         header('Location: ../verifymobile.php?error=phone_not_found');
+        exit();
+    }
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['verify_email'])) {
+    // Fetch the tenant details to check the stored verification code and expiration time
+    $currentTenant = $tenantModel->findById($tenantId);
+    $verificationCode = mt_rand(100000, 999999);
+    $expiresAt = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+
+    $email = $currentTenant['email'] ?? null;
+
+    if ($email) {
+        sendEmailVerification($email, $verificationCode);
+
+        $updateData = [
+            'verification_code' => $verificationCode,
+            'verification_expires_at' => $expiresAt
+        ];
+
+        if ($tenantModel->smsVerCode($tenantId, $updateData)) {
+            header('Location: ../verify-email.php');
+            exit();
+        } else {
+            header('Location: ../verifyemail.php?error=verification_failed');
+            exit();
+        }
+    } else {
+        $_SESSION['errors']['email'] = "Phone number not found.";
+        header('Location: ../verifyemail.php?error=email_not_found');
         exit();
     }
 }

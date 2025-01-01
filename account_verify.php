@@ -3,6 +3,47 @@ session_start();
 require_once 'Controllers/Database.php';
 require_once 'Models/Tenants.php';
 require_once 'Models/Landlords.php';
+require 'vendor/autoload.php'; // Ensure this path is correct
+
+// Load the .env file and check for success
+try {
+    $dotenv->load();
+} catch (Exception $e) {
+    die('Failed to load .env file: ' . $e->getMessage());
+}
+// Check if the environment variable is set
+if (!$_ENV['SMS_API']) {
+    die("SMS_API is not set in the environment variables.");
+}
+function sendVerificationSMS($phone, $code)
+{
+    $ch = curl_init();
+    $apiKey = $_ENV['SMS_API'];
+    $senderName = 'SNIHS';
+    $message = "Your verification code is: $code. It will expire in 5 minutes.";
+
+    $url = "https://api.semaphore.co/api/v4/priority";
+    $data   = [
+        'apikey' => $apiKey,
+        'number' => $phone,
+        'message' => $message,
+        'sendername' => $senderName
+    ];
+
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+
+    if (!$output) {
+        error_log('Error sending SMS: ' . curl_error($ch));
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $database = new Database();
@@ -74,6 +115,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
+if (isset($_GET['resend_otp'])) {
+    // Resend OTP logic
+    $user_id = $_SESSION['user_id'];
+    $database = new Database();
+    $db = $database->getConnection();
+    $tenants = new Tenants($db);
+    $landlords = new Landlords($db);
+
+    // Set the timezone to Asia/Manila
+    date_default_timezone_set('Asia/Manila');
+
+    if ($_SESSION['user_role'] == 'tenant') {
+        $tenant = $tenants->findById($user_id);
+        // Generate new OTP and expiration time
+        $new_code = rand(100000, 999999);
+        $expires_at = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+
+        // Update the tenant's verification code and expiration time
+        $tenants->updateVerificationCode($user_id, $new_code, $expires_at);
+
+        // Send the SMS with the new code
+        sendVerificationSMS($tenant['phone_number'], $new_code); // Actual SMS sending
+
+        $_SESSION['success'] = "A new OTP has been sent to your phone number.";
+        header("Location: account_verify.php"); // Reload the verification page
+        exit();
+    }
+
+    if ($_SESSION['user_role'] == 'landlord') {
+        $landlord = $landlords->findById($user_id);
+        // Generate new OTP and expiration time
+        $new_code = rand(100000, 999999);
+        $expires_at = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+
+        // Update the landlord's verification code and expiration time
+        $landlords->updateVerificationCode($user_id, $new_code, $expires_at);
+
+        // Send the SMS with the new code
+        sendVerificationSMS($landlord['phone_number'], $new_code); // Actual SMS sending
+
+        $_SESSION['success'] = "A new OTP has been sent to your phone number.";
+        header("Location: account_verify.php"); // Reload the verification page
+        exit();
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -117,10 +204,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="text" name="verification[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
                         <input type="text" name="verification[]" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none" required>
                     </div>
-                    <button type="submit" class="btn bg-primary w-full">Verify OTP</button>
+                    <button type="submit" class="btn bg-primary w-full text-white">Verify OTP</button>
                 </form>
-                <div id="countdown" class="text-center mt-4 text-red-500 font-semibold">
+                <div id="countdown" class=" text-center mt-4 text-red-500 font-semibold">
                     It will expire in 5 minutes.
+                </div>
+                <div class="text-center mt-4 btn bg-primary w-full">
+                    <a href="?resend_otp=true" class="text-white hover:underline">Resend OTP</a>
                 </div>
             </div>
         </div>

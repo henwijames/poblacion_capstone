@@ -119,12 +119,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $db = $database->getConnection();
         $booking = new Tenants($db);
 
+        // Fetch booking details
+        $query = "SELECT b.*, l.listing_name, ll.email AS landlord_email 
+                  FROM bookings b 
+                  JOIN listings l ON b.listing_id = l.id 
+                  JOIN landlords ll ON b.landlord_id = ll.id 
+                  WHERE b.id = :booking_id";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
+        $stmt->execute();
+        $bookingDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$bookingDetails) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Booking not found.'
+            ]);
+            exit;
+        }
+
         // Attempt to delete booking
         if ($booking->deleteBooking($bookingId)) {
-            // Ensure no other output is sent before this response
+            // Send cancellation email to the landlord
+            sendCancellationEmailToLandlord(
+                $bookingDetails['landlord_email'],
+                $bookingDetails['listing_name'],
+                $bookingDetails['check_in']
+            );
+
             echo json_encode([
                 'status' => 'success',
-                'message' => 'Booking has been successfully deleted.'
+                'message' => 'Booking has been successfully deleted, and the landlord has been notified.'
             ]);
             exit; // Stop script execution
         } else {
@@ -218,5 +243,50 @@ function sendEmailNotificationToLandlord($landlordEmail, $listingDetails, $total
         $mail->send();
     } catch (Exception $e) {
         echo "Notification email could not be sent. Error: {$mail->ErrorInfo}";
+    }
+}
+
+function sendCancellationEmailToLandlord($landlordEmail, $listingName, $checkInDate)
+{
+    $mail = new PHPMailer(true);
+    $emailBody = '
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Booking Cancellation Notice</title>
+        </head>
+        <body>
+            <h2>Booking Cancellation Notice</h2>
+            <p>Dear Landlord,</p>
+            <p>We regret to inform you that the booking for your listing <b>' . htmlspecialchars($listingName) . '</b> has been canceled.</p>
+            <p><b>Original Check-in Date:</b> ' . htmlspecialchars($checkInDate) . '</p>
+            <p>Please check your dashboard for further details.</p>
+            <p>Thank you for your understanding.</p>
+            <p>Best regards,<br>PoblacionEase</p>
+        </body>
+    </html>';
+
+    try {
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host = $_ENV['SMTP_HOST'];
+        $mail->SMTPAuth = true;
+        $mail->Username = $_ENV['SMTP_USER'];
+        $mail->Password = $_ENV['SMTP_PASS'];
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = $_ENV['SMTP_PORT'];
+
+        // Email setup
+        $mail->setFrom('poblacionease@gmail.com', 'PoblacionEase');
+        $mail->addAddress($landlordEmail);
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Booking Cancellation Notice';
+        $mail->Body = $emailBody;
+
+        // Send email
+        $mail->send();
+    } catch (Exception $e) {
+        echo "Cancellation email could not be sent. Error: {$mail->ErrorInfo}";
     }
 }

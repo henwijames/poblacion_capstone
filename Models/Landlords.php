@@ -197,7 +197,7 @@ class Landlords
     public function getPendingTransactionsByTenantId($tenantId, $landlordId)
     {
         $query = "
-    SELECT t.amount, t.reference_number, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
+    SELECT t.amount, t.screenshot, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
     FROM transactions t
     JOIN listings l ON t.listing_id = l.id
     WHERE t.user_id = :tenant_id
@@ -218,7 +218,7 @@ class Landlords
     public function getCompletedTransactionsByTenantId($tenantId, $landlordId)
     {
         $query = "
-    SELECT t.amount, t.reference_number, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
+    SELECT t.amount, t.screenshot, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
     FROM transactions t
     JOIN listings l ON t.listing_id = l.id
     WHERE t.user_id = :tenant_id
@@ -239,7 +239,7 @@ class Landlords
     public function getDeclinedTransactionsByTenantId($tenantId, $landlordId)
     {
         $query = "
-    SELECT t.amount, t.reference_number, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
+    SELECT t.amount, t.screenshot, t.transaction_date, t.transaction_id, t.transaction_status, l.listing_name
     FROM transactions t
     JOIN listings l ON t.listing_id = l.id
     WHERE t.user_id = :tenant_id
@@ -256,6 +256,26 @@ class Landlords
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Return results as an associative array
+    }
+    public function updateVerificationCode($user_id, $new_code, $expires_at)
+    {
+        $query = "UPDATE " . $this->table . " 
+                  SET verification_code = :verification_code, verification_expires_at = :verification_expires_at 
+                  WHERE id = :user_id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Bind values
+        $stmt->bindParam(':verification_code', $new_code);
+        $stmt->bindParam(':verification_expires_at', $expires_at);
+        $stmt->bindParam(':user_id', $user_id);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        return false;
     }
 
     public function verifyPassword($password, $hash)
@@ -367,5 +387,22 @@ class Landlords
         }
 
         return false;
+    }
+
+    // Get the landlord's email by listing ID
+    public function getLandlordEmailByListing($listing_id)
+    {
+        $query = "
+        SELECT landlords.email 
+        FROM landlords 
+        INNER JOIN listings ON landlords.id = listings.user_id 
+        WHERE listings.id = :listing_id
+    ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':listing_id', $listing_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['email'] : null;
     }
 }

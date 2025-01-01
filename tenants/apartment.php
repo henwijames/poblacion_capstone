@@ -28,6 +28,8 @@ $listingDetails['images'] = $images;
 
 // Get the landlord's full name from the database
 $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_name']);
+
+$reviews = $listing->getReviewsByListingId($listing_id);
 ?>
 
 <section class="" id="apartment">
@@ -240,6 +242,33 @@ $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_nam
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Reviews Section -->
+        <div class="mt-6">
+            <h2 class="text-2xl font-bold mb-4">Tenant Reviews</h2>
+            <?php if (!empty($reviews)): ?>
+                <div class="space-y-4">
+                    <?php foreach ($reviews as $review): ?>
+                        <div class="p-4 bg-white shadow-lg rounded-lg">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="font-semibold"><?= htmlspecialchars($review['tenant_name']); ?></div>
+                                <div class="flex items-center">
+                                    <!-- Display Rating (Assuming 1 to 5 stars) -->
+                                    <?php for ($i = 0; $i < $review['rating']; $i++): ?>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="gold" viewBox="0 0 20 20">
+                                            <polygon points="10,0 12,7 19,7 13,11 15,18 10,14 5,18 7,11 1,7 8,7" />
+                                        </svg>
+                                    <?php endfor; ?>
+                                </div>
+                            </div>
+                            <p class="text-muted-foreground"><?= htmlspecialchars($review['review_message']); ?></p>
+                            <div class="text-sm text-gray-500"><?= htmlspecialchars($review['created_at']); ?></div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p>No reviews available.</p>
+            <?php endif; ?>
         </div>
 
     </main>

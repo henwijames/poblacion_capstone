@@ -88,6 +88,37 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <!-- Style for Stars -->
+    <style>
+        .stars {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 200px;
+            margin-top: 10px;
+        }
+
+        .star-input {
+            display: none;
+        }
+
+        .star {
+            font-size: 30px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star-input:checked~.star {
+            color: gold;
+        }
+
+        .star:hover,
+        .star-input:checked~.star:hover {
+            color: gold;
+        }
+    </style>
 </head>
 
 <body class="font-custom">
@@ -169,6 +200,7 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <td class="px-6 py-3 border-b">
                                         <a href="rent-listing?id=<?php echo $rent['listing_id'] ?>" class="btn bg-primary text-white">View Rent</a>
                                         <button class="btn btn-warning text-white" onclick="document.getElementById('modal_<?= $rent['listing_id']; ?>').showModal()">Complain</button>
+                                        <button class="btn btn-error text-white" onclick="document.getElementById('review_modal_<?= $rent['listing_id']; ?>').showModal()">Leave</button>
                                         <dialog id="modal_<?= $rent['listing_id']; ?>" class="modal modal-bottom sm:modal-middle">
                                             <div class="modal-box">
                                                 <form method="dialog">
@@ -188,6 +220,59 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                     </div>
                                                 </form>
 
+                                            </div>
+                                        </dialog>
+                                        <!-- Review Modal -->
+                                        <dialog id="review_modal_<?= $rent['listing_id']; ?>" class="modal modal-bottom sm:modal-middle">
+                                            <div class="modal-box bg-base-100 p-6 rounded-lg shadow-xl max-w-md mx-auto">
+                                                <form method="dialog" class="absolute right-2 top-2">
+                                                    <button class="btn btn-sm btn-circle btn-ghost hover:bg-base-200">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                                <h3 class="font-bold text-2xl mb-6 text-center text-primary">Leave a Review</h3>
+                                                <form id="review-form-<?= $rent['listing_id']; ?>" class="space-y-6">
+                                                    <input type="hidden" name="listing_id" value="<?= $rent['listing_id']; ?>">
+
+                                                    <!-- Star Rating -->
+                                                    <div class="form-control">
+                                                        <label class="label">
+                                                            <span class="label-text text-lg font-semibold">Rating</span>
+                                                        </label>
+                                                        <select name="rating" id="rating-<?= $rent['listing_id']; ?>" class="select select-bordered w-full" required>
+                                                            <option value="" disabled selected>Select your rating</option>
+                                                            <option value="1">Very Dissatisfied</option>
+                                                            <option value="2">Dissatisfied</option>
+                                                            <option value="3">Neutral</option>
+                                                            <option value="4">Satisfied</option>
+                                                            <option value="5">Very Satisfied</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Review Text -->
+                                                    <div class="form-control">
+                                                        <label for="review_message_<?= $rent['listing_id']; ?>" class="label">
+                                                            <span class="label-text text-lg font-semibold">Your Review</span>
+                                                        </label>
+                                                        <textarea
+                                                            id="review_message_<?= $rent['listing_id']; ?>"
+                                                            name="review_message"
+                                                            class="textarea textarea-bordered h-32 w-full resize-none focus:ring-2 focus:ring-primary"
+                                                            placeholder="Share your experience..."
+                                                            required></textarea>
+                                                    </div>
+
+                                                    <div class="modal-action flex justify-end">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            Submit Review
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </dialog>
 
@@ -266,6 +351,67 @@ $rents = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 console.log(modal); // Check if modal is selected correctly
                                 modal.close(); // Close the modal
                             }
+                        });
+                    },
+                });
+            });
+        });
+
+        document.querySelectorAll('form[id^="review-form-"]').forEach((form) => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const listingId = formData.get('listing_id');
+                const reviewMessage = formData.get('review_message').trim();
+                const rating = formData.get('rating'); // Now grabbing value from dropdown
+                const modal = document.getElementById(`review_modal_${listingId}`);
+
+                // Validate input
+                if (!reviewMessage || !rating) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Incomplete Review',
+                        text: 'Please provide a rating and a review message before submitting.',
+                    });
+                    return;
+                }
+
+                // Close the modal before sending the request
+                if (modal) {
+                    modal.close();
+                }
+
+                // AJAX request
+                $.ajax({
+                    url: '../Controllers/ReviewController.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json', // Ensure jQuery expects a JSON response
+                    success: function(response) {
+                        console.log('Raw Response:', response); // Log the response for debugging
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Review Submitted',
+                                text: response.message,
+                            }).then(() => location.reload()); // Reload page after success
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX Error:', jqXHR, textStatus, errorThrown);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Request Failed',
+                            text: 'There was an issue submitting your review. Please try again.',
                         });
                     },
                 });

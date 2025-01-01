@@ -81,6 +81,9 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
     <main class="main-content main">
+        <div id="loader" class="hidden fixed inset-0 flex items-center justify-center bg-background bg-opacity-75 z-50">
+            <span class="loading loading-dots loading-lg"></span>
+        </div>
         <?php require 'includes/topbar.php'; ?>
 
         <div class=" p-6">
@@ -113,36 +116,63 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </td>
                                     <td class="px-6 py-3 border-b">
                                         <?php
-                                        if ($listing['booking_status'] == 'verified') {
-                                            // Button to open the modal for "Pay Rent"
-                                            echo '<button class="btn bg-primary text-white" onclick="document.getElementById(\'modal_' . $listing['booking_id'] . '\').showModal()">Pay Rent</button>';
-
-                                            // Modal dialog for "Pay Rent"
-                                            echo '<dialog id="modal_' . htmlspecialchars($listing['booking_id']) . '" class="modal">
-                                                    <div class="modal-box w-11/12 max-w-5xl flex flex-col items-start">
-                                                        <form method="dialog">
-                                                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                                        </form>
-                                                        <h3 class="text-lg font-bold mb-4">' . htmlspecialchars($listing['first_name']) . "'s  " . htmlspecialchars($listing['mode_of_payment']) . " QR Code</h3>";
-                                            echo '<p class="mb-4 text-red-500">Note: Please pay the exact amount or else your transaction will be cancelled.</p>';
-                                            // Display permit image if available, otherwise show message
-                                            if (!empty($listing['qr_payment'])) {
-                                                echo "<img src='../landlords/Controllers/uploads/" . htmlspecialchars($listing['qr_payment']) . "' alt='permit' class=' h-96 object-cover rounded-lg shadow-lg'>";
-                                            } else {
-                                                echo "<h1 class='text-4xl text-center p-6 text-red-500 uppercase font-bold'>No QR Code Uploaded</h1>";
-                                            }
-                                            echo '<label id="reference" class="mt-4 text-xl">' . $listing['mode_of_payment'] . ' Reference Number</label>';
-                                            echo '<input name="reference" id="reference_' . htmlspecialchars($listing['booking_id']) . '" type="text" pattern="^\d{13}$" title="Please enter exactly 13 digits" class="input input-bordered mb-4" maxlength="13">';
-                                            // Pay Rent button with onclick event
-                                            echo '<button type="button" class="btn bg-primary text-white" onclick="payRent(' . htmlspecialchars($listing['booking_id']) . ', ' . htmlspecialchars($listing['total_amount']) . ', document.getElementById(\'reference_' . $listing['booking_id'] . '\').value)">Pay Rent</button>';
-
-                                            echo '</div>
-                                                    </dialog>';
-                                        } else {
-                                            // Button to cancel booking
-                                            echo '<button onclick="cancelBooking(' . htmlspecialchars($listing['booking_id']) . ')" class="btn btn-sm btn-warning text-white">Cancel</button>';
-                                        }
+                                        if ($listing['booking_status'] === 'verified') {
+                                            $bookingId = htmlspecialchars($listing['booking_id']);
+                                            $firstName = htmlspecialchars($listing['first_name']);
+                                            $modeOfPayment = htmlspecialchars($listing['mode_of_payment']);
+                                            $qrPayment = htmlspecialchars($listing['qr_payment']);
+                                            $totalAmount = htmlspecialchars($listing['total_amount']);
                                         ?>
+
+                                            <!-- Button to open the modal for "Pay Rent" -->
+                                            <button class="btn bg-primary text-white" onclick="document.getElementById('modal_<?= $bookingId ?>').showModal()">
+                                                Pay Rent
+                                            </button>
+
+                                            <!-- Modal dialog for "Pay Rent" -->
+                                            <dialog id="modal_<?= $bookingId ?>" class="modal">
+                                                <div class="modal-box w-11/12 max-w-5xl flex flex-col items-start">
+                                                    <form method="dialog">
+                                                        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                    </form>
+
+                                                    <h3 class="text-lg font-bold mb-4">
+                                                        <?= $firstName ?>'s <?= $modeOfPayment ?> QR Code
+                                                    </h3>
+
+                                                    <p class="mb-4 text-red-500">
+                                                        Note: Please pay the exact amount or else your transaction will be cancelled.
+                                                    </p>
+
+                                                    <?php if (!empty($qrPayment)) { ?>
+                                                        <img src="../landlords/Controllers/uploads/<?= $qrPayment ?>" alt="permit" class="h-96 object-cover rounded-lg shadow-lg">
+                                                    <?php } else { ?>
+                                                        <h1 class="text-4xl text-center p-6 text-red-500 uppercase font-bold">No QR Code Uploaded</h1>
+                                                    <?php } ?>
+                                                    <div class="mb-4">
+                                                        <img id="screenshot_<?= $bookingId ?>" class="h-[400px] w-[400px] mb-6 object-scale-down" src="../assets/img/upload.svg" alt="Screenshot Transaction" />
+                                                        <input type="file" id="uploadInput_<?= $bookingId ?>" name="screenshot" class="file-input file-input-bordered w-full max-w-xs" onchange="previewQrCode(event, <?= $bookingId ?>)" accept="image/png, image/gif, image/jpeg" />
+                                                    </div>
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn bg-primary text-white"
+                                                        onclick="payRent(<?= $bookingId ?>, <?= $totalAmount ?>, 'uploadInput_<?= $bookingId ?>')">
+                                                        Pay Rent
+                                                    </button>
+                                                </div>
+                                            </dialog>
+
+                                        <?php } else { ?>
+
+                                            <!-- Button to cancel booking -->
+                                            <button
+                                                onclick="cancelBooking(<?= htmlspecialchars($listing['booking_id']) ?>)"
+                                                class="btn btn-sm btn-warning text-white">
+                                                Cancel
+                                            </button>
+
+                                        <?php } ?>
 
                                     </td>
                                 </tr>
@@ -158,44 +188,63 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </main>
     <script>
-        function payRent(bookingId, totalAmount, referenceNumber) {
+        function previewQrCode(event, bookingId) {
+            const reader = new FileReader();
+            const fileInput = event.target;
+
+            reader.onload = function() {
+                // Dynamically get the image element based on the bookingId
+                const imageElement = document.getElementById('screenshot_' + bookingId);
+                imageElement.src = reader.result; // Set the new image source to the uploaded file
+            };
+
+            if (fileInput.files[0]) {
+                reader.readAsDataURL(fileInput.files[0]); // Read the selected file and convert it to a data URL
+            }
+        }
+
+        function payRent(bookingId, totalAmount, uploadInputId) {
             const modal = document.getElementById(`modal_${bookingId}`);
-            // Setup AJAX request for payment initiation
-            if (!referenceNumber) {
+            const uploadInput = document.getElementById(uploadInputId); // Get the actual input element
+            const file = uploadInput.files[0]; // Get the selected file
+
+            // Check if a screenshot file is selected
+            if (!file) {
                 modal.close();
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Reference Number Required',
-                    text: 'Please enter a reference number to proceed with the payment.'
+                    title: 'Screenshot Transaction Required',
+                    text: 'Please upload a Screenshot Transaction to proceed with the payment.'
                 }).then(() => {
                     modal.showModal();
                 });
                 return;
             }
 
+            // If the screenshot is selected, proceed with payment
+            const formData = new FormData();
+            formData.append('booking_id', bookingId);
+            formData.append('screenshot', file); // Add the screenshot file to the form data
+            formData.append('total_amount', totalAmount);
+
             modal.close();
             $.ajax({
                 url: 'Controller/PaymentController.php',
                 type: 'POST',
+                data: formData,
                 dataType: 'json',
-                data: {
-                    booking_id: bookingId,
-                    reference_number: referenceNumber,
-                    total_amount: totalAmount
-                },
+                processData: false, // Important: to prevent jQuery from processing the data
+                contentType: false, // Important: to prevent jQuery from setting the content type
                 success: function(response) {
                     if (response.status === 'success') {
-                        // Show success message
                         Swal.fire({
                             icon: 'success',
                             title: 'Transaction Completed',
                             text: response.message
                         }).then(() => {
-                            // Redirect to the inquiries page
                             window.location.href = response.redirect_url;
                         });
                     } else {
-                        // Show error message if transaction failed
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -215,6 +264,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
+
         function cancelBooking(bookingId) {
             Swal.fire({
                 title: 'Are you sure?',
@@ -226,6 +276,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 confirmButtonText: 'Yes, cancel it!'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    document.getElementById('loader').classList.remove('hidden');
                     $.ajax({
                         url: 'Controller/BookingController.php',
                         type: 'POST',
@@ -235,6 +286,7 @@ $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             booking_id: bookingId
                         },
                         success: function(response) {
+                            document.getElementById('loader').classList.add('hidden');
                             if (response.status === 'success') {
                                 Swal.fire({
                                     icon: 'success',

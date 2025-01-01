@@ -39,7 +39,7 @@ $tenantDeclinedTransactions = $landlords->getDeclinedTransactionsByTenantId($ten
                             <tr class="bg-slate-100">
                                 <th class="py-2 px-4 border-r border-gray-200">House Name</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Amount</th>
-                                <th class="py-2 px-4 border-r border-gray-200">Reference Number</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Transaction Screenshot</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Transaction Date</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Status</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Actions</th>
@@ -55,7 +55,24 @@ $tenantDeclinedTransactions = $landlords->getDeclinedTransactionsByTenantId($ten
                                     <tr class="border-b">
                                         <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['listing_name']); ?></td>
                                         <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['amount']); ?></td>
-                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['reference_number']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 text-center">
+                                            <button class="btn bg-primary text-white" onclick="document.getElementById('modal_<?= $transaction['screenshot']; ?>').showModal()">View Valid ID</button>
+                                            <dialog id="modal_<?= $transaction['screenshot']; ?>" class="modal">
+                                                <div class="modal-box">
+                                                    <form method="dialog">
+                                                        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                    </form>
+                                                    <?php
+                                                    if ($transaction['screenshot']) {
+                                                        echo "<img src='../tenants/Controller/uploads/" . htmlspecialchars($transaction['screenshot']) . "' alt='transaction screenshot' class='object-cover rounded-lg shadow-lg'>";
+                                                    } else {
+                                                        echo "<h1 class='text-4xl text-center p-6 text-red-500 uppercase font-bold'>No Valid ID uploaded</h1>";
+                                                    }
+                                                    ?>
+
+                                                </div>
+                                            </dialog>
+                                        </td>
                                         <td class="py-2 px-4 border-r border-gray-200"><?php echo date('F j, Y', strtotime($transaction['transaction_date'])); ?></td>
                                         <td class="py-2 px-4 border-r border-gray-200 capitalize"><?php echo htmlspecialchars($transaction['transaction_status']); ?></td>
                                         <td class="py-2 px-4 border-r border-gray-200 text-center">
@@ -95,7 +112,7 @@ $tenantDeclinedTransactions = $landlords->getDeclinedTransactionsByTenantId($ten
                             <tr class="bg-slate-100">
                                 <th class="py-2 px-4 border-r border-gray-200">House Name</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Amount</th>
-                                <th class="py-2 px-4 border-r border-gray-200">Reference Number</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Transaction Screenshot</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Transaction Date</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Status</th>
                             </tr>
@@ -110,7 +127,24 @@ $tenantDeclinedTransactions = $landlords->getDeclinedTransactionsByTenantId($ten
                                     <tr class="border-b">
                                         <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['listing_name']); ?></td>
                                         <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['amount']); ?></td>
-                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['reference_number']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 text-center">
+                                            <button class="btn bg-primary text-white" onclick="document.getElementById('modal_<?= $transaction['screenshot']; ?>').showModal()">View Valid ID</button>
+                                            <dialog id="modal_<?= $transaction['screenshot']; ?>" class="modal">
+                                                <div class="modal-box">
+                                                    <form method="dialog">
+                                                        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                    </form>
+                                                    <?php
+                                                    if ($transaction['screenshot']) {
+                                                        echo "<img src='../tenants/Controller/uploads/" . htmlspecialchars($transaction['screenshot']) . "' alt='transaction screenshot' class='object-cover rounded-lg shadow-lg'>";
+                                                    } else {
+                                                        echo "<h1 class='text-4xl text-center p-6 text-red-500 uppercase font-bold'>No Valid ID uploaded</h1>";
+                                                    }
+                                                    ?>
+
+                                                </div>
+                                            </dialog>
+                                        </td>
                                         <td class="py-2 px-4 border-r border-gray-200"><?php echo date('F j, Y', strtotime($transaction['transaction_date'])); ?></td>
                                         <td class="py-2 px-4 border-r border-gray-200 capitalize">
                                             <!-- Add DaisyUI badge based on status -->
@@ -135,7 +169,7 @@ $tenantDeclinedTransactions = $landlords->getDeclinedTransactionsByTenantId($ten
                             <tr class="bg-slate-100">
                                 <th class="py-2 px-4 border-r border-gray-200">House Name</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Amount</th>
-                                <th class="py-2 px-4 border-r border-gray-200">Reference Number</th>
+                                <th class="py-2 px-4 border-r border-gray-200">Transaction Screenshot</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Transaction Date</th>
                                 <th class="py-2 px-4 border-r border-gray-200">Status</th>
                             </tr>
@@ -150,7 +184,24 @@ $tenantDeclinedTransactions = $landlords->getDeclinedTransactionsByTenantId($ten
                                     <tr class="border-b">
                                         <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['listing_name']); ?></td>
                                         <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['amount']); ?></td>
-                                        <td class="py-2 px-4 border-r border-gray-200"><?php echo htmlspecialchars($transaction['reference_number']); ?></td>
+                                        <td class="py-2 px-4 border-r border-gray-200 text-center">
+                                            <button class="btn bg-primary text-white" onclick="document.getElementById('modal_<?= $transaction['screenshot']; ?>').showModal()">View Valid ID</button>
+                                            <dialog id="modal_<?= $transaction['screenshot']; ?>" class="modal">
+                                                <div class="modal-box">
+                                                    <form method="dialog">
+                                                        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                    </form>
+                                                    <?php
+                                                    if ($transaction['screenshot']) {
+                                                        echo "<img src='../tenants/Controller/uploads/" . htmlspecialchars($transaction['screenshot']) . "' alt='transaction screenshot' class='object-cover rounded-lg shadow-lg'>";
+                                                    } else {
+                                                        echo "<h1 class='text-4xl text-center p-6 text-red-500 uppercase font-bold'>No Valid ID uploaded</h1>";
+                                                    }
+                                                    ?>
+
+                                                </div>
+                                            </dialog>
+                                        </td>
                                         <td class="py-2 px-4 border-r border-gray-200"><?php echo date('F j, Y', strtotime($transaction['transaction_date'])); ?></td>
                                         <td class="py-2 px-4 border-r border-gray-200 capitalize">
                                             <!-- Add DaisyUI badge based on status -->
