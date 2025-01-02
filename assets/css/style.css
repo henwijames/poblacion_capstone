@@ -3683,6 +3683,18 @@ input.tab:checked + .tab-content,
   margin-top: 60px;
 }
 
+.ml-\[20px\]{
+  margin-left: 20px;
+}
+
+.ml-\[40px\]{
+  margin-left: 40px;
+}
+
+.ml-\[42px\]{
+  margin-left: 42px;
+}
+
 .block{
   display: block;
 }
@@ -4720,11 +4732,6 @@ input.tab:checked + .tab-content,
 .text-white{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-yellow-400{
-  --tw-text-opacity: 1;
-  color: rgb(250 204 21 / var(--tw-text-opacity));
 }
 
 .opacity-0{

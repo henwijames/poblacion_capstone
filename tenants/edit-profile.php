@@ -116,7 +116,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
                             file:bg-violet-50 file:text-primary
                             hover:file:bg-accent
                             "
-                                    onchange="previewProfilePhoto(event)"
+                                    onchange="validateFileSize(event)"
+                                    accept=" image/jpg, image/jpeg, image/png"
                                     value="<?php echo htmlspecialchars($tenant['profile_picture']); ?>" />
                             </label>
                         </div>
@@ -152,6 +153,20 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
         </div>
     </main>
     <script>
+        function validateFileSize(event) {
+            const file = event.target.files[0]; // Get the selected file
+            if (file && file.size > 2 * 1024 * 1024) { // Check if file size exceeds 2MB
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File Too Large',
+                    text: 'The selected file exceeds the 2MB limit. Please choose a smaller file.',
+                });
+                event.target.value = ''; // Clear the input
+            } else {
+                previewProfilePhoto(event); // Call your preview function if file size is valid
+            }
+        }
+
         function previewProfilePhoto(event) {
             const reader = new FileReader();
             const fileInput = event.target;

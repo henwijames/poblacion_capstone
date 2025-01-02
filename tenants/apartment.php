@@ -30,6 +30,8 @@ $listingDetails['images'] = $images;
 $fullName = htmlspecialchars($landlord['first_name'] . ' ' . $landlord['last_name']);
 
 $reviews = $listing->getReviewsByListingId($listing_id);
+$listingByUser = $listing->getListingsByUser($landlord['id']);
+$listingsCount = count($listingByUser); // Count the number of listings
 ?>
 
 <section class="" id="apartment">
@@ -91,6 +93,7 @@ $reviews = $listing->getReviewsByListingId($listing_id);
                 <p class="text-muted-foreground"><?= htmlspecialchars($fullName); ?></p>
                 <p class="text-muted-foreground"><?= htmlspecialchars($listingDetails['address']); ?></p>
                 <p class="text-muted-foreground">Phone Number: <span class=" font-bold"><?= htmlspecialchars($landlord['phone_number']); ?></span></p>
+                <p class="text-muted-foreground">Number of Rooms Available: <span class=" font-bold"><?= htmlspecialchars($listingsCount); ?></span></p>
             </div>
             <div class="mb-6">
                 <h2 class="text-xl font-bold mb-2">Rooms</h2>

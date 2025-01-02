@@ -10,11 +10,13 @@ $landlordListings = $listing->getAllApartmentListings();
 
 $landlordId  = $_GET['id'] ?? null;
 
-$listingByUser = $listing->getListingsByUser(user_id: $landlordId);
+
 
 if ($landlordId) {
     // Fetch landlord details using the ID
     $landlordDetails = $landlords->findById($landlordId);
+    $listingByUser = $listing->getListingsByUser($landlordId);
+    $listingsCount = count($listingByUser); // Count the number of listings
 } else {
     // Handle the case where ID is not provided
     die('Landlord ID not specified.');
@@ -30,11 +32,14 @@ $landlordFullName = $landlordDetails['first_name'] . ' ' . $landlordDetails['las
     <!-- Landlord's Apartment/Business Establishment Name -->
     <div class="mb-6">
         <div class="flex items-center gap-4">
+
             <a href="contact-landlord.php?id=<?php echo $landlordDetails['id']; ?>" class="rounded-full w-10 h-10 hover:bg-primary hover:text-white flex items-center justify-center transition-colors ease-in duration-100  hover:shadow-md">
                 <i class="fa-solid fa-chevron-left"></i>
             </a>
-            <h1 class="text-lg sm:text-3xl font-bold"><?= $landlordFullName . "'s Properties"; ?></h1>
+            <h1 class="text-lg sm:text-3xl font-bold"><?= $landlordFullName . "'s Properties - "; ?><?= htmlspecialchars($listingsCount); ?> <?= $listingsCount > 1 ? "Rooms" : "Room"; ?></h1>
+            <p></p> <!-- Display listings count -->
         </div>
+
         <div class="flex-1 mx-auto py-8 px-6 md:px-8 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <?php if (!empty($listingByUser)): ?>
                 <?php foreach ($listingByUser as $listings): ?>
